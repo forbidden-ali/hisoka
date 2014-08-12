@@ -1,0 +1,12 @@
+{
+    "name":"hisoka",
+    "description":"And a server-side XSS.",
+    "version":"0.0.1",
+    "private":true,
+    "dependencies":{
+        "express":"4.*",
+        "mongoose":"*",
+        "morgan":"*",
+        "ejs":"*"
+    }
+}
