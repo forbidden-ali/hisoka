@@ -7,8 +7,8 @@ var express = require('express'),
     app = express();
 
 #   数据库
-var models = require('./models');
-mongoose.connect(models.Db);
+var sql = require('./models');
+mongoose.connect(sql.Db);
 
 #   模板引擎
 app.set('view engine', 'ejs');
@@ -25,16 +25,20 @@ app.all('/page/:uri', page);
 app.all('/v/:uri', page);
 
 #   用户相关
-app.get('/login', function(req, res){
+app.get('/login', function(){
     res.rendr('login');
 });
 app.post('/login', function(req, res){
     var name = req.body.name;
     var passwd = req.body.passwd;
-    passwd = crypto.createHash('md5').update(
-        passwd + models.User.find({name:name})['salt'];
-    );
-    models.User.findOne({name:name, passwd:passwd}, function(err, info){
+    sql.User.findOne({name:name}, function(err, info){
+        err&&res.status(500)&&res.rendr('500', {err:err});
+        !info&&res.rendr('login', {err:'login failed.'});
+        passwd = crypto.createHash('md5').update(
+            passwd + info['salt']
+        );
+    });
+    sql.User.findOne({name:name, passwd:passwd}, function(err, info){
         err&&res.status(500)&&res.render('500', {err:err});
         !info&&res.render('login', {err:'login failed.'});
         req.session.user = info;
