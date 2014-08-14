@@ -13,8 +13,8 @@ var _Victim = new Schema({
     id:String,
     who:String,
     module:{},
-    status:{}
-    //TODO
+    status:{},
+    now:String
 });
 
 var _Page = new Schema({
@@ -26,4 +26,4 @@ var _Page = new Schema({
 exports.User = mongoose.model('User', _User);
 exports.Victim = mongoose.model('Victim', _Victim);
 exports.Page = mongoose.model('Page', _Page);
-exports.Db = 'mongodb://localhost/hisoka'
+exports.Db = 'mongodb://localhost/hisoka';

@@ -5,8 +5,12 @@
     "private":true,
     "dependencies":{
         "express":"4.*",
+        "express-session":"*",
+        "cookie-parser":"*",
+        "body-parser":"*",
         "mongoose":"*",
         "morgan":"*",
+        "csurf":"*",
         "ejs":"*"
     }
 }
