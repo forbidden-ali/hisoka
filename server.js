@@ -33,13 +33,13 @@ app.use('/static', express.static(__dirname+'/static'));
 //   TODO 长逻辑, XSS处理部分
 app.all('/', function(req, res){});
 function page(){};
-app.all('/page/:uri', page);
-app.all('/v/:uri', page);
+app.all('/home/page/:uri', page);
+app.all('/h/:uri', page);
 
 //   用户相关
 app.route('/login')
     .get('/login', function(){
-        res.rendr('login', {csrf:req.scrfToken()});
+        res.rendr('login', {csrf:req.csrfToken()});
     })
     .post('/login', function(req, res){
         var name = req.body.name;
@@ -68,7 +68,20 @@ app.post('/home/logout', function(req, res){
 });
 
 //   TODO 主页及查看
-app.get('/home', function(req, res){});
+app.get('/home', function(req, res){
+    var victim, page;
+    sql.Victim.find({name:req.session.user.name}, function(err, info){
+        victim = info;
+    });
+    sql.Page.find({name:req.session.user.name}, function(err, info){
+        page = info;
+    });
+    res.render('home', {
+        victim = victim,
+        page = page,
+        csrf = req.csrfToken()
+    });
+});
 app.get('/home/victim/:id', function(){});
 app.get('/home/page/:uri/edit', function(){});
 

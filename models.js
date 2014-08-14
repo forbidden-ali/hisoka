@@ -3,15 +3,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var _User = new Schema({
+    email:String,
     name:String,
     passwd:String,
     salt:String
 });
 
 var _Victim = new Schema({
-    url:String,
+    name:String,
+    victim:String,
     id:String,
-    who:String,
+    who:{},
     payload:{},
     module:{},
     status:{},
@@ -19,6 +21,7 @@ var _Victim = new Schema({
 });
 
 var _Page = new Schema({
+    name:String,
     uri:String,
     type:String,
     module:{}
