@@ -12,6 +12,7 @@ var _Victim = new Schema({
     url:String,
     id:String,
     who:String,
+    payload:{},
     module:{},
     status:{},
     now:String
