@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-
 var Schema = mongoose.Schema;
 
 var _User = new Schema({
@@ -8,7 +7,6 @@ var _User = new Schema({
     passwd:String,
     salt:String
 });
-
 var _Victim = new Schema({
     name:String,
     victim:String,
@@ -19,7 +17,6 @@ var _Victim = new Schema({
     status:{},
     now:String
 });
-
 var _Page = new Schema({
     name:String,
     uri:String,

@@ -36,12 +36,18 @@ app.use(function(req, res, next){
 });
 app.use('/static', express.static(__dirname+'/static'));
 
-/*/   TODO 长逻辑, XSS处理部分
-app.all('/', function(req, res){});
-function page(){};
+//   TODO 长逻辑, XSS处理部分
+app.all('/', function(req, res){
+    //TODO
+    return res.send('Hello world.');
+});
+function page(req, res){
+    //TODO
+    return res.send('Hello world.');
+};
 app.all('/home/page/:uri', page);
 app.all('/h/:uri', page);
-*/
+
 //   用户相关
 app.route('/login')
     .get(function(req, res){
