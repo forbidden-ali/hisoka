@@ -1,7 +1,7 @@
 var express = require('express'),
     session = require('express-session'),
-    cookieParser = require('cookie-parser');
-    bodyParser = require('body-parser');
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     logger = require('morgan'),
     crypto = require('crypto'),
@@ -25,46 +25,50 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(session({
     secret:'session',
-    cookie:{secre:true}
+    cookie:{
+        secre:true
+    }
 }));
 app.use(csrf());
+app.use(function(req, res, next){
+    res.locals.token = req.csrfToken();
+    next();
+});
 app.use('/static', express.static(__dirname+'/static'));
 
-//   TODO 长逻辑, XSS处理部分
+/*/   TODO 长逻辑, XSS处理部分
 app.all('/', function(req, res){});
 function page(){};
 app.all('/home/page/:uri', page);
 app.all('/h/:uri', page);
-
+*/
 //   用户相关
 app.route('/login')
-    .get('/login', function(){
-        res.rendr('login', {csrf:req.csrfToken()});
+    .get(function(req, res){
+        return res.render('login', {err:''});
     })
-    .post('/login', function(req, res){
+    .post(function(req, res){
         var name = req.body.name;
         var passwd = req.body.passwd;
         sql.User.findOne({name:name}, function(err, info){
-            err&&res.status(500)&&res.rendr('500', {err:err});
-            !info&&res.rendr('login', {err:'login failed.'});
+            if(!info){return res.render('login', {err:'login failed.'})};
             passwd = crypto.createHash('md5').update(
-                passwd + info['salt']
-            );
-        });
-        sql.User.findOne({name:name, passwd:passwd}, function(err, info){
-            err&&res.status(500)&&res.render('500', {err:err});
-            !info&&res.render('login', {err:'login failed.'});
-            req.session.user = info;
-            res.redirect('/home');
+                passwd + info.salt
+            ).digest('hex');
+            sql.User.findOne({name:name, passwd:passwd}, function(err, info){
+                if(!info){return res.render('login', {err:'login failed.'})};
+                req.session.user = info;
+                return res.redirect('/home');
+            });
         });
     });
 app.use('/home', function(req, res, next){
-    !req.session.user?res.redirect('/login');
+    if(!req.session.user){return res.redirect('/login')};
     next();
 });
 app.post('/home/logout', function(req, res){
     req.session.user = null;
-    res.redirect('/login');
+    return res.redirect('/login');
 });
 
 //   TODO 主页及查看
@@ -76,15 +80,18 @@ app.get('/home', function(req, res){
     sql.Page.find({name:req.session.user.name}, function(err, info){
         page = info;
     });
-    res.render('home', {
-        victim = victim,
-        page = page,
-        csrf = req.csrfToken()
+    return res.render('home', {
+        victim:victim,
+        page:page
     });
 });
+/*
 app.get('/home/victim/:id', function(){});
 app.get('/home/page/:uri/edit', function(){});
 
 //   TODO 设置
 app.post('/home/victim/:id/edit', function(){});
 app.post('/home/page/:uri/edit', function(){});
+*/
+app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    process.env.OPENSHIFT_NODEJS_IP);

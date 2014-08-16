@@ -14,6 +14,7 @@ function main(name, passwd, salt){
         salt:salt
     });
     user.save();
+    console.log('ok!');
 };
 
 if(process.argv.length < 3){
