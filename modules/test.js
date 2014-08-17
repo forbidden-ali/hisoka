@@ -2,8 +2,8 @@ module.exports = function(str){
     this.author = 'quininer@live.com',
     this.description = 'This is an example of a test module',
     this.type = 'Dealwith',
-    // Priority: 优先执行, Accepted: 接受信息, Dealwith: 处理信息, Returns: 返回页面
-    this.parms = {
+    // !Priority: 优先执行, Accepted: 接受信息, Dealwith: 处理信息, !Returns: 返回页面
+    this.params = {
         'str':'String',
         //'name':'dependence', 待输入参数与其描述
         //'name':{

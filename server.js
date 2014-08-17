@@ -47,7 +47,7 @@ app.all('/', function(req, res){
 });
 app.all('/i/', function(req, res){
     //TODO who id use "Canvas Fingerprinting"
-    var id = req.parms.i;
+    var id = req.params.i;
     var who = req.cookies.who;
     who&&sql.Victim.findOne();
     id&&sql.Item.findOne();
