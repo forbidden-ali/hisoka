@@ -7,13 +7,18 @@ var _User = new Schema({
     passwd:String,
     salt:String
 });
+var _Item = new Schema({
+    name:String,
+    item:String,
+    payload:{},
+    modules:{}
+});
 var _Victim = new Schema({
     name:String,
-    victim:String,
     id:String,
-    who:{},
+    who:String,
     payload:{},
-    module:{},
+    modules:{},
     status:{},
     now:String
 });
@@ -25,6 +30,7 @@ var _Page = new Schema({
 });
 
 exports.User = mongoose.model('User', _User);
+exports.Item = mongoose.model('Item', _Item);
 exports.Victim = mongoose.model('Victim', _Victim);
 exports.Page = mongoose.model('Page', _Page);
 exports.Db = 'mongodb://'+

