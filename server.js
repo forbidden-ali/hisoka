@@ -26,10 +26,7 @@ app.use(evercookie.backend());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(session({
-    secret:'session',
-    cookie:{
-        secre:true
-    }
+    secret:'session'
 }));
 app.use(csrf());
 app.use(function(req, res, next){
