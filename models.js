@@ -8,13 +8,14 @@ var _User = new Schema({
     salt:String
 });
 var _Item = new Schema({
-    name:String,
+    owner:String,
+    id:String,
     item:String,
     payload:{},
     modules:{}
 });
 var _Victim = new Schema({
-    name:String,
+    owner:String,
     id:String,
     who:String,
     payload:{},
@@ -23,10 +24,10 @@ var _Victim = new Schema({
     now:String
 });
 var _Page = new Schema({
-    name:String,
+    owner:String,
     uri:String,
     type:String,
-    module:{}
+    modules:{}
 });
 
 exports.User = mongoose.model('User', _User);
