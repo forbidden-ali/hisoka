@@ -98,7 +98,7 @@ function handle(re, modules, owner, victim, type){
     };
     for(var p in Process){
         p.forEach(function(m){
-            var share[m.name] = m(
+            share[m.name] = m(
                 re,
                 owner,
                 modules[m.name],
