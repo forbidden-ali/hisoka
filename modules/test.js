@@ -1,4 +1,4 @@
-module.exports = function(str){
+module.exports = function(re, str){
     this.author = 'quininer@live.com',
     this.description = 'This is an example of a test module',
     this.type = 'Dealwith',
@@ -32,10 +32,11 @@ module.exports = function(str){
     this.dependence = [];
     //依赖，选择该模块后，必须选择另一模块
 
-    return main(str);
+    return main(re, str);
 };
 
-function main(str){
-    console.log(str);
+function main(re, str){
+    console.log(str+' '+re.q.host);
+    console.log(str+' '+re.s.header('x','x'));
     return str;
 };

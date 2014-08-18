@@ -9,14 +9,14 @@ var _User = new Schema({
 });
 var _Item = new Schema({
     owner:String,
+    name:String,
     id:String,
-    item:String,
     payload:{},
     modules:{}
 });
 var _Victim = new Schema({
     owner:String,
-    id:String,
+    name:String,
     who:String,
     payload:{},
     modules:{},
