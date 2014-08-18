@@ -10,7 +10,6 @@ var _User = new Schema({
 var _Item = new Schema({
     owner:String,
     name:String,
-    id:String,
     payload:{},
     modules:{}
 });

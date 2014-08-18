@@ -1,7 +1,9 @@
-module.exports = function(re, str){
-    this.author = 'quininer@live.com',
-    this.description = 'This is an example of a test module',
-    this.type = 'Dealwith',
+module.exports = function(re, owner, param, victim, share){
+    this.name = 'test';
+    this.author = 'quininer@live.com';
+    this.description = 'This is an example of a test module';
+    this.type = 'http';
+    this.priority = 'Dealwith';
     // !Priority: 优先执行, Accepted: 接受信息, Dealwith: 处理信息, !Returns: 返回页面
     this.params = {
         'str':'String',
@@ -28,14 +30,15 @@ module.exports = function(re, str){
         //    'type':'text', 长文本
         //    'description':'long text'
         //}
-    },
+    };
     this.dependence = [];
     //依赖，选择该模块后，必须选择另一模块
 
-    return main(re, str);
+    return main(re, owner, str);
 };
 
-function main(re, str){
+function main(re, owner, str){
+    if(owner){return null};
     console.log(str+' '+re.q.host);
     console.log(str+' '+re.s.header('x','x'));
     return str;
