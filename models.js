@@ -36,13 +36,15 @@ var _Victim = new Schema({
     owner:String,
     name:String,
     who:String,
-    payload:{},
+    payload:String,
+    load:{},
     modules:{},
     status:{},
     now:String
 });
 var _Page = new Schema({
     owner:String,
+    name:String,
     uri:String,
     type:String,
     modules:{}

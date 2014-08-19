@@ -222,12 +222,40 @@ app.get('/home/page/:uri/edit', function(req, res){
     });
 });
 
-//   TODO 设置
-app.post('/home/victim/:name/edit', function(req, res){
-    //TODO
+app.post('/home/victim/:id/edit', function(req, res){
+    var id = req.params.id;
+    if(req.params.type=='delete'){
+        sql.Victim.findByIdAndRemove(id, function(err){
+            return res.json({error:err});
+        });
+    };
+    sql.Victim.findByIdUpdate(id, {
+        owner:req.body.owner,
+        name:req.body.name,
+        payload:req.body.payload,
+        load:JSON.parse(req.body.load),
+        modules:JSON.parse(req.body.modules),
+        status:JSON.parse(req.body.modules),
+    }, function(err){
+        return res.json({error:err});
+    });
 });
 app.post('/home/page/:uri/edit', function(req, res){
-    //TODO
+    var id = req.params.id;
+    if(req.params.type=='delete'){
+        sql.Page.findByIdAndRemove(id, function(err){
+            return res.json({error:err});
+        });
+    };
+    sql.Page.findByIdUpdate(id, {
+        owner:req.body.owner,
+        name:req.body.name,
+        uri:req.body.uri,
+        type:req.body.type,
+        modules:JSON.parse(req.body.modules)
+    }, function(err){
+        return res.json({error:err});
+    });
 });
 
 app.all('/home/modules', function(req, res){
