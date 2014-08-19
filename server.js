@@ -27,10 +27,10 @@ app.use(cookieParser());
 app.use(evercookie.backend());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use('/home', session({
+app.use(session({
     secret:'session'
 }));
-app.use(csrf());
+app.use('/home', csrf());
 function err404(req, res, next){
     //  定义404页面
     return res.send(404, '( ・_・)');
