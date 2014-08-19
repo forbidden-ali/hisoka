@@ -10,8 +10,27 @@ var _User = new Schema({
 var _Item = new Schema({
     owner:String,
     name:String,
-    payload:{},
-    modules:{}
+    payload:String,
+    load:{},
+    /*
+    *   load:{
+    *       "steal_cookie":{
+    *           "post":"steal_cookie"
+    *       }
+    *   }
+    */
+    modules:[]
+    /*
+    *   modules:[
+    *       ["auto_accept", {}],
+    *       ["test", {"str":"test"}]
+    *   ]
+    */
+    /*
+    *   modules:{
+    *       "auto_accept":{}
+    *   }
+    */
 });
 var _Victim = new Schema({
     owner:String,
