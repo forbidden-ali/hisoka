@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(evercookie.backend());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(session({
+app.use('/home', session({
     secret:'session'
 }));
 app.use(csrf());
@@ -236,8 +236,8 @@ app.post('/home/victim/:id/edit', function(req, res){
         load:JSON.parse(req.body.load),
         modules:JSON.parse(req.body.modules),
         status:JSON.parse(req.body.modules),
-    }, function(err){
-        return res.json({error:err});
+    }, function(err, info){
+        return res.json({error:(err||info?'':'not found.')});
     });
 });
 app.post('/home/page/:uri/edit', function(req, res){
@@ -253,8 +253,8 @@ app.post('/home/page/:uri/edit', function(req, res){
         uri:req.body.uri,
         type:req.body.type,
         modules:JSON.parse(req.body.modules)
-    }, function(err){
-        return res.json({error:err});
+    }, function(err, info){
+        return res.json({error:(err||info?'':'not found.')});
     });
 });
 
