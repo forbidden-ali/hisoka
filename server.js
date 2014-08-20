@@ -63,9 +63,7 @@ app.all('/i/', function(req, res){
     var who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
         if(info){
-            return render('load', {
-                modules:info.load
-            });
+            return res.jsonp(info.load);
         };
         //  若数据库内无Victim，则创建之
         sql.Item.findById(id, function(err, info){
@@ -84,9 +82,7 @@ app.all('/i/', function(req, res){
                 status:{},
                 now:Date.now()
             }, function(){
-                return render('load', {
-                    modules:info.modules
-                });
+                return res.jsonp(info.load);
             });
         });
     });
@@ -97,14 +93,17 @@ function handle(re, modules, owner, victim, who, type){
     modules.forEach(function(n){
         var m = require('./'+n[0]);
         if(m.type!=type){return null};
-        share[n[0]] = m(
+        if(typeof share[n[0]] != 'object'){
+            share[n[0]] = [];
+        };
+        share[n[0]].unshift(m(
             re,
             owner,
             n[1],
             victim,
             who,
             share
-        );
+        ));
     });
 };
 function httppage(req, res){
