@@ -5,7 +5,6 @@ var express = require('express'),
     evercookie = require('evercookie'),
     mongoose = require('mongoose'),
     logger = require('morgan'),
-    crypto = require('crypto'),
     csrf = require('csurf'),
     ejs = require('ejs'),
     fs = require('fs'),
@@ -16,7 +15,7 @@ var express = require('express'),
     home = require('./routes/home');
 
 //   数据库
-var sql = require('./models');
+sql = require('./models');
 mongoose.connect(sql.Db);
 
 //   模板引擎

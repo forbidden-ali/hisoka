@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    crypto = require('crypto');
 var Schema = mongoose.Schema;
 
 var _User = new Schema({
