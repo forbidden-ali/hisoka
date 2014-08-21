@@ -57,6 +57,9 @@ var _Page = new Schema({
     modules:{}
 });
 
+exports.gethash = function(str){
+    return crypto.createHash('md5').update(str).digest('hex');
+};
 exports.User = mongoose.model('User', _User);
 exports.Item = mongoose.model('Item', _Item);
 exports.Victim = mongoose.model('Victim', _Victim);

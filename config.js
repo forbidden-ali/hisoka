@@ -5,16 +5,14 @@ var mongoose = require('mongoose'),
 mongoose.connect(models.Db);
 
 function main(name, passwd, salt){
-    var passwd = crypto.createHash('md5').update(
-        passwd + salt
-    ).digest('hex');
+    var passwd = sql.gethash(passwd+salt);
     var user = new models.User({
         name:name,
         passwd:passwd,
         salt:salt
     });
     user.save();
-    console.log('ok!');
+    return console.log('ok!');
 };
 
 if(process.argv.length < 3){
