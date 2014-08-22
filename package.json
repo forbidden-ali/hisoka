@@ -9,6 +9,7 @@
         "cookie-parser":"*",
         "body-parser":"*",
         "evercookie":"*",
+        "express-ws":"*",
         "mongoose":"*",
         "morgan":"*",
         "csurf":"*",

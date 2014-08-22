@@ -45,8 +45,6 @@ function online(who, on){
     sql.Victim.findOne({who:who}, function(err, info){
         info&&sql.Victim.update({who:who}, {
             now:on
-        }, function(err, info){
-            sql.Victim.seva();
         });
     });
 };
