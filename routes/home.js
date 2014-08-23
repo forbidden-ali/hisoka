@@ -142,7 +142,6 @@ exports.page = {
                         owner:req.body.owner||info.owner,
                         name:req.body.name||info.name,
                         uri:req.body.uri||info.uri,
-                        type:req.body.type||info.type,
                         modules:JSON.parse(req.body.modules)||info.modules
                     }, function(err){
                         res.json({
@@ -154,7 +153,6 @@ exports.page = {
                         owner:req.body.owner||req.session.user.name,
                         name:req.body.name,
                         uri:req.body.uri,
-                        type:req.body.type,
                         modules:JSON.parse(req,body.modules)
                     }, function(err){
                         res.json({
@@ -174,12 +172,11 @@ exports.modules = function(req, res){
         //TODO
     }else if(type=='server'){
         fs.readdirSync('./modules').forEach(function(n){
-            var m = require('./modules/'+n);
+            var m = require('./modules/'+n+'/'+n);
             json[m.name] = {
                 name:m.name,
                 author:m.author,
                 description:m.description,
-                type:m.type,
                 params:m.params
             }
         });

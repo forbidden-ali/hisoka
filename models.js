@@ -54,7 +54,6 @@ var _Page = new Schema({
     owner:String,
     name:String,
     uri:String,
-    type:String,
     modules:{}
 });
 

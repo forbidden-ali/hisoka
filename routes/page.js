@@ -8,7 +8,7 @@ exports.xss = function(req, res){
 };
 exports.load = function(req, res){
     //  返回模块
-    //  TODO who id use "Canvas Fingerprinting"
+    //  XXX who id use "Canvas Fingerprinting"
     var id = req.param('i');
     var who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
@@ -48,17 +48,18 @@ function online(who, on){
         });
     });
 };
-function handle(re, modules, owner, victim, who, type){
+function handle(req, res, modules, owner, victim, who, type){
     //  处理服务端模块
     var share = {};
+    var path = fs.realpathSync('.');
     modules.forEach(function(n){
-        var m = require('./'+n[0]);
-        if(m.type!=type){return null};
+        var m = require(path+'/modules/'+n[0]+'/'+n[0]);
+//        if(m.type!=type){return null};
         if(typeof share[n[0]] != 'object'){
             share[n[0]] = [];
         };
         share[n[0]].unshift(
-            m(re, owner, n[1], victim, who, share)
+            m({q:req, s:res}, {v:victim, w:who}, {p:n[1], s:share}, {o:owner, t:type})
         );
     });
 };
@@ -68,10 +69,10 @@ exports.http = function(req, res){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info||info.type != 'http'){return err404(req, res)};
+        if(!info){return err404(req, res)};
         var owner = req.session.user&&(req.session.user.name == info.owner);
         !owner&&online(who, Date.now());
-        handle({q:req, s:res}, info.modules, owner, sql.Victim, who, 'http');
+        handle(req, res, info.modules, owner, sql.Victim, who, 'http');
     });
 };
 exports.ws = function(ws, req){
@@ -79,7 +80,7 @@ exports.ws = function(ws, req){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info||info.type != 'ws'){return null};
+        if(!info){return null};
         var owner = req.session.user&&(req.session.user.name == info.owner);
         ws.on('open', function(){
             return !owner&&online(who, 'online');
@@ -88,7 +89,7 @@ exports.ws = function(ws, req){
             return !owner&&online(who, Date.now());
         });
         ws.on('message', function(msg){
-            handle({q:req, s:ws}, info.modules, owner, sql.Victim, who, 'ws');
+            handle(req, ws, info.modules, owner, sql.Victim, who, 'ws');
         });
     });
 };

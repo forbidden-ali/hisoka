@@ -7,14 +7,14 @@ var express = require('express'),
     logger = require('morgan'),
     csrf = require('csurf'),
     ejs = require('ejs'),
-    fs = require('fs'),
     app = express(),
     server = require('http').createServer(app),
     ews = require('express-ws')(app, server),
     page = require('./routes/page'),
     home = require('./routes/home');
 
-//   数据库
+
+fs = require('fs'),
 sql = require('./models');
 mongoose.connect(sql.Db);
 
