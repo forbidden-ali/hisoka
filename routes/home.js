@@ -57,18 +57,23 @@ exports.item = {
         };
         sql.Item.findOne({owner:req.session.user.name, name:name}, function(err, info){
             if(info){
-                sql.Item.update({name:name}, {
-                    owner:req.body.owner||info.owner,
-                    name:name,
-                    payload:req.body.payload||info.payload,
-                    load:JSON.parse(req.body.load)||info.payload,
-                    modules:JSON.parse(req.body.modules)||info.modules
-                }, function(err, info){
-                   res.json({
+                //  owner, name, payload, load, modules
+                req.body.owner&&(info.owner=req.body.owner);
+                (name!=info.name)&&(info.name=name);
+                req.body.payload&&(info.payload=req.body.payload);
+                try{
+                    req.body.load&&(info.load=JSON.parse(req.body.load));
+                    req.body.modules&&(info.modules=JSON.parse(req.body.modules));
+                }catch(err){
+                    res.json({status:err});
+                };
+                info.save(function(err){
+                    res.json({
                         status:err||'update ok.'
-                    });
+                    })
                 });
             }else{
+                //  owner, name, payload, load, modules
                 sql.Item.create({
                     owner:req.body.owner||req.session.user.name,
                     name:name,
@@ -104,15 +109,21 @@ exports.victim = {
         }else{
             sql.Victim.find({_id:id, owner:req.session.user.name}, function(err, info){
                 if(!info){return err404(req, res)};
-                sql.Victim.findByIdAndUpdate(id, {
-                    owner:req.body.owner||info.owner,
-                    name:req.body.name||info.name,
-                    payload:req.body.payload||info.payload,
-                    load:JSON.parse(req.body.load)||info.load,
-                    modules:JSON.parse(req.body.modules)||info.modules,
-                    status:JSON.parse(req.body.modules)||info.status,
-                }, function(err, info){
-                    return res.json({status:(err||info?'':'not found.')});
+                //  owner, name, payload, load, modules, status
+                req.body.owner&&(info.owner=req.body.owner);
+                req.body.name&&(info.name=req.body.name);
+                req.body.payload&&(info.payload=req.body.payload);
+                try{
+                    req.body.load&&(info.load=JSON.parse(req.body.load));
+                    req.body.modules&&(info.modules=JSON.parse(req.body.modules));
+                    req.body.status&&(info.status=JSON.parse(req.body.status));
+                }catch(err){
+                    res.json({status:err});
+                };
+                info.seva(function(err){
+                    res.json({
+                        status:err||'update ok.'
+                    })
                 });
             });
         };
@@ -138,17 +149,22 @@ exports.page = {
         }else{
             sql.Page.findOne({_id:id, owner:req.session.user.name}, function(err, info){
                 if(info){
-                    sql.Page.update({_id:id, owner:req.session.user.name}, {
-                        owner:req.body.owner||info.owner,
-                        name:req.body.name||info.name,
-                        uri:req.body.uri||info.uri,
-                        modules:JSON.parse(req.body.modules)||info.modules
-                    }, function(err){
+                    //  owner, name, uri, modules
+                    req.body.owner&&(info.owner=req.body.owner);
+                    req.body.name&&(info.name=req.body.name);
+                    req.body.uri&&(info.uri=req.body.uri);
+                    try{
+                        req.body.modules&&(info.modules=JSON.parse(req.body.modules));
+                    }catch(err){
+                        res.json({status:err});
+                    };
+                    info.save(function(err){
                         res.json({
                             status:err||'update ok.'
                         });
                     });
                 }else{
+                    //  owner, name, uri, modules
                     sql.Page.create({
                         owner:req.body.owner||req.session.user.name,
                         name:req.body.name,
@@ -167,18 +183,20 @@ exports.page = {
 
 exports.modules = function(req, res){
     var type = req.param('type');
+    var path = fs.realpathSync('.');
     var json = {};
     if(type=='user'){
         //TODO
     }else if(type=='server'){
+
         fs.readdirSync('./modules').forEach(function(n){
-            var m = require('./modules/'+n+'/'+n);
+            var m = require(path+'/modules/'+n+'/'+n);
             json[m.name] = {
                 name:m.name,
                 author:m.author,
                 description:m.description,
                 params:m.params
-            }
+            };
         });
         return res.json(json);
     }else if(type=='victim'){
