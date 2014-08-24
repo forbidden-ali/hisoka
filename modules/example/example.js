@@ -56,6 +56,7 @@ function main(re, sql, param, type){
     re.s.header('str', param.p.str);
     //  re.s 同理
     sql.v.find({who:sql.w}, function(err, info){
+        //  TODO    数据库操作封装成类库
         //  sql.v 操作victim数据库
         //  sql.w who
         var status = info.status;
