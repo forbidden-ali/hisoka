@@ -56,7 +56,7 @@ function handle(req, res, modules, owner, victim, who, type){
     //  处理服务端模块
     var share = {};
     var path = fs.realpathSync('.');
-    modules.forEach(function(n){
+/*    modules.forEach(function(n){
         var m = require(path+'/modules/'+n[0]+'/'+n[0]);
 //        if(m.type!=type){return null};
         if(typeof share[n[0]] != 'object'){
@@ -67,6 +67,16 @@ function handle(req, res, modules, owner, victim, who, type){
             m({q:req, s:res}, {v:victim, w:who}, {p:n[1], s:share}, {o:owner, t:type})
         );
     });
+*/
+    for(var i in modules){
+        var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
+        if(typeof share[modules[i][0]] != 'object'){
+            share[modules[i][0]] = [];
+        };
+        share[modules[i][0]].unshift(
+            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, t:type});
+        );
+    };
 };
 
 //  ALL     /h/:uri
