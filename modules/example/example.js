@@ -72,8 +72,8 @@ function main(re, sql, param, type){
 //            re.s.send('Hello world.');
             re.s.render(__dirname+'/example');
             //  __dirname 指向模块所在的Path
-            return param.p.str;
-            //  返回的内容将会储存到share，为了插件更丰富，请务必返回内容
         });
     });
+    return param.p.str;
+    //  返回的内容将会储存到share，为了插件更丰富，请务必返回内容
 };
