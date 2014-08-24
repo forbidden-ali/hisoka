@@ -7,6 +7,7 @@
         "express":"4.*",
         "express-session":"*",
         "cookie-parser":"*",
+        "serve-favicon":"*",
         "body-parser":"*",
         "evercookie":"*",
         "express-ws":"*",

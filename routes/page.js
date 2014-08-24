@@ -1,3 +1,4 @@
+//  ALL     /
 exports.xss = function(req, res){
     //  返回XSSJS 框架
     res.header('Content-Type', 'application/javascript');
@@ -6,6 +7,7 @@ exports.xss = function(req, res){
         id:req.query.i
     });
 };
+//  ALL     /i/
 exports.load = function(req, res){
     //  返回模块
     //  XXX who id use "Canvas Fingerprinting"
@@ -67,6 +69,8 @@ function handle(req, res, modules, owner, victim, who, type){
     });
 };
 
+//  ALL     /h/:uri
+//  ALL     /home/page/:uri
 exports.http = function(req, res){
     //  HTTP页面
     var pageid = req.params.uri;
@@ -78,6 +82,8 @@ exports.http = function(req, res){
         handle(req, res, info.modules, owner, sql.Victim, who, 'http');
     });
 };
+//  ALL     /h/:uri
+//  ALL     /home/page/:uri
 exports.ws = function(ws, req){
     //  WebSocket页面
     var pageid = req.params.uri;

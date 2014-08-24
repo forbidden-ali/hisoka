@@ -3,6 +3,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     evercookie = require('evercookie'),
+    favicon = require('serve-favicon');
     mongoose = require('mongoose'),
     logger = require('morgan'),
     csrf = require('csurf'),
@@ -12,7 +13,6 @@ var express = require('express'),
     ews = require('express-ws')(app, server),
     page = require('./routes/page'),
     home = require('./routes/home');
-
 
 fs = require('fs'),
 sql = require('./models');
@@ -36,6 +36,7 @@ function err404(req, res, next){
     //  定义404页面
     return res.send(404, '( ・_・)');
 };
+app.use(favicon(__dirname+'/static/favicon.ico'));
 app.use('/static', express.static(__dirname+'/static'));
 app.use('/home', function(req, res, next){
     //  后台处理

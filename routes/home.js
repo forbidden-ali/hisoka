@@ -1,7 +1,9 @@
 exports.login = {
+//  GET     /login
     get:function(req, res){
         res.render('login', {err:''});
     },
+//  POST    /login
     post:function(req, res){
         var name = req.body.name;
         var passwd = req.body.passwd;
@@ -17,12 +19,14 @@ exports.login = {
             });
         });
     },
+//  POST    /home/logout
     logout:function(req, res){
         req.session.user = null;
         res.redirect('/login');
     }
 };
 
+//  GET     /home
 exports.home = function(req, res){
     var victim, page;
     sql.Victim.find({owner:req.session.user.name}, function(err, info){
@@ -42,6 +46,7 @@ exports.home = function(req, res){
 };
 
 exports.item = {
+//  GET     /home/item/:name
     item:function(req, res){
         sql.Item.findOne({owner:req.session.user.name, id:req.params.name}, function(err, info){
             if(!info){return err404(req, res)};
@@ -50,6 +55,7 @@ exports.item = {
             });
         });
     },
+//  POST    /home/item/:name/edit
     edit:function(req, res){
         var name = req.params.name;
         if(!name){
@@ -90,6 +96,7 @@ exports.item = {
     },
 };
 exports.victim = {
+//  GET     /home/victim/:name
     victim:function(req, res){
         sql.Victim.findOne({owner:req.session.user.name, id:req.params.name}, function(err, info){
             if(!info){return err404(req, res);};
@@ -98,6 +105,7 @@ exports.victim = {
             });
         });
     },
+//  POST    /home/victim/:name/edit
     edit:function(req, res){
         var id = req.params.id;
         if(req.param('type')=='delete'){
@@ -130,6 +138,7 @@ exports.victim = {
     }
 };
 exports.page = {
+//  GET     /home/page/:uri/editor
     page:function(req, res){
         sql.Page.findOne({owner:req.session.user.name, uri:req.params.uri}, function(err, info){
             if(!info){return err404(req, res)};
@@ -138,6 +147,7 @@ exports.page = {
             });
         });
     },
+//  POST    /home/page/:uri/edit
     edit:function(req, res){
         var id = req.params.id;
         if(req.param('type')=='delete'){
@@ -181,6 +191,7 @@ exports.page = {
     }
 };
 
+//  ALL     /home/modules
 exports.modules = function(req, res){
     var type = req.param('type');
     var path = fs.realpathSync('.');
