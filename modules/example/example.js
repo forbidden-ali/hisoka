@@ -10,29 +10,31 @@ module.exports = function(re, sql, param, type){
     this.params = {
         //  需要的参数和参数描述
         'str':'String'
-        //'name':'dependence', 待输入参数与其描述
-        //'name':{
-        //    'type':'radio', 单选类型
-        //    'description':'ya',
-        //    'content':['one', 'two']
-        //},
-        //'name':{
-        //    'type':'muradio', 多选类型
-        //    'description':'yaya',
-        //    'content':['one', 'two']
-        //},
-        //'name':{
-        //    'type':'progress', 百分比条
-        //    'description':'100%'
-        //},
-        //'name':{
-        //    'type':'toggle', 开关按钮
-        //    'description':'off or on?'
-        //},
-        //'name':{
-        //    'type':'text', 长文本
-        //    'description':'long text'
-        //}
+/*
+        'name':'dependence', 待输入参数与其描述
+        'name':{
+            'type':'radio', 单选类型
+            'description':'ya',
+            'content':['one', 'two']
+        },
+        'name':{
+            'type':'muradio', 多选类型
+            'description':'yaya',
+            'content':['one', 'two']
+        },
+        'name':{
+            'type':'progress', 百分比条
+            'description':'100%'
+        },
+        'name':{
+            'type':'toggle', 开关按钮
+            'description':'off or on?'
+        },
+        'name':{
+            'type':'text', 长文本
+            'description':'long text'
+        }
+*/
     };
     this.dependence = [];
     //  依赖，选择该模块后，必须选择另一模块
@@ -59,22 +61,19 @@ function main(re, sql, param, type){
         //  TODO    数据库操作封装成类库
         //  sql.v 操作victim数据库
         //  sql.w who
-        var status = info.status;
-        if(!status['Example']){
+        if(!info.status['Example']){
             //  注意status的结构
-            status['Example'] = {};
-            status['Example']['str'] = [];
+            info.status['Example'] = {};
+            info.status['Example']['str'] = [];
         };
-        status['Example']['str'].unshift(str);
+        info.status['Example']['str'].unshift(str);
         //  注意一定要是unshift，加在数组前头，否则不视为最新信息
-        sql.v.findByIdUpdate(info._id, {
-            status:status
-        }, function(err, info){
-//            re.s.send('Hello world.');
+        info.save(function(err, info){
+//          re.s.send('Hello world.');
             re.s.render(__dirname+'/example');
             //  __dirname 指向模块所在的Path
         });
     });
     return param.p.str;
-    //  返回的内容将会储存到share，为了插件更丰富，请务必返回内容
+    //  返回的内容将会储存到share，为了模块更丰富，请务必返回内容
 };
