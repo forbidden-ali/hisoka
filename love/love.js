@@ -132,9 +132,7 @@ var love = (function(){
         ajax:function(url, datas, headers){
             var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
-            (window.XMLHttpRequest)?(
-                xhr = new XMLHttpRequest()):(
-                xhr = new ActiveXObject('Microsoft.XMLHTTP'));
+            var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
             xhr.open(type, url, false);
             (type=='POST')&&(
                 xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'));
