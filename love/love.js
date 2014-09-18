@@ -35,9 +35,12 @@ var love = (function(){
                 }, 5);
             };
         },
-        hook:function(){
-            //TODO
-            //函数劫持
+
+        hook:function(foo, hook){
+            return function(){
+                Array.prototype.unshift.call(arguments, foo);
+                return (hook&&(typeof hook == 'function'))?hook.apply(this, arguments):foo;
+            };
         }
     };
 
@@ -70,7 +73,7 @@ var love = (function(){
 
     u.dom = {
         inner:function(dom, e, hide){
-            var callback = array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
             e = (e&&u.get.isdom(e))?e:u.get.html();
             var t = u.dom.create('div');
             t.innerHTML = dom;
@@ -94,7 +97,7 @@ var love = (function(){
             return e;
         },
         add:function(tag, attr, parent){
-            var callback = array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
             var e = this.create(tag, attr);
             this.insert(e, parent, callback);
             return e;
