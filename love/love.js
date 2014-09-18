@@ -44,6 +44,16 @@ var love = (function(){
         }
     };
 
+    u.code = {
+        enurl:function(datas, post){
+            var uri = '';
+            for(var data in datas){
+                uri += (data+'='+encodeURIComponent(datas[data])+(post?';':'&'));
+            }
+            return uri.slice(0, -1);
+        }
+    },
+
     u.get = {
         isorigin:function(url, url2){
             var one = u.dom.create('a', {'href':url});
@@ -72,13 +82,13 @@ var love = (function(){
     };
 
     u.dom = {
-        inner:function(dom, e, hide){
+        inner:function(dom, hide, e){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             e = (e&&u.get.isdom(e))?e:u.get.html();
             var t = u.dom.create('div');
             t.innerHTML = dom;
             var i = t.children[0];
-            hide&&(typeof hide != 'function')&&(i.style.display = 'none');
+            (hide&&(typeof hide != 'function'))&&(i.style.display = 'none');
             (typeof callback == 'function')&&u.op.bind(i, 'load', callback);
             e.appendChild(i);
             return i;
@@ -151,7 +161,7 @@ var love = (function(){
                          ||(this.status == 304))
                 )&&callback.apply(this, arguments);
             });
-            xhr.send(datas);
+            xhr.send((typeof datas == 'object')?u.code.enurl(datas):datas);
             return xhr;
         },
 
@@ -185,22 +195,25 @@ var love = (function(){
     u.req = {
         post:function(url, datas, jump){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            var form = u.dom.inner("<form method='POST'>", u.get.html(), true);
-            form.action = url;
-            for(var name in data){
-                var input = document.createElement('input');
-                input.name = name;
-                input.value = data[name];
-                form.appendChild(input);
+            var form = u.dom.add('form', {
+                'method':'POST',
+                'style':'display: none;',
+                'action':url,
+            });
+            for(var name in datas){
+                var input = u.dom.add('input', {
+                    'name':name,
+                    'value':datas[name]
+                }, form);
             };
-            if(!nj){
-                var iframe = u.addom('<iframe sandbox name=_'+u.rdm()+'_>', u.html(), true);
-                form.target = iframe.name;
+            if(!jump){
+                var iframe = u.dom.inner('<iframe sandbox name="'+u.op.random(true)+'">', true);
+                u.dom.attr(form, 'target', iframe.name);
             };
-            callback&&u.bind(form, 'submit', callback);
+            (callback&&(typeof callback == 'function'))&&u.op.bind(form, 'submit', callback);
             form.submit();
-            (!nj)&&(u.kill(form))&(setTimeout(function(){
-                u.kill(iframe);
+            (!jump)&&(u.dom.kill(form))&(setTimeout(function(){
+                u.dom.kill(iframe);
             }, 3*1000));
         },
         upload:function(){
