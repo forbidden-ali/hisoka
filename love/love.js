@@ -73,7 +73,7 @@ var love = (function(){
 
     u.dom = {
         inner:function(dom, e, hide){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             e = (e&&u.get.isdom(e))?e:u.get.html();
             var t = u.dom.create('div');
             t.innerHTML = dom;
@@ -90,21 +90,21 @@ var love = (function(){
             return e;
         },
         insert:function(e, parent){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             parent = (parent&&u.get.isdom(parent))?parent:u.get.html();
             parent.appendChild(e);
             (typeof callback == 'function')&&callback(e, parent);
             return e;
         },
         add:function(tag, attr, parent){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             var e = this.create(tag, attr);
             this.insert(e, parent, callback);
             return e;
         },
 
         kill:function(e){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             u.get.isdom(e)&&e.parentNode.removeChild(e);
             (typeof callback == 'function')&&calback();
         },
@@ -117,7 +117,7 @@ var love = (function(){
 
     u.load = {
         script:function(url){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             url += '?_=' + u.op.random();
             var script = u.dom.create('script', {'src':url});
             (typeof callback == 'function')&&u.bind(script, 'load', callback);
@@ -133,7 +133,7 @@ var love = (function(){
 
     u.xhr = {
         ajax:function(url, datas, headers){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
             var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
             xhr.open(type, url, false);
@@ -156,7 +156,7 @@ var love = (function(){
         },
 
         json:function(url, callname){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             var json;
             if(callname&&(typeof callname != 'function')){
                 var backname = 'i'+u.op.random(true);
@@ -184,7 +184,7 @@ var love = (function(){
 
     u.req = {
         post:function(url, datas, jump){
-            var callback = Array.prototype.slice.call(arguments).slice(-1)[0];
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
             var form = u.dom.inner("<form method='POST'>", u.get.html(), true);
             form.action = url;
             for(var name in data){
