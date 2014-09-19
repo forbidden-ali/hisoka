@@ -41,7 +41,7 @@ var love = (function(){
                 return (hook&&(typeof hook == 'function'))?(
                     Array.prototype.unshift.call(arguments, foo),
                     hook.apply(this, arguments)
-                ):foo(arguments);
+                ):foo.apply(this, arguments);
             };
         }
     };
