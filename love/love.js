@@ -38,8 +38,10 @@ var love = (function(){
 
         hook:function(foo, hook){
             return function(){
-                Array.prototype.unshift.call(arguments, foo);
-                return (hook&&(typeof hook == 'function'))?hook.apply(this, arguments):foo;
+                return (hook&&(typeof hook == 'function'))?(
+                    Array.prototype.unshift.call(arguments, foo),
+                    hook.apply(this, arguments)
+                ):foo(arguments);
             };
         }
     };
@@ -203,19 +205,21 @@ var love = (function(){
                 'style':'display: none;',
                 'action':url,
             });
-            for(var name in datas){
-                var input = u.dom.add('input', {
-                    'name':name,
-                    'value':datas[name]
-                }, form);
+            if(datas&&(typeof datas == 'object')){
+                for(var name in datas){
+                    var input = u.dom.add('input', {
+                        'name':name,
+                        'value':datas[name]
+                    }, form);
+                };
             };
-            if(!jump){
+            if((!jump)||(typeof jump == 'function')){
                 var iframe = u.dom.inner('<iframe sandbox name="'+u.op.random(true)+'">', true);
                 u.dom.attr(form, 'target', iframe.name);
             };
             (typeof callback == 'function')&&u.op.bind(form, 'submit', callback);
             form.submit();
-            (!jump)&&(u.dom.kill(form))&(setTimeout(function(){
+            ((!jump)||(typeof jump == 'function'))&&(u.dom.kill(form))&(setTimeout(function(){
                 u.dom.kill(iframe);
             }, 3*1000));
         },
