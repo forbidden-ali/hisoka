@@ -70,7 +70,7 @@ var love = (function(){
         },
         testorigin:function(url){
             try{
-                u.xhr.ajax(url);
+                u.req.ajax(url);
             }catch(e){
                 return (e.code != 19)?true:false;
             };
@@ -150,7 +150,7 @@ var love = (function(){
         }
     };
 
-    u.xhr = {
+    u.req = {
         ajax:function(url, datas, headers, sync){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
@@ -192,26 +192,6 @@ var love = (function(){
             };
         },
 
-        upload:function(){
-            //TODO
-            //基于ajax的表单上传
-        }
-    };
-    u.socket = {
-        conneted:{},
-        connet:function(ws){
-            var callback = Array.prototype.slice.call(arguments, -1)[0];
-            this.conneted[ws] = ((window.WebSocket)?(new window.WebSocket):(new window.MozWebSocket))(ws);
-
-            (typeof callback == 'function')&&(this.conneted[ws].onopen = callback);
-            this.conneted[ws].onclose = function(){
-                delete this.conneted[ws];
-            };
-            return this.conneted[ws];
-        }
-    };
-
-    u.req = {
         post:function(url, datas, jump){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             var form = u.dom.add('form', {
@@ -240,10 +220,20 @@ var love = (function(){
                     u.dom.kill(iframe);
                 }, 3*1000)
             );
-        },
-        upload:function(){
-            //TODO
-            //基于表单的文件上传
+        }
+    };
+
+    u.socket = {
+        conneted:{},
+        connet:function(ws){
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
+            this.conneted[ws] = ((window.WebSocket)?(new window.WebSocket):(new window.MozWebSocket))(ws);
+
+            (typeof callback == 'function')&&(this.conneted[ws].onopen = callback);
+            this.conneted[ws].onclose = function(){
+                delete this.conneted[ws];
+            };
+            return this.conneted[ws];
         }
     };
 
