@@ -10,7 +10,8 @@ var love = (function(){
             id:"<%= id %>"
         },
         run:{
-            jsonp:{}
+            jsonp:{},
+            foo:{}
         }
     };
 
@@ -137,12 +138,11 @@ var love = (function(){
                 u.dom.kill(e);
             });
         },
-        import:function(){
-            //{
-            //  'name':{args}
-            //}
-            //TODO
-            //根据json导入模块并传入参数执行
+        import:function(loads){
+            for(var i in loads){
+                u.run.foo[i] = loads[i];
+                this.script(i);
+            };
         }
     };
 
@@ -151,6 +151,7 @@ var love = (function(){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
             var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
+
             xhr.open(type, url, (sync&&(typeof sync != 'function'))?true:false);
             (type=='POST')&&(
                 xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'));
@@ -194,9 +195,15 @@ var love = (function(){
     };
     u.socket = {
         conneted:{},
-        connet:function(){
-            //TODO
-            //连接websocket
+        connet:function(ws){
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
+            this.conneted[ws] = ((window.WebSocket)?(new window.WebSocket):(new window.MozWebSocket))(ws);
+
+            (typeof callback == 'function')&&(this.conneted[ws].onopen = callback);
+            this.conneted[ws].onclose = function(){
+                delete this.conneted[ws];
+            };
+            return this.conneted[ws];
         }
     };
 
@@ -222,7 +229,6 @@ var love = (function(){
                 u.dom.attr(form, 'target', iframe.name);
             };
             (typeof callback == 'function')&&u.op.bind(form, 'submit', callback);
-//            form.submit();
             submit.click();
             ((!jump)||(typeof jump == 'function'))&&(
                 u.dom.kill(form),
