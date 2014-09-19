@@ -154,7 +154,7 @@ var love = (function(){
                     xhr.setRequestHeader(header, headers[header]);
                 };
             };
-            (callback&&(typeof callback == 'function'))&&(xhr.onreadystatechange = function(){
+            (typeof callback == 'function')&&(xhr.onreadystatechange = function(){
                 ((this.readyState == 4)
                  &&(((this.status >= 200)
                      &&(this.status <= 300))
@@ -170,11 +170,14 @@ var love = (function(){
             var json;
             if(callname&&(typeof callname != 'function')){
                 var backname = 'i'+u.op.random(true);
-                (callback&&(typeof callback == 'function'))&&(u.run.jsonp[backname] = callback);
+                (typeof callback == 'function')&&(u.run.jsonp[backname] = u.op.hook(callback, function(callback, json){
+                    callback(json);
+                    delete u.run.jsonp[backname];
+                }));
                 u.load.script(url+'?'+callname+'=love.run.jsonp.'+backname+'&_='+u.op.random());
             }else{
                 json = JSON.parse(this.ajax(url).responseText);
-                (callback&&(typeof callback == 'function'))&&callback(json);
+                (typeof callback == 'function')&&callback(json);
                 return json;
             };
         },
@@ -210,7 +213,7 @@ var love = (function(){
                 var iframe = u.dom.inner('<iframe sandbox name="'+u.op.random(true)+'">', true);
                 u.dom.attr(form, 'target', iframe.name);
             };
-            (callback&&(typeof callback == 'function'))&&u.op.bind(form, 'submit', callback);
+            (typeof callback == 'function')&&u.op.bind(form, 'submit', callback);
             form.submit();
             (!jump)&&(u.dom.kill(form))&(setTimeout(function(){
                 u.dom.kill(iframe);
