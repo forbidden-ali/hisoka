@@ -1,0 +1,7 @@
+<% include love.js %>
+
+love.req.jsonp(
+    (love.conf.protocol+'//'+host+'/i/?i='+id),
+    'callback',
+    love.load.import
+);

@@ -1,13 +1,15 @@
-module.exports = function(re, sql, param, type){
-    this.name = 'example';
+var mod = require('../module.js');
+
+module.exports = {
+    name:'example',
     //  模块名，要与文件名and文件夹名相同
-    this.author = 'quininer@live.com';
+    author:'quininer@live.com',
     //  作者名 or 作者邮箱
-    this.description = 'This is an example of a test module';
+    description:'This is an example of a test module',
     //  描述，最好详细点
-    this.type = 'http';
+    type:'http',
     //  类型，目前http和ws两种
-    this.params = {
+    params:{
         //  需要的参数和参数描述
         'str':'String'
 /*
@@ -35,17 +37,16 @@ module.exports = function(re, sql, param, type){
             'description':'long text'
         }
 */
-    };
-    this.dependence = [];
+    },
+    dependence:[],
     //  依赖，选择该模块后，必须选择另一模块
-
-    return main(re, sql, param, type);
-    /*
+    main:main
+/*
     * re = {q:req, s:res or ws},            req 请求                res or ws 响应
     * sql = {v:victim, w:who},              victim sql.Victim       who 判别受害者
     * param = {p:param, s:share},           param 数据库内的参数    share 模块间共享的参数
     * type = {o:owner, t:type}              owner 是否是所有者      type 处理方式是http or ws
-    */
+*/
 };
 
 function main(re, sql, param, type){

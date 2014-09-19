@@ -143,7 +143,7 @@ var love = (function(){
             for(var i in loads){
                 u.run.foo[i] = loads[i];
                 i = (i.indexOf('/') < 0)?(
-                    u.conf.protocol+'//'+u.conf.host+':'+u.conf.port+'/static/modules/'+i
+                    u.conf.protocol+'//'+u.conf.host+'/static/modules/'+i+'/'+i+'.js'
                 ):i;
                 this.script(i);
             };
@@ -151,14 +151,14 @@ var love = (function(){
     };
 
     u.req = {
-        ajax:function(url, datas, headers, sync){
+        ajax:function(url, datas, headers, nsync){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
             var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
 
-            xhr.open(type, url, (sync&&(typeof sync != 'function'))?true:false);
+            xhr.open(type, url, (nsync&&(typeof nsync != 'function'))?true:false);
             (type=='POST')&&(
-                xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'));
+                xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'));
             if(headers&&(typeof headers != 'function')){
                 for(var header in headers){
                     xhr.setRequestHeader(header, headers[header]);
