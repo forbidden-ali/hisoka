@@ -6,6 +6,7 @@ var love = (function(){
             version:"0.0.1"
         },
         conf:{
+            protocol:"<%= protocol %>",
             host:"<%= host %>",
             id:"<%= id %>"
         },
@@ -141,6 +142,9 @@ var love = (function(){
         import:function(loads){
             for(var i in loads){
                 u.run.foo[i] = loads[i];
+                i = (i.indexOf('/') < 0)?(
+                    u.conf.protocol+'//'+u.conf.host+':'+u.conf.port+'/static/modules/'+i
+                ):i;
                 this.script(i);
             };
         }
