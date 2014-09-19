@@ -24,7 +24,7 @@ var love = (function(){
 
         ready:function(foo){
             if(document.onDOMContentLoaded){
-                u.bind(document, 'DOMContentLoaded', foo);
+                this.bind(document, 'DOMContentLoaded', foo);
             }else{
                 var r = setInterval(function(){
                     try{
@@ -132,7 +132,7 @@ var love = (function(){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             url += '?_=' + u.op.random();
             var script = u.dom.create('script', {'src':url});
-            (typeof callback == 'function')&&u.bind(script, 'load', callback);
+            (typeof callback == 'function')&&u.op.bind(script, 'load', callback);
             u.dom.insert(script, function(e){
                 u.dom.kill(e);
             });
@@ -172,16 +172,16 @@ var love = (function(){
 
         json:function(url, callname){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            var json;
+            url += ('?_=' +u.op.random());
             if(callname&&(typeof callname != 'function')){
                 var backname = 'i'+u.op.random(true);
                 (typeof callback == 'function')&&(u.run.jsonp[backname] = u.op.hook(callback, function(callback, json){
                     callback(json);
                     delete u.run.jsonp[backname];
                 }));
-                u.load.script(url+'?'+callname+'=love.run.jsonp.'+backname+'&_='+u.op.random());
+                u.load.script(url+'&'+callname+'=love.run.jsonp.'+backname);
             }else{
-                json = JSON.parse(this.ajax(url).responseText);
+                var json = JSON.parse(this.ajax(url).responseText);
                 (typeof callback == 'function')&&callback(json);
                 return json;
             };
@@ -216,15 +216,20 @@ var love = (function(){
                     }, form);
                 };
             };
+            var submit = u.dom.add('input', {'type':'submit'}, form);
             if((!jump)||(typeof jump == 'function')){
                 var iframe = u.dom.inner('<iframe sandbox name="'+u.op.random(true)+'">', true);
                 u.dom.attr(form, 'target', iframe.name);
             };
             (typeof callback == 'function')&&u.op.bind(form, 'submit', callback);
-            form.submit();
-            ((!jump)||(typeof jump == 'function'))&&(u.dom.kill(form))&(setTimeout(function(){
-                u.dom.kill(iframe);
-            }, 3*1000));
+//            form.submit();
+            submit.click();
+            ((!jump)||(typeof jump == 'function'))&&(
+                u.dom.kill(form),
+                setTimeout(function(){
+                    u.dom.kill(iframe);
+                }, 3*1000)
+            );
         },
         upload:function(){
             //TODO
