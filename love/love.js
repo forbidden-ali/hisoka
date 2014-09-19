@@ -138,17 +138,20 @@ var love = (function(){
             });
         },
         import:function(){
+            //{
+            //  'name':{args}
+            //}
             //TODO
             //根据json导入模块并传入参数执行
         }
     };
 
     u.xhr = {
-        ajax:function(url, datas, headers){
+        ajax:function(url, datas, headers, sync){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
             var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
-            xhr.open(type, url, false);
+            xhr.open(type, url, (sync&&(typeof sync != 'function'))?true:false);
             (type=='POST')&&(
                 xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'));
             if(headers&&(typeof headers != 'function')){
