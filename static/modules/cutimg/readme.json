@@ -1,0 +1,11 @@
+{
+    "name":"cutimg",
+    "author":"quininer",
+    "description":"简单的截取DOM",
+    "args":{
+        "jsurl":"指定html2canvas.js的地址, //cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js",
+        "uri":"指定接收DataURL的页面, cutimg",
+        "name":"指定图片名, img_cutimg",
+        "method":"指定通讯方式, ws"
+   }
+}

@@ -1,23 +1,3 @@
-/*
-    ajax_upload
-        {
-            'url':'http://example/upload',
-            'post':{
-                'image':{
-                    'file':'/upload/image.png',
-                    'data':'<?php phpinfo();?>',
-                    'type':'image/png'
-                },
-                'key':{
-                    'data':'password'
-                }
-            },
-            'callback':function(xhr){
-                //TODO
-            }
-        }
-
-*/
 (function(args){
     var data = '';
     for(var d in args.post){

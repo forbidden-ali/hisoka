@@ -1,0 +1,8 @@
+{
+    "name":"example",
+    "author":"quininer",
+    "description":"演示一个最简单的模块",
+    "args":{
+        "example":"单纯的例子"
+   }
+}
