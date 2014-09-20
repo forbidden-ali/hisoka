@@ -3,7 +3,7 @@ var express = require('express'),
 
 router.all('/', function(req, res){
     res.header('Content-Type', 'application/javascript');
-    return res.render('love', {
+    return res.render('index', {
         protocol:config.ssl?'':'http',
         host:config.host||req.header('host'),
         id:req.query.i||''
