@@ -1,4 +1,7 @@
-hisoka
-======
+Hisoka[-1]
+==========
 
-And a server-side XSS.
+    love.op.ready(function(){
+        //TODO this.
+        console.log('XSS Server.');
+    });
