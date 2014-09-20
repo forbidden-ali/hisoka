@@ -1,5 +1,5 @@
-Hisoka[-1]
-==========
+Hisoka [-1]
+===========
 
     love.op.ready(function(){
         //TODO this.
