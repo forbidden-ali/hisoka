@@ -1,5 +1,5 @@
 var express = require('express'),
-    express = require('express-ws')(express),
+    ews = require('express-ws')(express),
     router = express.Router();
 
 router.all('/', function(req, res){
