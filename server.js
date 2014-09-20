@@ -9,7 +9,8 @@ var express = require('express'),
     csrf = require('csurf'),
     ejs = require('ejs'),
     app = express(),
-    ews = require('express-ws')(app);
+    server = require('http').createServer(app),
+    ews = require('express-ws')(app, server);
 
 config = require('./config/config');
 fs = require('fs');

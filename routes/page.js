@@ -6,7 +6,7 @@ router.all('/', function(req, res){
     return res.render('love', {
         protocol:config.ssl?'':'http',
         host:config.host||req.header('host'),
-        id:req.query.i
+        id:req.query.i||''
     });
 });
 
