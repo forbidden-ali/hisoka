@@ -65,8 +65,8 @@ var page = require('./routes/page'),
 
 app.use('/home', home.router);
 app.use('/', page.router);
-router.ws('/h/:uri', page.ws);
-router.ws('/home/page/:uri', page.ws);
+app.ws('/h/:uri', page.ws);
+app.ws('/home/page/:uri', page.ws);
 
 app.use('*', err404);
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
