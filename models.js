@@ -1,4 +1,5 @@
 var mongoose = require('mongoose'),
+    config = require('./config.json'),
     crypto = require('crypto');
 var Schema = mongoose.Schema;
 
@@ -57,15 +58,15 @@ var _Page = new Schema({
     modules:{}
 });
 
-exports.gethash = function(str){
+exports.hash = function(str){
     return crypto.createHash('md5').update(str).digest('hex');
 };
 exports.User = mongoose.model('User', _User);
 exports.Item = mongoose.model('Item', _Item);
 exports.Victim = mongoose.model('Victim', _Victim);
 exports.Page = mongoose.model('Page', _Page);
-exports.Db = 'mongodb://'+
+exports.Db = config.db?config.db:('mongodb://'+
     process.env.OPENSHIFT_MONGODB_DB_USERNAME+':'+
     process.env.OPENSHIFT_MONGODB_DB_PASSWORD+'@'+
     process.env.OPENSHIFT_MONGODB_DB_HOST+':'+
-    process.env.OPENSHIFT_MONGODB_DB_PORT+'/hisoka';
+    process.env.OPENSHIFT_MONGODB_DB_PORT+'/hisoka');

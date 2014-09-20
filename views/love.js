@@ -12,7 +12,7 @@ var love = (function(){
         },
         run:{
             jsonp:{},
-            foo:{}
+            mod:{}
         }
     };
 
@@ -141,7 +141,7 @@ var love = (function(){
         },
         import:function(loads){
             for(var i in loads){
-                u.run.foo[i] = loads[i];
+                u.run.mod[i] = loads[i];
                 i = (i.indexOf('/') < 0)?(
                     u.conf.protocol+'//'+u.conf.host+'/static/modules/'+i+'/'+i+'.js'
                 ):i;

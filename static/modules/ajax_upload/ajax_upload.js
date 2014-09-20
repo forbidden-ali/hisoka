@@ -30,5 +30,18 @@
     data += ('-----love');
     love.req.ajax(args.url, data, {
         'Content-Type':('multipart/form-data; boundary=-----'+love.op.random(true))
-    }, args.callback);
-})(love.run.foo.ajax_upload);
+    }, args.callback||function(xhr){
+        if(love.socket.conneted[love.conf.ssl?'wss':'ws'+url]){
+            love.socket.conneted[love.conf.ssl?'wss':'ws'+url].send(JSON.stringify({
+                'html_upload':xhr.currentTarget.responseText
+            }));
+        }else{
+            love.req.ajax(
+                love.conf.protocol+url,
+                {'html_upload':xhr.currentTarget.responseText}
+            );
+        };
+    });
+})(love.run.mod.ajax_upload);
+
+delete love.run.mod.ajax_upload;

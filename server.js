@@ -14,9 +14,10 @@ var express = require('express'),
     page = require('./routes/page'),
     home = require('./routes/home');
 
+config = require('./config.json'),
 fs = require('fs'),
 sql = require('./models');
-mongoose.connect(sql.Db);
+mongoose.connect(config.db);
 
 app.set('view engine', 'ejs');
 app.engine('html', ejs.renderFile);
@@ -42,27 +43,28 @@ app.use('/home', function(req, res, next){
     next();
 });
 
-app.all('/', page.xss);
-app.all('/i/', page.load);
-app.all('/h/:uri', page.http);
-app.ws('/h/:uri', page.ws);
-app.all('/home/page/:uri', page.http);
-app.ws('/home/page/:uri', page.ws);
-
 app.route('/login')
-    .get(home.login.get)
-    .post(home.login.post);
-app.post('/home/logout', home.login.logout);
-app.get('/home', home.home);
-app.get('/home/item/:name', home.item.item);
-app.post('/home/item/:name/edit', home.item.edit);
+    .get(function(req, res){
+        res.render('login', {err:''});
+    })
+    .post(function(req, res){
+        var name = req.body.name;
+        var passwd = req.body.passwd;
+        sql.User.findOne({name:name}, function(err, info){
+            if(!info){return res.render('login', {err:'login failed.'})};
+            sql.User.findOne({
+                name:name,
+                passwd:sql.hash(passwd+info.salt)
+            }, function(err, info){
+                if(!info){return res.render('login', {err:'login failed.'})};
+                req.session.user = info;
+                res.redirect('/home');
+            });
+        });
+    });
 
-app.get('/home/victim/:name', home.victim.victim);
-app.post('/home/victim:name/edit', home.victim.edit);
-app.get('/home/page/:uri/editor', home.page.page);
-app.post('/home/page/:uri/edit', home.page.edit);
-
-app.all('/home/modules', home.modules);
+app.use('/home', home);
+app.use('/', page);
 
 app.use('*', err404);
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
