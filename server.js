@@ -14,9 +14,9 @@ var express = require('express'),
     page = require('./routes/page'),
     home = require('./routes/home');
 
-config = require('./config.json'),
+config = require('./config/config'),
 fs = require('fs'),
-sql = require('./models');
+sql = require('./config/models');
 mongoose.connect(config.db);
 
 app.set('view engine', 'ejs');

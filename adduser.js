@@ -1,11 +1,11 @@
 var mongoose = require('mongoose'),
-    crypto = require('crypto'),
-    models = require('./models');
+    config = require('./config/config'),
+    models = require('./config/models');
 
-mongoose.connect(models.Db);
+mongoose.connect(config.db);
 
 function main(name, passwd, salt){
-    var passwd = sql.gethash(passwd+salt);
+    var passwd = sql.hash(passwd+salt);
     var user = new models.User({
         name:name,
         passwd:passwd,
