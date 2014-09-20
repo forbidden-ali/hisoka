@@ -185,4 +185,4 @@ route.all('/modules', function(req, res){
     };
 });
 
-module.exports = router;
+exports.router = router;

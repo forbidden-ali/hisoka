@@ -7,12 +7,12 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('morgan'),
     csrf = require('csurf'),
-    ejs = require('ejs');
+    ejs = require('ejs'),
+    app = express(),
+    ews = require('express-ws')(app);
 
-app = express();
-ews = require('express-ws')(app),
-config = require('./config/config'),
-fs = require('fs'),
+config = require('./config/config');
+fs = require('fs');
 sql = require('./config/models');
 mongoose.connect(config.db);
 
@@ -63,8 +63,10 @@ app.route('/login')
 var page = require('./routes/page'),
     home = require('./routes/home');
 
-app.use('/home', home);
-app.use('/', page);
+app.use('/home', home.router);
+app.use('/', page.router);
+router.ws('/h/:uri', page.ws);
+router.ws('/home/page/:uri', page.ws);
 
 app.use('*', err404);
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,

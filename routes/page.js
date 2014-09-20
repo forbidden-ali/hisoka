@@ -1,4 +1,5 @@
-var router = app.Router();
+var express = require('express'),
+    router = express.Router();
 
 router.all('/', function(req, res){
     res.header('Content-Type', 'application/javascript');
@@ -74,7 +75,7 @@ var http = function(req, res){
 router.all('/h/:uri', http);
 router.all('/home/page/:uri', http);
 
-var hws = function(ws, req){
+exports.ws = function(ws, req){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
@@ -91,7 +92,5 @@ var hws = function(ws, req){
         });
     });
 };
-router.ws('/h/:uri', hws);
-router.ws('/home/page/:uri', hws);
 
-module.exports = router;
+exports.router = router;
