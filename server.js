@@ -9,8 +9,6 @@ var express = require('express'),
     csrf = require('csurf'),
     ejs = require('ejs'),
     app = express(),
-    server = require('http').createServer(app),
-    ews = require('express-ws')(app, server),
     page = require('./routes/page'),
     home = require('./routes/home');
 
