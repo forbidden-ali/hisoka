@@ -7,9 +7,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('morgan'),
     csrf = require('csurf'),
-    ejs = require('ejs'),
-    page = require('./routes/page'),
-    home = require('./routes/home');
+    ejs = require('ejs');
 
 app = express();
 ews = require('express-ws')(app),
@@ -61,6 +59,9 @@ app.route('/login')
             });
         });
     });
+
+var page = require('./routes/page'),
+    home = require('./routes/home');
 
 app.use('/home', home);
 app.use('/', page);
