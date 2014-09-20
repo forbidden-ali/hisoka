@@ -160,7 +160,7 @@ router.post('/page/:uri/edit', function(req, res){
     };
 });
 
-route.all('/modules', function(req, res){
+router.all('/modules', function(req, res){
     var type = req.param('type');
     var path = fs.realpathSync('.');
     var json = {};
