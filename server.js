@@ -8,10 +8,11 @@ var express = require('express'),
     logger = require('morgan'),
     csrf = require('csurf'),
     ejs = require('ejs'),
-    app = express(),
     page = require('./routes/page'),
     home = require('./routes/home');
 
+app = express();
+ews = require('express-ws')(app),
 config = require('./config/config'),
 fs = require('fs'),
 sql = require('./config/models');

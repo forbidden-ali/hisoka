@@ -1,6 +1,4 @@
-var express = require('express'),
-    ews = require('express-ws')(express),
-    router = express.Router();
+var router = app.Router();
 
 router.all('/', function(req, res){
     res.header('Content-Type', 'application/javascript');
