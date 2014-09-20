@@ -57,7 +57,7 @@ function handle(req, res, modules, owner, victim, who, type){
             share[modules[i][0]] = [];
         };
         share[modules[i][0]].unshift(
-            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, t:type});
+            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, t:type})
         );
     };
 };
