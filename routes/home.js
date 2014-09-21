@@ -35,7 +35,7 @@ router.get('/item/:name', function(req, res){
 router.post('/item/:name/edit', function(req, res){
     var name = req.params.name;
     if(!name){
-        return res.json({status:'error, name?'});
+        return res.json({'err':'error, name?'});
     };
     sql.Item.findOne({owner:req.session.user.name, name:name}, function(err, info){
         if(info){
@@ -47,11 +47,11 @@ router.post('/item/:name/edit', function(req, res){
                 req.body.load&&(info.load=JSON.parse(req.body.load));
                 req.body.modules&&(info.modules=JSON.parse(req.body.modules));
             }catch(err){
-                res.json({status:err});
+                res.json({'err':err});
             };
             info.save(function(err){
                 res.json({
-                    status:err
+                    'err':err
                 })
             });
         }else{
@@ -64,7 +64,7 @@ router.post('/item/:name/edit', function(req, res){
                 modules:JSON.parse(req.body.modules)
             }, function(err){
                 res.json({
-                    status:err
+                    'err':err
                 });
             });
         };
@@ -84,7 +84,7 @@ router.post('/victim/:name/edit', function(req, res){
     if(req.param('type')=='delete'){
         sql.Victim.remove({_id:id, owner:req.session.user.name}, function(err){
             res.json({
-                status:err
+                'err':err
             });
         });
     }else{
@@ -99,11 +99,11 @@ router.post('/victim/:name/edit', function(req, res){
                 req.body.modules&&(info.modules=JSON.parse(req.body.modules));
                 req.body.status&&(info.status=JSON.parse(req.body.status));
             }catch(err){
-                res.json({status:err});
+                res.json({'err':err});
             };
             info.seva(function(err){
                 res.json({
-                    status:err
+                    'err':err
                 })
             });
         });
@@ -123,7 +123,7 @@ router.post('/page/:uri/edit', function(req, res){
     if(req.param('type')=='delete'){
         sql.Page.remove({_id:id, owner:req.session.user.name}, function(err){
             res.json({
-                status:err
+                'err':err
             });
         });
     }else{
@@ -136,11 +136,11 @@ router.post('/page/:uri/edit', function(req, res){
                 try{
                     req.body.modules&&(info.modules=JSON.parse(req.body.modules));
                 }catch(err){
-                    res.json({status:err});
+                    res.json({'err':err});
                 };
                 info.save(function(err){
                     res.json({
-                        status:err
+                        'err':err
                     });
                 });
             }else{
@@ -152,7 +152,7 @@ router.post('/page/:uri/edit', function(req, res){
                     modules:JSON.parse(req,body.modules)
                 }, function(err){
                     res.json({
-                        status:err
+                        'err':err
                     });
                 });
             };
@@ -160,29 +160,44 @@ router.post('/page/:uri/edit', function(req, res){
     };
 });
 
-router.all('/modules', function(req, res){
-    var type = req.param('type');
-    var path = fs.realpathSync('.');
-    var json = {};
-    if(type=='user'){
-        //TODO
-    }else if(type=='server'){
-
-        fs.readdirSync('./modules').forEach(function(n){
-            var m = require(path+'/modules/'+n+'/'+n);
-            json[m.name] = {
-                name:m.name,
-                author:m.author,
-                description:m.description,
-                params:m.params
-            };
-        });
-        return res.json(json);
-    }else if(type=='victim'){
-        //TODO
-    }else{
-        return err404(req, res);
+router.all('/modules/:type', function(req, res){
+    var type = req.params.type;
+    var lists = {};
+    var path = (
+            (type=='server'&&(/\.|\/|\\/.test(name)))?
+            ('./modules'):
+            (
+                (type=='victime'&&(/\.|\/|\\/.test(name)))?
+                ('./static/modules'):
+                (null)));
+    try{
+        if(!path)throw 'path error.';
+        for(var e in fs.readdirSync(path)){
+            lists[e] = fs.lstatSync(path+'/'+e).isDirectory()?true:false;
+        };
+    }catch(e){
+        lists = {'err':404};
     };
+    return res.json(lists);
 });
+router.all('/modules/:type/:name', function(req, res){
+    var type = req.params.type;
+    var name = req.params.name;
+    var details;
+    var path = (
+            (type=='server'&&(/\.|\/|\\/.test(name)))?
+            ('./modules/'+name+'/readme.json'):
+            (
+                (type=='victime'&&(/\.|\/|\\/.test(name)))?
+                ('./static/modules/'+name+'/readme.json'):
+                (null)));
+    try{
+        if(!path)throw 'path error.';
+        details = require(path);
+    }catch(e){
+        details = {'err':404};
+    };
+    return res.json(details);
+})
 
 exports.router = router;

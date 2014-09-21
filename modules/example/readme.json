@@ -1,0 +1,39 @@
+{
+    "name":"example",
+    //  模块名，要与文件名and文件夹名相同
+    "author":"quininer",
+    "description":"This is an example of a test module",
+    "type":"http",
+    //  类型，目前http和ws两种
+    "args":{
+        //  需要的参数和参数描述
+        "str":"String"
+/*
+        "name":"dependence", 描述
+        "name":{
+            "type":"radio, 单选类型",
+            "description":"ya",
+            "content":["one", "two"]
+        },
+        "name":{
+            "type":"muradio", 多选类型
+            "description":"yaya",
+            "content":["one", "two"]
+        },
+        "name":{
+            "type":"progress", 百分比条
+            "description":"100%"
+        },
+        "name":{
+            "type":"toggle", 开关按钮
+            "description":"off or on?"
+        },
+        "name":{
+            "type":"text", 长文本
+            "description":"long text"
+        }
+*/
+    },
+    dependence:[],
+    //  依赖，选择该模块后，必须选择另一模块
+};

@@ -21,7 +21,7 @@ router.all('/i/', function(req, res){
         sql.Item.findById(id, function(err, info){
             if(!info){
                 return res.jsonp({
-                    error:'Not found.'
+                    'err':404
                 });
             };
             who = getmd5(info.owner+id+Date.now());
@@ -52,7 +52,7 @@ function handle(req, res, modules, owner, victim, who, type){
     var share = {};
     var path = fs.realpathSync('.');
     for(var i in modules){
-        var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]).main;
+        var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
         if(typeof share[modules[i][0]] != 'object'){
             share[modules[i][0]] = [];
         };
