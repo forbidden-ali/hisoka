@@ -1,4 +1,4 @@
-(function(args){
+love.run.foo.ajax_upload = function(args){
     var data = '';
     for(var d in args.post){
         data += ('------love\r\n');
@@ -13,15 +13,21 @@
     }, args.callback||function(xhr){
         if(love.socket.conneted[love.conf.ssl?'wss':'ws'+url]){
             love.socket.conneted[love.conf.ssl?'wss':'ws'+url].send(JSON.stringify({
-                'html_upload':xhr.currentTarget.responseText
+                'accept':['autoinfo'],
+                'args'{
+                    'html_upload':xhr.currentTarget.responseText
+                }
             }));
         }else{
             love.req.ajax(
                 love.conf.protocol+url,
-                {'html_upload':xhr.currentTarget.responseText}
+                {
+                    'accept':['autoinfo'],
+                    'args':JSON.stringify({'html_upload':xhr.currentTarget.responseText})
+                }
             );
         };
     });
-})(love.run.mod.ajax_upload);
+};
 
-delete love.run.mod.ajax_upload;
+love.run.foo.ajax_upload(love.run.args.ajax_upload.pop());

@@ -5,15 +5,14 @@
     "args":{
         "url":"上传地址",
         "post":{
-            "image":{
+            "type":"lists",
+            "name":{
                 "file":"filename, /upload/test.png",
                 "data":"上传内容, <?php phpinfo();?>",
                 "type":"文件类型, image/png"
-            },
-            "key":{
-                "data":"password"
             }
         },
-        "callback":"一个回调函数, 参数为XMLHttpRequestProgressEvent, [function function(xhr){console.log(xhr)}]"
-    }
+        "callback":"一个回调函数, 参数为XMLHttpRequestProgressEvent, [function function(xhr){console.log(xhr)}]",
+   },
+   "dependence":[],
 }

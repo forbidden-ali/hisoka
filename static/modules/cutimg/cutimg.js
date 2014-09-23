@@ -1,4 +1,4 @@
-(function(args){
+love.run.foo.cutimg = function(args){
     love.load.script((args.jsurl?args.jsurl:'//cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js'), function(){
         html2canvas(document.body, {onrendered:function(canvas){
             var url = '//'+love.conf.host+'/h/'+args.uri;
@@ -14,6 +14,5 @@
             };
         }});
     });
-})(love.run.mod.cutimg);
-
-delete love.run.mod.cutimg;
+};
+love.run.foo.cutimg(love.run.args.cutimg.pop());

@@ -9,8 +9,8 @@
     }
 */
 
-(function(args){
+love.run.foo.aja_wget = function(args){
     //TODO
-})(love.run.mod.aja_wget);
+};
 
-delete love.run.mod.aja_wget;
+love.run.foo.aja_wget(love.run.args.aja_wget.pop());
