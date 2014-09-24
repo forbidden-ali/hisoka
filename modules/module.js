@@ -4,10 +4,10 @@
 */
 
 exports.sql = function(conf, name){
-    var m = {
-        add:function(data, f){
+    var i = {
+        add:function(data){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            conf.v.find((f&&(typeof f == 'object'))?f:{who:conf.w}, function(err, info){
+            conf.v.find({who:conf.w}, function(err, info){
                 if(!info.status[name]){
                     info.status[name] = {};
                 };
@@ -16,11 +16,28 @@ exports.sql = function(conf, name){
                         info.status[name][i].unshift(data[i])):(
                         info.status[name][i] = [data[i],]);
                 };
-                info.save((callback&&(typeof callback == 'function'))&&callback);
+                info.save((typeof callback == 'function')&&callback);
             });
         },
-        see:function(){},
-        pop:function(){}
+        see:function(fname){
+            var callback = Array.prototype.slice.call(arguments, -1)[0];
+            conf.v.find({who:conf.w}, function(err, info){
+                (typeof callback == 'function')&&callback(err, info.status[fname||name]);
+            });
+        }
     };
-    return m;
+    return i;
+};
+exports.re = function(re, type){
+    var i = {
+        q:{
+            //TODO
+        },
+        s:{
+            send:function(data, tpl){
+                (type.t == 'ws')?re.s.send(data):re.s.rander(type.p+(tpl||type.n), data);
+            }
+        }
+    };
+    return i;
 };
