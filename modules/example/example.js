@@ -19,12 +19,12 @@ module.exports = function(re, sql, param, type){
         //  TODO    数据库操作封装成类库
         //  sql.v 操作victim数据库
         //  sql.w who
-        if(!info.status['Example']){
+        if(!info.status['example']){
             //  注意status的结构
-            info.status['Example'] = {};
-            info.status['Example']['str'] = [];
+            info.status['example'] = {};
+            info.status['example']['str'] = [];
         };
-        info.status['Example']['str'].unshift(str);
+        info.status['example']['str'].unshift(str);
         //  注意一定要是unshift，加在数组前头，否则不视为最新信息
         info.save(function(err, info){
 //          re.s.send('Hello world.');
