@@ -17,7 +17,7 @@ router.all('/i/', function(req, res){
     sql.Victim.findOne({who:who}, function(err, info){
         if(info)return res.jsonp(info.load);
         sql.Item.findById(id, function(err, info){
-            if(!info)return res.jsonp({'err':404});
+            if(!info)return res.jsonp({err:404});
             who = sql.hash(info.owner+id+Date.now());
             res.cookie('who', who);
             sql.Victim.create({

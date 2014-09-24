@@ -34,7 +34,7 @@ router.get('/item/:name', function(req, res){
 });
 router.post('/item/:name/edit', function(req, res){
     var name = req.params.name;
-    if(!name)return res.json({'err':'error, name?'});
+    if(!name)return res.json({err:'error, name?'});
     sql.Item.findOne({owner:req.session.user.name, name:name}, function(err, info){
         if(info){
             //  owner, name, payload, load, modules
@@ -45,12 +45,10 @@ router.post('/item/:name/edit', function(req, res){
                 req.body.load&&(info.load=JSON.parse(req.body.load));
                 req.body.modules&&(info.modules=JSON.parse(req.body.modules));
             }catch(err){
-                res.json({'err':err});
+                res.json({err:err});
             };
             info.save(function(err){
-                res.json({
-                    'err':err
-                })
+                res.json({err:err});
             });
         }else{
             //  owner, name, payload, load, modules
@@ -61,9 +59,7 @@ router.post('/item/:name/edit', function(req, res){
                 load:JSON.parse(req.body.load),
                 modules:JSON.parse(req.body.modules)
             }, function(err){
-                res.json({
-                    'err':err
-                });
+                res.json({err:err});
             });
         };
     });
@@ -81,9 +77,7 @@ router.post('/victim/:name/edit', function(req, res){
     var id = req.params.id;
     if(req.param('type')=='delete'){
         sql.Victim.remove({_id:id, owner:req.session.user.name}, function(err){
-            res.json({
-                'err':err
-            });
+            res.json({err:err});
         });
     }else{
         sql.Victim.find({_id:id, owner:req.session.user.name}, function(err, info){
@@ -97,12 +91,10 @@ router.post('/victim/:name/edit', function(req, res){
                 req.body.modules&&(info.modules=JSON.parse(req.body.modules));
                 req.body.status&&(info.status=JSON.parse(req.body.status));
             }catch(err){
-                res.json({'err':err});
+                res.json({err:err});
             };
             info.seva(function(err){
-                res.json({
-                    'err':err
-                })
+                res.json({err:err});
             });
         });
     };
@@ -120,9 +112,7 @@ router.post('/page/:uri/edit', function(req, res){
     var id = req.params.id;
     if(req.param('type')=='delete'){
         sql.Page.remove({_id:id, owner:req.session.user.name}, function(err){
-            res.json({
-                'err':err
-            });
+            res.json({err:err});
         });
     }else{
         sql.Page.findOne({_id:id, owner:req.session.user.name}, function(err, info){
@@ -134,12 +124,10 @@ router.post('/page/:uri/edit', function(req, res){
                 try{
                     req.body.modules&&(info.modules=JSON.parse(req.body.modules));
                 }catch(err){
-                    res.json({'err':err});
+                    res.json({err:err});
                 };
                 info.save(function(err){
-                    res.json({
-                        'err':err
-                    });
+                    res.json({err:err});
                 });
             }else{
                 //  owner, name, uri, modules
@@ -149,9 +137,7 @@ router.post('/page/:uri/edit', function(req, res){
                     uri:req.body.uri,
                     modules:JSON.parse(req,body.modules)
                 }, function(err){
-                    res.json({
-                        'err':err
-                    });
+                    res.json({err:err});
                 });
             };
         });
