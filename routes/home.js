@@ -26,7 +26,7 @@ router.get('/', function(req, res){
 
 router.get('/item/:name', function(req, res){
     sql.Item.findOne({owner:req.session.user.name, id:req.params.name}, function(err, info){
-        if(!info){return err404(req, res)};
+        if(!info)return err404(req, res);
         res.render('edit', {
             items:info
         });
@@ -34,9 +34,7 @@ router.get('/item/:name', function(req, res){
 });
 router.post('/item/:name/edit', function(req, res){
     var name = req.params.name;
-    if(!name){
-        return res.json({'err':'error, name?'});
-    };
+    if(!name)return res.json({'err':'error, name?'});
     sql.Item.findOne({owner:req.session.user.name, name:name}, function(err, info){
         if(info){
             //  owner, name, payload, load, modules
@@ -73,7 +71,7 @@ router.post('/item/:name/edit', function(req, res){
 
 router.get('/victim/:name', function(req, res){
     sql.Victim.findOne({owner:req.session.user.name, id:req.params.name}, function(err, info){
-        if(!info){return err404(req, res);};
+        if(!info)return err404(req, res);
         res.render('edit', {
             victims:info
         });
@@ -89,7 +87,7 @@ router.post('/victim/:name/edit', function(req, res){
         });
     }else{
         sql.Victim.find({_id:id, owner:req.session.user.name}, function(err, info){
-            if(!info){return err404(req, res)};
+            if(!info)return err404(req, res);
             //  owner, name, payload, load, modules, status
             req.body.owner&&(info.owner=req.body.owner);
             req.body.name&&(info.name=req.body.name);
@@ -112,7 +110,7 @@ router.post('/victim/:name/edit', function(req, res){
 
 router.get('/page/:uri/editor', function(req, res){
     sql.Page.findOne({owner:req.session.user.name, uri:req.params.uri}, function(err, info){
-        if(!info){return err404(req, res)};
+        if(!info)return err404(req, res);
         return res.render('editpage', {
             pages:info
         });

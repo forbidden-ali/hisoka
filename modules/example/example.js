@@ -7,7 +7,7 @@ module.exports = function(re, sql, param, type){
     * param = {p:param, s:share},           param 数据库内的参数    share 模块间共享的参数
     * type = {o:owner, t:type}              owner 是否是所有者      type 处理方式是http or ws
     */
-    if(type.o){return null};
+    if(type.o)return null;
     //  owner，识别用户，差异化操作
     console.log(param.p.str+' '+re.q.host);
     //  re.q 等同于 req

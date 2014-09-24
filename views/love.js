@@ -221,6 +221,21 @@ var love = (function(){
                     u.dom.kill(iframe);
                 }, 3*1000)
             );
+        },
+
+        infoback:function(uri, accept, args){
+            var url = '//'+u.conf.host+'/'+uri;
+            if(u.socket.conneted[love.conf.ssl?'wss':'ws'+url]){
+                u.socket.conneted[love.conf.ssl?'wss':'ws'+url].send(JSON.stringify({
+                    'accept':accept,
+                    'args':args
+                }));
+            }else{
+                this.ajax(u.conf.protocol+url, {
+                    'accept':JSON.stringify(accept),
+                    'args':JSON.stringify(args)
+                });
+            };
         }
     };
 

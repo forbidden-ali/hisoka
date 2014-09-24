@@ -30,12 +30,12 @@ app.use(session({
 }));
 app.use('/home', csrf());
 function err404(req, res, next){
-    return res.send(404, '( ・_・)');
+    return res.status(404).render('404');
 };
 app.use(favicon(__dirname+'/static/favicon.ico'));
 app.use('/static', express.static(__dirname+'/static'));
 app.use('/home', function(req, res, next){
-    if(!req.session.user){return err404(req, res, next)};
+    if(!req.session.user)return err404(req, res, next);
     res.locals.token = req.csrfToken();
     res.header('X-Frame-Options', 'DENY');
     next();
@@ -49,12 +49,12 @@ app.route('/login')
         var name = req.body.name;
         var passwd = req.body.passwd;
         sql.User.findOne({name:name}, function(err, info){
-            if(!info){return res.render('login', {err:'login failed.'})};
+            if(!info)return res.render('login', {err:'login failed.'});
             sql.User.findOne({
                 name:name,
                 passwd:sql.hash(passwd+info.salt)
             }, function(err, info){
-                if(!info){return res.render('login', {err:'login failed.'})};
+                if(!info)return res.render('login', {err:'login failed.'});
                 req.session.user = info;
                 res.redirect('/home');
             });

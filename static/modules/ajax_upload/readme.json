@@ -4,6 +4,7 @@
     "description":"通过ajax上传文件",
     "args":{
         "url":"上传地址",
+        "uri":"接受信息地址",
         "post":{
             "type":"lists",
             "name":{

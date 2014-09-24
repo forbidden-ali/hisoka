@@ -11,22 +11,9 @@ love.run.foo.ajax_upload = function(args){
     love.req.ajax(args.url, data, {
         'Content-Type':('multipart/form-data; boundary=-----'+love.op.random(true))
     }, args.callback||function(xhr){
-        if(love.socket.conneted[love.conf.ssl?'wss':'ws'+url]){
-            love.socket.conneted[love.conf.ssl?'wss':'ws'+url].send(JSON.stringify({
-                'accept':['autoinfo'],
-                'args'{
-                    'html_upload':xhr.currentTarget.responseText
-                }
-            }));
-        }else{
-            love.req.ajax(
-                love.conf.protocol+url,
-                {
-                    'accept':['autoinfo'],
-                    'args':JSON.stringify({'html_upload':xhr.currentTarget.responseText})
-                }
-            );
-        };
+        love.req.infoback(args.uri, ['autoinfo'], {
+            'html_upload':xhr.currentTarget.responseText
+        });
     });
 };
 
