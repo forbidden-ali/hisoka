@@ -52,8 +52,8 @@ function handle(req, res, modules, owner, victim, who, type){
         try{
             if(!fs.lstatSync(path+'/'+modules[i][0]).isDirectory())throw 'path error.';
             var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
-        }catch(e){
-            share[modules[i][0]].unshift({'err':e});
+        }catch(err){
+            share[modules[i][0]].unshift({'err':err});
             continue
         };
         share[modules[i][0]].unshift(
