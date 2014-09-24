@@ -35,7 +35,7 @@ exports.re = function(re, type){
         },
         s:{
             send:function(data, tpl){
-                (type.t == 'ws')?re.s.send(data):re.s.rander(type.p+(tpl||type.n), data);
+                (type.t == 'ws')?re.s.send(data):re.s.rander(type.d+(tpl||type.n), data);
             }
         }
     };
