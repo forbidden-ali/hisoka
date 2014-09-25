@@ -1,6 +1,9 @@
 /*
     TODO
-      封装一些模块常用操作
+        封装一些模块常用操作
+        mod.js的目的不是用来完全代替原本的sql, req, res操作
+            只是针对Hisoka一些特别的处理进行封装
+            弥补原本的麻烦操作
 */
 
 exports.sql = function(conf, name){
@@ -22,7 +25,7 @@ exports.sql = function(conf, name){
         see:function(fname){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             conf.v.find({who:conf.w}, function(err, info){
-                (typeof callback == 'function')&&callback(err, info.status[fname||name]);
+                (typeof callback == 'function')&&callback(err, info.status[fname||name], info);
             });
         }
     };
@@ -31,11 +34,23 @@ exports.sql = function(conf, name){
 exports.re = function(re, type){
     var i = {
         q:{
-            //TODO
+            accpet:re.q.param('accept'),
+            query:function(name){
+                var args = JSON.parse(re.q.query.args||'{}');
+                return name?args[name]:args;
+            },
+            body:function(name){
+                var args = JSON.parse(re.q.body.args||'{}');
+                return name?args[name]:args;
+            },
+            args:function(name){
+                var args = JSON.parse(re.q.param('args')||'{}');
+                return name?args[name]:args;
+            }
         },
         s:{
             send:function(data, tpl){
-                (type.t == 'ws')?re.s.send(data):re.s.rander(type.d+(tpl||type.n), data);
+                (type.t == 'ws')?re.s.send(JSON.stringify(data)):re.s.rander(type.d+(tpl||type.n), data);
             }
         }
     };

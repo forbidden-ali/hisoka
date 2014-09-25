@@ -11,8 +11,8 @@ module.exports = function(re, sql, param, type){
     if(type.o)return null;//                        owner，识别用户，差异化操作
     var msql = mod.sql(sql, readme.name);//         mod模块，封装一些关于模块的操作，此处关于数据库
     var mre = mod.re(re, {n:readme.name, t:type.t, d:__dirname});//     关于请求响应的封装
-    console.log(param.p.str, re.q.hostname);//      re.q 等同于 req
-    re.s.header(mre.q.args.str, param.p.str);//     re.s 同理，mre.q封装了请求，简化参数
+    console.log(param.p.str, re.q.get('referer'));//      re.q 等同于 req
+    re.s.header(mre.q.args().str, param.p.str);//     re.s 同理，mre.q封装了请求，简化参数
     console.log(param.s.cookie);//                  share 共享各个模块处理后的信息
     msql.add({
         str:param.p.str//                   封装数据库操作
