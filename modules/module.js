@@ -31,10 +31,10 @@ exports.sql = function(conf, name){
     };
     return i;
 };
-exports.re = function(re, type){
+exports.re = function(re, ms){
     var i = {
         q:{
-            accpet:re.q.param('accept'),
+            accpet:(ms.g === null)?re.q.param('accept'):JSON.parse(ms.g)['accept'],
             query:function(name){
                 var args = JSON.parse(re.q.query.args||'{}');
                 return name?args[name]:args;
@@ -44,13 +44,13 @@ exports.re = function(re, type){
                 return name?args[name]:args;
             },
             args:function(name){
-                var args = JSON.parse(re.q.param('args')||'{}');
+                var args = JSON.parse(((ms.g === null)?re.q.param('args'):JSON.parse(ms.g).args)||'{}');
                 return name?args[name]:args;
             }
         },
         s:{
             send:function(data, tpl){
-                (type.t == 'ws')?re.s.send(JSON.stringify(data)):re.s.rander(type.d+(tpl||type.n), data);
+                (ms.t === null)?re.s.rander(ms.d+(tpl||ms.n), data):re.s.send(JSON.stringify(data));
             }
         }
     };

