@@ -7,7 +7,7 @@
         "uri":"接受信息地址",
         "post":{
             "type":"lists",
-            "name":{
+            "args":{
                 "file":"filename, /upload/test.png",
                 "data":"上传内容, <?php phpinfo();?>",
                 "type":"文件类型, image/png"

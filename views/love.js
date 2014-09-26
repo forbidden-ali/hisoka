@@ -3,7 +3,7 @@ var love = (function(){
         version:{
             name:"Elastic Love",
             author:"quininer",
-            version:"0.0.1"
+            version:"140926"
         },
         conf:{
             protocol:"<%= protocol %>",

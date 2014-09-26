@@ -151,7 +151,7 @@ router.all('/modules/:type', function(req, res){
             (type=='server'&&(/\.|\/|\\/.test(name)))?
             ('./modules'):
             (
-                (type=='victime'&&(/\.|\/|\\/.test(name)))?
+                (type=='victim'&&(/\.|\/|\\/.test(name)))?
                 ('./static/modules'):
                 (null)));
     try{
@@ -172,7 +172,7 @@ router.all('/modules/:type/:name', function(req, res){
             (type=='server'&&(/\.|\/|\\/.test(name)))?
             ('./modules/'+name+'/readme.json'):
             (
-                (type=='victime'&&(/\.|\/|\\/.test(name)))?
+                (type=='victim'&&(/\.|\/|\\/.test(name)))?
                 ('./static/modules/'+name+'/readme.json'):
                 (null)));
     try{

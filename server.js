@@ -66,7 +66,6 @@ var page = require('./routes/page'),
 
 app.use('/home', home.router);
 app.use('/', page.router);
-app.ws('/h/:uri', page.ws);
 app.ws('/home/page/:uri', page.ws);
 
 app.use('*', err404);
