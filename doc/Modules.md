@@ -7,7 +7,7 @@ Hisoka Mod Document
 
 是单纯的 JavaScript 。
 在 Victim 的浏览器上执行，然后与 Hisoka 通信。
-后文简称 Vmod.
+后文简称 Vmod。
 
 ### readme.json
 
