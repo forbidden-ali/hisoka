@@ -1,8 +1,7 @@
 Hisoka Mod Document
 ===================
 
-一个框架没有模块什么都干不了，
-不多说。
+一个框架没有模块什么都干不了，大概。
 
 ## Victim Mod.
 
@@ -38,7 +37,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
 
 为了方便编写 Vmod，Hisoka封装了一个利用框架，称作 love.js (伸缩自在的爱)。
 
-love.conf
+#### love.conf
 
     conf:{
         protocol:[str],     //  指定与Hisoka通信是否通过ssl，虽然一般情况缺省协议就可以了
@@ -46,7 +45,7 @@ love.conf
         id:[str]            //  判断处理入口的ID，不是很需要了解的东西      eg: "1"
     },
 
-love.req
+#### love.req
 
     req:{
         ajax:[function],
@@ -91,7 +90,7 @@ love.req
 
     }
 
-love.load
+#### love.load
 
     load:{
         script:[function],
