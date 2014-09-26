@@ -142,7 +142,7 @@ var love = (function(){
         },
         import:function(loads){
             for(var i in loads){
-                u.run.args[i]?(u.run.args[i].push(loads[i])):(u.run.args[i] = [loads[i]]);
+                u.run.args[i]?(u.run.args[i].push(loads[i])):(u.run.args[i] = [loads[i],]);
                 i = (i.indexOf('/') < 0)?(
                     u.conf.protocol+'//'+u.conf.host+'/static/modules/'+i+'/'+i+'.js'
                 ):i;
@@ -225,13 +225,13 @@ var love = (function(){
 
         infoback:function(uri, accept, args){
             var url = '//'+u.conf.host+'/'+uri;
-            if(u.socket.conneted[love.conf.ssl?'wss':'ws'+url]){
-                u.socket.conneted[love.conf.ssl?'wss':'ws'+url].send(JSON.stringify({
+            if(u.socket.conneted[(love.conf.protocol == 'https:')?'wss:':'ws:'+url]){
+                u.socket.conneted[(love.conf.protocol == 'https:')?'wss:':'ws:'+url].send(JSON.stringify({
                     'accept':accept,
                     'args':args
                 }));
             }else{
-                this.ajax(u.conf.protocol+url, {
+                this.ajax((location.protocol == 'file:')?'http:':u.conf.protocol+url, {
                     'accept':JSON.stringify(accept),
                     'args':JSON.stringify(args)
                 });

@@ -6,6 +6,6 @@ module.exports = {
         process.env.OPENSHIFT_MONGODB_DB_HOST+':'+
         process.env.OPENSHIFT_MONGODB_DB_PORT+'/hisoka'
     ),
-    'ssl':true,
+    'ssl':null,
     'host':'',
 };

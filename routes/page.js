@@ -5,7 +5,7 @@ var express = require('express'),
 router.all('/', function(req, res){
     res.header('Content-Type', 'application/javascript');
     return res.render('index', {
-        protocol:config.ssl?'':'http',
+        protocol:config.ssl?'https:':'',
         host:config.host||req.header('host'),
         id:req.query.i||'1'
     });
