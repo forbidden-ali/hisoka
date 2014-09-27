@@ -127,7 +127,7 @@ var love = (function(){
             (typeof callback == 'function')&&calback();
         },
         attr:function(e, attr, value){
-            if(!value)return e.attributes[attr].value;
+            if(!value)return (e.attributes[attr]||{}).value;
             e.setAttribute(attr, value);
             return e;
         }
