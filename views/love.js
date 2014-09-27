@@ -31,7 +31,7 @@ var love = (function(){
             }else{
                 var r = setInterval(function(){
                     try{
-                        document.body.doScroll('left');
+                        u.get.body().doScroll('left');
                         clearInterval(r);
                         foo();
                     }catch(e){};
@@ -84,21 +84,20 @@ var love = (function(){
         name:function(name){return document.getElementsByName(name)},
         tag:function(name){return document.getElementsByTagName(name)},
         class:function(name){return document.getElementsByClassName(name)},
-        html:this.tag('html')[0]||(document.write('<html>')&this.tag('html')[0]),
-        head:this.tag('head')[0]||u.dom.inner('<head>'),
-        body:this.tag('body')[0]||u.dom.inner('<body>')
+        html:function(){return this.tag('html')[0]||(document.write('<html>')&this.tag('html')[0])},
+        head:function(){return this.tag('head')[0]||u.dom.inner('<head>')},
+        body:function(){return this.tag('body')[0]||u.dom.inner('<body>')}
     };
 
     u.dom = {
         inner:function(dom, hide, e){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            e = (e&&u.get.isdom(e))?e:u.get.html;
+            e = (e&&u.get.isdom(e))?e:u.get.html();
             var t = u.dom.create('div');
             t.innerHTML = dom;
             var i = t.children[0];
             (hide&&(typeof hide != 'function'))&&(i.style.display = 'none');
-            (typeof callback == 'function')&&u.op.bind(i, 'load', callback);
-            e.appendChild(i);
+            this.insert(i, e, (typeof callback == 'function')&&callback)
             return i;
         },
 
@@ -109,7 +108,7 @@ var love = (function(){
         },
         insert:function(e, parent){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            parent = (parent&&u.get.isdom(parent))?parent:u.get.body;
+            parent = (parent&&u.get.isdom(parent))?parent:u.get.body();
             parent.appendChild(e);
             (typeof callback == 'function')&&callback(e, parent);
             return e;
@@ -139,7 +138,7 @@ var love = (function(){
             url += '?_=' + u.op.random();
             var script = u.dom.create('script', {'src':url});
             (typeof callback == 'function')&&u.op.bind(script, 'load', callback);
-            u.dom.insert(script, u.get.head, function(e){
+            u.dom.insert(script, u.get.head(), function(e){
                 u.dom.kill(e);
             });
         },
@@ -202,7 +201,7 @@ var love = (function(){
                 'method':'POST',
                 'style':'display: none;',
                 'action':url,
-            }, u.get.body);
+            }, u.get.body());
             if(datas&&(typeof datas == 'object')){
                 for(var name in datas){
                     var input = u.dom.add('input', {
