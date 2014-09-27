@@ -41,7 +41,7 @@ var love = (function(){
 
         hook:function(foo, hook){
             return function(){
-                return (hook&&(typeof hook == 'function'))?(
+                return (typeof hook == 'function')?(
                     Array.prototype.unshift.call(arguments, foo),
                     hook.apply(this, arguments)
                 ):foo.apply(this, arguments);

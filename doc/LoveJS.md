@@ -349,7 +349,7 @@ foo函数将会作为hook函数的第一个参数传入，而被hook的函数接
 ```
     >alert = love.op.hook(alert, function(foo, str){console.log(str), foo(str)});
     function (){
-        return (hook&&(typeof hook == 'function'))?(
+        return (typeof hook == 'function')?(
             Array.prototype.unshift.call(arguments, foo),
             hook.apply(this, arguments)
         ):foo.apply(this, arguments);
@@ -363,7 +363,7 @@ foo函数将会作为hook函数的第一个参数传入，而被hook的函数接
 ```
     >alert = love.op.hook(console.log);
     function (){
-        return (hook&&(typeof hook == 'function'))?(
+        return (typeof hook == 'function')?(
             Array.prototype.unshift.call(arguments, foo),
             hook.apply(this, arguments)
         ):foo.apply(this, arguments);
