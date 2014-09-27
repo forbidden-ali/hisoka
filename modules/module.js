@@ -37,14 +37,8 @@ exports.re = function(re, ms, di){
         type:(((ms.g === null)&&(ms.o === null))?true:false),
         q:{
             accpet:(ms.g === null)?re.q.param('accept'):JSON.parse(ms.g)['accept'],
-            query:function(name){
-                var args = JSON.parse(re.q.query.args||'{}');
-                return name?args[name]:args;
-            },
-            body:function(name){
-                var args = JSON.parse(re.q.body.args||'{}');
-                return name?args[name]:args;
-            },
+            query:JSON.parse(re.q.query.args||'{}'),
+            body:JSON.parse(re.q.body.args||'{}'),
             args:function(name){
                 var args = JSON.parse(((ms.g === null)?re.q.param('args'):JSON.parse(ms.g).args)||'{}');
                 return name?args[name]:args;

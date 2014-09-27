@@ -78,18 +78,21 @@ var love = (function(){
             return true;
         },
 
+        protocol:u.conf.protocol?((location.protocol == 'file:')?'http:':''):u.conf.protocol,
         isdom:function(e){return e.nodeType?true:false},
         id:function(name){return document.getElementById(name)},
         name:function(name){return document.getElementsByName(name)},
         tag:function(name){return document.getElementsByTagName(name)},
         class:function(name){return document.getElementsByClassName(name)},
-        html:function(){return this.tag('html')[0]||(document.write('<html>')&this.tag('html')[0])}
+        html:this.tag('html')[0]||(document.write('<html>')&this.tag('html')[0]),
+        head:this.tag('head')[0]||u.dom.inner('<head>'),
+        body:this.tag('body')[0]||u.dom.inner('<body>')
     };
 
     u.dom = {
         inner:function(dom, hide, e){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            e = (e&&u.get.isdom(e))?e:u.get.html();
+            e = (e&&u.get.isdom(e))?e:u.get.html;
             var t = u.dom.create('div');
             t.innerHTML = dom;
             var i = t.children[0];
@@ -106,7 +109,7 @@ var love = (function(){
         },
         insert:function(e, parent){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            parent = (parent&&u.get.isdom(parent))?parent:u.get.html();
+            parent = (parent&&u.get.isdom(parent))?parent:u.get.body;
             parent.appendChild(e);
             (typeof callback == 'function')&&callback(e, parent);
             return e;
@@ -136,7 +139,7 @@ var love = (function(){
             url += '?_=' + u.op.random();
             var script = u.dom.create('script', {'src':url});
             (typeof callback == 'function')&&u.op.bind(script, 'load', callback);
-            u.dom.insert(script, function(e){
+            u.dom.insert(script, u.get.head, function(e){
                 u.dom.kill(e);
             });
         },
@@ -144,7 +147,7 @@ var love = (function(){
             for(var i in loads){
                 u.run.args[i]?(u.run.args[i].push(loads[i])):(u.run.args[i] = [loads[i],]);
                 i = (i.indexOf('/') < 0)?(
-                    u.conf.protocol+'//'+u.conf.host+'/static/modules/'+i+'/'+i+'.js'
+                    u.get.protocol+'//'+u.conf.host+'/static/modules/'+i+'/'+i+'.js'
                 ):i;
                 this.script(i);
             };
@@ -199,7 +202,7 @@ var love = (function(){
                 'method':'POST',
                 'style':'display: none;',
                 'action':url,
-            });
+            }, u.get.body);
             if(datas&&(typeof datas == 'object')){
                 for(var name in datas){
                     var input = u.dom.add('input', {
@@ -225,13 +228,13 @@ var love = (function(){
 
         infoback:function(uri, accept, args){
             var url = '//'+u.conf.host+'/'+uri;
-            if(u.socket.conneted[(love.conf.protocol == 'https:')?'wss:':'ws:'+url]){
-                u.socket.conneted[(love.conf.protocol == 'https:')?'wss:':'ws:'+url].send(JSON.stringify({
+            if(u.socket.conneted[(u.conf.protocol == 'https:')?'wss:':'ws:'+url]){
+                u.socket.conneted[(u.conf.protocol == 'https:')?'wss:':'ws:'+url].send(JSON.stringify({
                     'accept':accept,
                     'args':args
                 }));
             }else{
-                this.ajax((location.protocol == 'file:')?'http:':u.conf.protocol+url, {
+                this.ajax(u.get.protocol+url, {
                     'accept':JSON.stringify(accept),
                     'args':JSON.stringify(args)
                 });
