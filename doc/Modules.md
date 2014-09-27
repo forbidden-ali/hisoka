@@ -58,7 +58,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
                 nsync   - 是否不使用同步xhr                     eg: true
                 callback - 如果最后一个参数是function，将会当作回调函数执行
                     *love.req.ajax回调函数的参数是XMLHttpRequestProgressEvent，
-                    而非XMLHttpRequest，需要注意。              eg: function(xhr){console.log(xhr)}
+                    而非XMLHttpRequest，需要注意。              eg: function(xhr){console.log(xhr.currentTarget.responseText)}
         */
         json:[function],
         /*
