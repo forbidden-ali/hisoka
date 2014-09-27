@@ -47,7 +47,7 @@ love.req
 ```
 
 **love.req.ajax回调函数的参数是XMLHttpRequestProgressEvent，而非XMLHttpRequest，需要注意。**
-**另一点需要注意的是，如果有headers，则默认不会带上Content-Type Headers**
+**另一点需要注意的是，如果有headers，则不会默认带上Content-Type Headers**
 
 ### json:[function]
 简化了json和jsonp的操作
@@ -231,17 +231,17 @@ love.get
 上面也有用到一些`love.get`的内容，
 是对获取信息的一些封装，
 子类有
-[isorigin](isoriginfunction)，
-[protocol](protocolstr)，
-[isdom](isdomfunction)，
-[id](idnametagclassfunction)，
-[name](idnametagclassfunction)，
-[tag](idnametagclassfunction)，
-[class](idnametagclassfunction)，
-[html](htmlheadbodyfunction)，
-[head](htmlheadbodyfunction)，
-[body](htmlheadbodyfunction)，
-[testorigin](testoriginfunciton)
+[isorigin](#isoriginfunction)，
+[protocol](#protocolstr)，
+[isdom](#isdomfunction)，
+[id](#idnametagclassfunction)，
+[name](#idnametagclassfunction)，
+[tag](#idnametagclassfunction)，
+[class](#idnametagclassfunction)，
+[html](#htmlheadbodyfunction)，
+[head](#htmlheadbodyfunction)，
+[body](#htmlheadbodyfunction)，
+[testorigin](#testoriginfunciton)
 
 ### isorigin:[function]
 判断一个URL是否和当前域同源 or 判断两个URL是否同源
@@ -306,10 +306,10 @@ love.op
 -------
 关于JavaScript的一些封装，
 子类有
-[bind](bindfunction)，
-[random](randomfunction)，
-[hook](hookfunction)，
-[ready](readyfunction)
+[bind](#bindfunction)，
+[random](#randomfunction)，
+[hook](#hookfunction)，
+[ready](#readyfunction)
 
 ### bind:[function]
 关于绑定事件的封装
@@ -385,7 +385,7 @@ love.socket
 -----------
 关于WebSocket的封装，
 子类有
-[connet](connetfunction)
+[connet](#connetfunction)
 
 ### connet:[funcction]
 连接到一个connet，将链接对象保存到`love.socket.conneted`
@@ -428,5 +428,4 @@ love.run
 
 ----------------------------------------
 
-大概写完了吧？以后有功能添加或更改再继续写
-==========================================
+# 大概写完了吧？以后有功能添加或更改再继续写
