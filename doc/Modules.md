@@ -47,8 +47,6 @@ Hisoka 提供了一个 example, `./static/modules/example`
 
 #### love.req
 
-##### ajax
-
     req:{
 
 ##### ajax
