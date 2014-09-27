@@ -1,9 +1,11 @@
 LoveJS Document
 ===============
 
-`love.js`篇幅可能比较长，还是独立出来比较好
+`love.js`篇幅可能比较长，还是独立出来比较好。
+
 为了方便编写 Vmod，Hisoka封装了一个利用框架，称作`love.js`(伸缩自在的爱)。
-**一下参数名后带`*`的，为必填参数**
+
+**以下参数名后带`*`的，为必填参数**
 
 love.conf
 ---------
@@ -19,9 +21,9 @@ love.conf
 love.req
 --------
 关于请求的封装，子类有
-[ajax](#ajaxfunction),
-[json](#jsonfunction),
-[post](#postfunction),
+[ajax](#ajaxfunction)，
+[json](#jsonfunction)，
+[post](#postfunction)，
 [infoback](#infobackfunction)
 
 ### ajax:[function]
@@ -99,7 +101,7 @@ love.req
 love.load
 ---------
 关于模块加载的封装，子类有
-[script](#scriptfunction),
+[script](#scriptfunction)，
 [import](#importfunction)
 
 ### script:[function]
@@ -131,11 +133,11 @@ love.load
 love.dom
 --------
 关于DOM操作的封装，子类有
-[inner](#innerfunction),
-[add](#addfunction),
-[create](#createfunction),
-[insert](#insertfunction),
-[kill](#killfunction),
+[inner](#innerfunction)，
+[add](#addfunction)，
+[create](#createfunction)，
+[insert](#insertfunction)，
+[kill](#killfunction)，
 [attr](#attrfunction)
 
 ### inner:[function]
@@ -229,16 +231,16 @@ love.get
 上面也有用到一些`love.get`的内容，
 是对获取信息的一些封装，
 子类有
-[isorigin](isoriginfunction),
-[protocol](protocolstr),
-[isdom](isdomfunction),
-[id](idnametagclassfunction),
-[name](idnametagclassfunction),
-[tag](idnametagclassfunction),
-[class](idnametagclassfunction),
-[html](htmlheadbodyfunction),
-[head](htmlheadbodyfunction),
-[body](htmlheadbodyfunction),
+[isorigin](isoriginfunction)，
+[protocol](protocolstr)，
+[isdom](isdomfunction)，
+[id](idnametagclassfunction)，
+[name](idnametagclassfunction)，
+[tag](idnametagclassfunction)，
+[class](idnametagclassfunction)，
+[html](htmlheadbodyfunction)，
+[head](htmlheadbodyfunction)，
+[body](htmlheadbodyfunction)，
 [testorigin](testoriginfunciton)
 
 ### isorigin:[function]
@@ -304,9 +306,9 @@ love.op
 -------
 关于JavaScript的一些封装，
 子类有
-[bind](bindfunction),
-[random](randomfunction),
-[hook](hookfunction),
+[bind](bindfunction)，
+[random](randomfunction)，
+[hook](hookfunction)，
 [ready](readyfunction)
 
 ### bind:[function]
@@ -401,8 +403,8 @@ love.run
 --------
 一些运行时的配置，
 大概有
-[jsonp](#jsonpobject),
-[args](#argsobject),
+[jsonp](#jsonpobject)，
+[args](#argsobject)，
 [foo](#fooobject)
 
 ### jsonp:[object]
