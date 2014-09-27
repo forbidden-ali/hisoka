@@ -35,7 +35,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
 
 ### love.js
 
-为了方便编写 Vmod，Hisoka封装了一个利用框架，称作 love.js (伸缩自在的爱)。
+为了方便编写 Vmod，Hisoka封装了一个利用框架，称作`love.js`(伸缩自在的爱)。
 
 #### love.conf
 
@@ -47,7 +47,12 @@ Hisoka 提供了一个 example, `./static/modules/example`
 
 #### love.req
 
+##### ajax
+
     req:{
+
+##### ajax
+
         ajax:[function],
         /*
             封装了xhr操作
@@ -59,7 +64,11 @@ Hisoka 提供了一个 example, `./static/modules/example`
                 callback - 如果最后一个参数是function，将会当作回调函数执行
                     *love.req.ajax回调函数的参数是XMLHttpRequestProgressEvent，
                     而非XMLHttpRequest，需要注意。              eg: function(xhr){console.log(xhr.currentTarget.responseText)}
+                    *另一点需要注意的是，如果有headers，则默认不会带上Content-Type Headers
         */
+
+##### json
+
         json:[function],
         /*
             简化了json和jsonp的操作
@@ -69,6 +78,9 @@ Hisoka 提供了一个 example, `./static/modules/example`
                     需要同时指定callback，且只能异步操作，没有返回  eg: callback
                 callback - 回调函数的参数即是json                   eg: function(json){console.log(json)}
         */
+
+##### post
+
         post:[function],
         /*
             使用form实现的表单提交
@@ -78,6 +90,9 @@ Hisoka 提供了一个 example, `./static/modules/example`
                 jump    - 是否跳转，当不需要使用iframe实现不刷新时可以打开  eg: true
                 callback - 回调函数
         */
+
+##### infoback
+
         infoback:[function]
         /*
             将信息回传给Hisoka的封装
@@ -93,6 +108,9 @@ Hisoka 提供了一个 example, `./static/modules/example`
 #### love.load
 
     load:{
+
+##### script
+
         script:[function],
         /*
             单独导入一个JavaScript文件
@@ -100,6 +118,9 @@ Hisoka 提供了一个 example, `./static/modules/example`
                 url         - JavaScript file URL.  eg: /hi.js
                 callback    - onload实现的回调函数  eg: function(){console.log('hi')}
         */
+
+##### import
+
         import:[function]
         /*
             导入多个modules

@@ -161,9 +161,9 @@ var love = (function(){
             var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
 
             xhr.open(type, url, (nsync&&(typeof nsync != 'function'))?true:false);
-            (type=='POST')&&(
+            ((typeof headers != 'object')&&(type=='POST'))&&(
                 xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'));
-            if(headers&&(typeof headers != 'function')){
+            if(typeof headers == 'object'){
                 for(var header in headers){
                     xhr.setRequestHeader(header, headers[header]);
                 };
@@ -182,7 +182,7 @@ var love = (function(){
         json:function(url, callname){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             url += ('?_=' +u.op.random());
-            if(callname&&(typeof callname != 'function')){
+            if(typeof callname == 'string'){
                 var backname = 'i'+u.op.random(true);
                 (typeof callback == 'function')&&(u.run.jsonp[backname] = u.op.hook(callback, function(callback, json){
                     callback(json);
