@@ -47,7 +47,8 @@ Hisoka 提供了一个 example, `./static/modules/example`
 
 但是这里还是要说一下。
 
-1. **信息回传给Hisoka，请用`love.req.infoback`**
+1. **信息回传给Hisoka，请用`[love.req.infoback](https://github.com/quininer/hisoka/blob/master/doc/LoveJS.md#infobackfunction)`**
+
     Hisoka本身不处理信息回传，而是交给`autoinfo`的服务端模块，
     `autoinfo`会处理`args`这个参数里的信息，并将其储存到数据库。
 
@@ -56,6 +57,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
     而其他参数则另有他用。
 
 2. **Vmod可以请求某些模块处理该信息!**
+
     `love.req.infoback`除去回传的信息，还有一个参数必填。
     `accept`要求是个Array，保存着请求处理该信息的服务端模块的名字。
     例如`love.req.infoback('page', ['autoinfo'], {"hello":"world."})`
@@ -67,13 +69,16 @@ Hisoka 提供了一个 example, `./static/modules/example`
     **我建议，如非必要，请遵守这个约定**
 
 3. **readme.json里的Name与Vmod以及函数名参数名和目录名务必一致**
+
     没什么好说的，方便寻址而已
 
 4. **将Vmod函数放置在`love.run.foo.*`里**
+
     没什么好说的，方便再次调用。
     当然，如果是设置为只使用一次的Vmod，可以做成自执行的匿名函数
 
 5. **Vmod的参数放置在`love.run.args.*里`**
+
     没什么好说的，只是找个地方放而已。
 
     **需要注意，因为考虑到可能需要调用多次的情况，`love.run.args.*`是个Array，依次保存着各个**
@@ -83,6 +88,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
     将最后一个参数弹出即可
 
 6. **args里的参数名控制显示形式**
+
     例如
         `love.req.infoback('page', ['autoinfo'], {"html_hi":"<h1>HI</h1>"})`
     会将其放入iframe中显示
