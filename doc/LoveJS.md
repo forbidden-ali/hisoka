@@ -222,7 +222,7 @@ love.dom
     >love.dom.attr(love.get.tag('img')[0], 'src');
     "#"
     >love.dom.attr(love.get.tag('img')[0], 'src', '/img.png');
-    <img src="/img.png" onerror="alert(1)" style="display: none">
+    undefined
 ```
 
 

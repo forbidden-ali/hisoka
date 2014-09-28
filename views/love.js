@@ -128,7 +128,6 @@ var love = (function(){
         attr:function(e, attr, value){
             if(!value)return (e.attributes[attr]||{}).value;
             e.setAttribute(attr, value);
-            return e;
         }
     };
 

@@ -6,4 +6,5 @@ Hisoka Document
     ./
         ./README.md
         ./Modules.md
+        ./LoveJS.md
         ./User.md
