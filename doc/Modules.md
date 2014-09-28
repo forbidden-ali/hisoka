@@ -95,8 +95,10 @@ Hisoka 提供了一个 example, `./static/modules/example`
         `<iframe sandbox srcdoc="<h1>HI</h1>">`
 
     目前有一下几个显示约定
-        `html_`: 需要是HTML源码
-        `html_b64_`: 需要是被Base64编码的HTML源码
-        `img_png_`: 需要是被Base64编码的PNG图片
-        `img_jpg_`: 需要是被Base64编码的JPG图片
-
+        `html_`: 显示HTML，需要是HTML源码
+        `html_b64_`: 显示HTML，需要是被Base64编码的HTML源码
+        `img_png_`: 显示图片，需要是被Base64编码的PNG图片
+        `img_jpg_`: 显示图片，需要是被Base64编码的JPG图片
+        `text_`: 显示可供编辑的长段文本，需要是文本
+        `input_`: 显示可供编辑的小段文本，需要是文本
+        `{str}`: 显示文本，嗯，只是单纯的文本
