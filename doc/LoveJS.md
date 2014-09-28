@@ -408,7 +408,7 @@ love.run
 [foo](#fooobject)
 
 ### jsonp:[object]
-临时保存jsonp回调函数的地方
+临时保存jsonp回调函数的地方。
 一般来说，无需关心
 
 ### args:[object]
@@ -423,6 +423,13 @@ love.run
 保存模块函数的地方，可供再次调用
 ```
     >love.run.foo.cutimg('auto');
+    undefined
+```
+
+### data:[object]
+用来临时保存数据
+```
+    >var love.run.foo.example = {};
     undefined
 ```
 

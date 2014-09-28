@@ -13,6 +13,7 @@ var love = (function(){
         run:{
             jsonp:{},
             args:{},
+            data:{},
             foo:{}
         }
     };
