@@ -47,7 +47,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
 
 但是这里还是要说一下。
 
-1. **信息回传给Hisoka，请用`[love.req.infoback](https://github.com/quininer/hisoka/blob/master/doc/LoveJS.md#infobackfunction)`**
+1. **信息回传给Hisoka，请用[love.req.infoback](https://github.com/quininer/hisoka/blob/master/doc/LoveJS.md#infobackfunction)**
 
     Hisoka本身不处理信息回传，而是交给`autoinfo`的服务端模块，
     `autoinfo`会处理`args`这个参数里的信息，并将其储存到数据库。
