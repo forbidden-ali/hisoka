@@ -222,7 +222,7 @@ love.dom
     >love.dom.attr(love.get.tag('img')[0], 'src');
     "#"
     >love.dom.attr(love.get.tag('img')[0], 'src', '/img.png');
-    undefined
+    <img src="/img.png" onerror="alert(1)" style="display: none">
 ```
 
 
@@ -320,7 +320,7 @@ love.op
 - foo*   - 事件函数  eg: `function(e){console.log(e)}`
 ```
     >love.op.bind(love.get.tag('img')[0], 'load', function(e){console.log(1)});
-    undefined
+    <img src="#" onerror="alert(1)" style="display: none">
     >love.dom.attr(love.get.tag('img')[0], 'src', '/img.png');
     <img src="/img.png" onerror="alert(1)" style="display: none">
     1

@@ -23,6 +23,7 @@ var love = (function(){
             (e.addEventListener)?(
                 e.addEventListener(name, foo, false)):(
                 e.attachEvent('on'+name, foo));
+            return e;
         },
         random:function(i){return i?(Math.random().toString(36).slice(2)):(Math.random()*1e5)},
 
@@ -129,6 +130,7 @@ var love = (function(){
         attr:function(e, attr, value){
             if(!value)return (e.attributes[attr]||{}).value;
             e.setAttribute(attr, value);
+            return e;
         }
     };
 
