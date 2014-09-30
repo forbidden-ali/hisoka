@@ -1,7 +1,7 @@
 Hisoka [-1]
 ===========
 
-    love.op.ready(function(){
+    (function(){
         //TODO this.
         console.log('XSS Server.');
-    });
+    })();

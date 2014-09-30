@@ -27,20 +27,6 @@ var love = (function(){
         },
         random:function(i){return i?(Math.random().toString(36).slice(2)):(Math.random()*1e5)},
 
-        ready:function(foo){
-            if(document.onDOMContentLoaded){
-                this.bind(document, 'DOMContentLoaded', foo);
-            }else{
-                var r = setInterval(function(){
-                    try{
-                        u.get.body().doScroll('left');
-                        clearInterval(r);
-                        foo();
-                    }catch(e){};
-                }, 5);
-            };
-        },
-
         hook:function(foo, hook){
             return function(){
                 return (typeof hook == 'function')?(
@@ -87,14 +73,14 @@ var love = (function(){
         tag:function(name){return document.getElementsByTagName(name)},
         class:function(name){return document.getElementsByClassName(name)},
         html:function(){return this.tag('html')[0]||(document.write('<html>')&this.tag('html')[0])},
-        head:function(){return this.tag('head')[0]||u.dom.inner('<head>')},
-        body:function(){return this.tag('body')[0]||u.dom.inner('<body>')}
+        head:function(){return this.tag('head')[0]||u.dom.add('head', false, this.html())},
+        body:function(){return this.tag('body')[0]||u.dom.add('body', false, this.html())}
     };
 
     u.dom = {
         inner:function(dom, hide, e){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            e = (e&&u.get.isdom(e))?e:u.get.html();
+            e = (e&&u.get.isdom(e))?e:u.get.body();
             var t = u.dom.create('div');
             t.innerHTML = dom;
             var i = t.children[0];
@@ -125,7 +111,7 @@ var love = (function(){
         kill:function(e){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             u.get.isdom(e)&&e.parentNode.removeChild(e);
-            (typeof callback == 'function')&&calback();
+            (typeof callback == 'function')&&callback();
         },
         attr:function(e, attr, value){
             if(!value)return (e.attributes[attr]||{}).value;

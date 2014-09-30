@@ -308,8 +308,7 @@ love.op
 子类有
 [bind](#bindfunction)，
 [random](#randomfunction)，
-[hook](#hookfunction)，
-[ready](#readyfunction)
+[hook](#hookfunction)
 
 ### bind:[function]
 关于绑定事件的封装
@@ -373,12 +372,6 @@ foo函数将会作为hook函数的第一个参数传入，而被hook的函数接
     // 没有弹出 alert(1)
 ```
 **注意alert前面不要有声明局部变量的var**
-
-### ready:[function]
-等待DOM加载完成之后执行某函数
-
-- @param - foo
-- foo* - 待执行函数  eg: `function(){alert('DOM加载完啦')}`
 
 
 love.socket
