@@ -80,7 +80,7 @@ exports.ws = function(ws, req){
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
         if(!info||(!who&&!req.session.user))return null;
-        var owner = req.session.user:true?false;
+        var owner = req.session.user?true:false;
         who = req.session.user?null:who;
         ws.on('open', function(){
             auws[who] = ws;
