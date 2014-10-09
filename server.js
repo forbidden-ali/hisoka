@@ -26,11 +26,16 @@ app.use(evercookie.backend());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(session({
-    secret:'session'
+    name:'session',
+    secret:true,
+    cookie:{
+        httpOnly:true,
+        path:'/home'
+    }
 }));
 app.use('/home', csrf());
 function err404(req, res, next){
-    return res.status(404).render('404');
+    return res.status(404).jsonp({err:404});
 };
 app.use(favicon(__dirname+'/static/favicon.ico'));
 app.use('/static', express.static(__dirname+'/static'));
@@ -43,20 +48,20 @@ app.use('/home', function(req, res, next){
 
 app.route('/login')
     .get(function(req, res){
-        res.render('login', {err:''});
+        res.render('login', {err:null});
     })
     .post(function(req, res){
         var name = req.body.name;
         var passwd = req.body.passwd;
         sql.User.findOne({name:name}, function(err, info){
-            if(!info)return res.render('login', {err:'login failed.'});
+            if(!info)return res.json({err:true});
             sql.User.findOne({
                 name:name,
                 passwd:sql.hash(passwd+info.salt)
             }, function(err, info){
-                if(!info)return res.render('login', {err:'login failed.'});
+                if(!info)return res.json({err:true});
                 req.session.user = info;
-                res.redirect('/home');
+                res.json({err:null});
             });
         });
     });
@@ -67,7 +72,7 @@ var page = require('./routes/page'),
 app.use('/home', home.router);
 app.use('/', page.router);
 app.ws('/home/page/:uri', page.ws);
+app.ws('/e/:uri', page.ws);
 
 app.use('*', err404);
-app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    process.env.OPENSHIFT_NODEJS_IP);
+app.listen(config.port, config.ip);

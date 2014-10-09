@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
     config = require('./config/config'),
     models = require('./config/models');
 
+//  写的差不多的时候再重写整合一下吧
 mongoose.connect(config.db);
 
 function main(name, passwd, salt){

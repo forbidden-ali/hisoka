@@ -8,11 +8,11 @@ router.post('/logout', function(req, res){
 
 router.get('/', function(req, res){
     var victim, page;
-    sql.Victim.find({owner:req.session.user.name}, function(err, info){
+    sql.Victim.find({}, function(err, info){
         victims = info;
-        sql.Page.find({owner:req.session.user.name}, function(err, info){
+        sql.Page.find({}, function(err, info){
             pages = info;
-            sql.Item.find({owner:req.session.user.name}, function(err, info){
+            sql.Item.find({}, function(err, info){
                 items = info;
                 res.render('home', {
                     items:items,
@@ -25,7 +25,7 @@ router.get('/', function(req, res){
 });
 
 router.get('/item/:name', function(req, res){
-    sql.Item.findOne({owner:req.session.user.name, id:req.params.name}, function(err, info){
+    sql.Item.findOne({id:req.params.name}, function(err, info){
         if(!info)return err404(req, res);
         res.render('edit', {
             items:info
@@ -35,10 +35,9 @@ router.get('/item/:name', function(req, res){
 router.post('/item/:name/edit', function(req, res){
     var name = req.params.name;
     if(!name)return res.json({err:'error, name?'});
-    sql.Item.findOne({owner:req.session.user.name, name:name}, function(err, info){
+    sql.Item.findOne({name:name}, function(err, info){
         if(info){
-            //  owner, name, payload, load, modules
-            req.body.owner&&(info.owner=req.body.owner);
+            //  name, payload, load, modules
             (name!=info.name)&&(info.name=name);
             req.body.payload&&(info.payload=req.body.payload);
             try{
@@ -51,9 +50,8 @@ router.post('/item/:name/edit', function(req, res){
                 res.json({err:err});
             });
         }else{
-            //  owner, name, payload, load, modules
+            //  name, payload, load, modules
             sql.Item.create({
-                owner:req.body.owner||req.session.user.name,
                 name:name,
                 payload:req.body.payload,
                 load:JSON.parse(req.body.load),
@@ -66,7 +64,7 @@ router.post('/item/:name/edit', function(req, res){
 });
 
 router.get('/victim/:name', function(req, res){
-    sql.Victim.findOne({owner:req.session.user.name, id:req.params.name}, function(err, info){
+    sql.Victim.findOne({id:req.params.name}, function(err, info){
         if(!info)return err404(req, res);
         res.render('edit', {
             victims:info
@@ -76,14 +74,13 @@ router.get('/victim/:name', function(req, res){
 router.post('/victim/:name/edit', function(req, res){
     var id = req.params.id;
     if(req.param('type')=='delete'){
-        sql.Victim.remove({_id:id, owner:req.session.user.name}, function(err){
+        sql.Victim.remove({_id:id}, function(err){
             res.json({err:err});
         });
     }else{
-        sql.Victim.find({_id:id, owner:req.session.user.name}, function(err, info){
+        sql.Victim.find({_id:id}, function(err, info){
             if(!info)return err404(req, res);
-            //  owner, name, payload, load, modules, status
-            req.body.owner&&(info.owner=req.body.owner);
+            //  name, payload, load, modules, status
             req.body.name&&(info.name=req.body.name);
             req.body.payload&&(info.payload=req.body.payload);
             try{
@@ -101,7 +98,7 @@ router.post('/victim/:name/edit', function(req, res){
 });
 
 router.get('/page/:uri/editor', function(req, res){
-    sql.Page.findOne({owner:req.session.user.name, uri:req.params.uri}, function(err, info){
+    sql.Page.findOne({uri:req.params.uri}, function(err, info){
         if(!info)return err404(req, res);
         return res.render('editpage', {
             pages:info
@@ -111,14 +108,13 @@ router.get('/page/:uri/editor', function(req, res){
 router.post('/page/:uri/edit', function(req, res){
     var id = req.params.id;
     if(req.param('type')=='delete'){
-        sql.Page.remove({_id:id, owner:req.session.user.name}, function(err){
+        sql.Page.remove({_id:id}, function(err){
             res.json({err:err});
         });
     }else{
-        sql.Page.findOne({_id:id, owner:req.session.user.name}, function(err, info){
+        sql.Page.findOne({_id:id}, function(err, info){
             if(info){
-                //  owner, name, uri, modules
-                req.body.owner&&(info.owner=req.body.owner);
+                //  name, uri, modules
                 req.body.name&&(info.name=req.body.name);
                 req.body.uri&&(info.uri=req.body.uri);
                 try{
@@ -130,9 +126,8 @@ router.post('/page/:uri/edit', function(req, res){
                     res.json({err:err});
                 });
             }else{
-                //  owner, name, uri, modules
+                //  name, uri, modules
                 sql.Page.create({
-                    owner:req.body.owner||req.session.user.name,
                     name:req.body.name,
                     uri:req.body.uri,
                     modules:JSON.parse(req,body.modules)

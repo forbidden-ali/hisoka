@@ -5,11 +5,12 @@ var Schema = mongoose.Schema;
 var _User = new Schema({
     name:String,
     passwd:String,
-    salt:String
+    salt:String,
+    watch:[]
 });
 var _Item = new Schema({
-    owner:String,
     name:String,
+    group:String,
     payload:String,
     load:{},
     /*
@@ -28,7 +29,7 @@ var _Item = new Schema({
     */
 });
 var _Victim = new Schema({
-    owner:String,
+    group:String,
     name:String,
     who:String,
     payload:String,
@@ -50,7 +51,6 @@ var _Victim = new Schema({
     now:String
 });
 var _Page = new Schema({
-    owner:String,
     name:String,
     uri:String,
     modules:{}

