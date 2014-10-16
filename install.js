@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     fs = require('fs');
     models = require('./config/models');
 
-function read(){
+function read(prompt, callback){
     process.stdout.write(prompt+':');
     process.stdin.resume();
     process.stdin.setEncoding('utf-8');
