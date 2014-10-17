@@ -9,9 +9,10 @@ var rl = readline.createInterface({
 });
 
 function adduser(db, name, passwd, salt, callback){
+    return callback();
     mongoose.connect(db);
 
-    var passwd = sql.hash(passwd+salt);
+    var passwd = models.hash(passwd+salt);
     var user = new models.User({
         name:name,
         passwd:passwd,
@@ -30,7 +31,7 @@ function adduser(db, name, passwd, salt, callback){
 };
 
 function createjson(config, callback){
-    fs.writeFile(__dirname+'config/config.json', JSON.stringify(config), callback);
+    fs.writeFile(__dirname+'/config/config.json', JSON.stringify(config), callback);
 };
 
 function main(){
@@ -43,23 +44,23 @@ function main(){
     console.log('*Including configuring the account password, and database name');
     rl.question('db[openshift]:', function(input){
         config.db = input||('mongodb://'+
-        process.env.OPENSHIFT_MONGODB_DB_USERNAME+':'+
-        process.env.OPENSHIFT_MONGODB_DB_PASSWORD+'@'+
-        process.env.OPENSHIFT_MONGODB_DB_HOST+':'+
-        process.env.OPENSHIFT_MONGODB_DB_PORT+'/hisoka');
+        (process.env.OPENSHIFT_MONGODB_DB_USERNAME||'')+(process.env.OPENSHIFT_MONGODB_DB_PASSWORD?':':'')+
+        (process.env.OPENSHIFT_MONGODB_DB_PASSWORD||'')+(process.env.OPENSHIFT_MONGODB_DB_USERNAME?'@':'')+
+        (process.env.OPENSHIFT_MONGODB_DB_HOST||'localhost')+':'+
+        (process.env.OPENSHIFT_MONGODB_DB_PORT||'27017')+'/hisoka');
         console.log('Here configuration Hisoka account.');
         rl.question('name:', function(input){
             user.name = input;
             rl.question('passwd:', function(input){
                 user.passwd = input;
                 console.log()
-                console.log('Creating a db...');
+                console.log('Add user...');
                 adduser(config.db, user.name, user.passwd, Math.random().toString(36).slice(2), function(){
                     console.log("Here's server configuration Hisoka.");
                     rl.question('ip[openshift]:', function(input){
                         config.ip = input||process.env.OPENSHIFT_NODEJS_IP;
                         rl.question('port[openshift]:', function(input){
-                            config.ip = input||process.env.OPENSHIFT_NODEJS_PORT||8080;
+                            config.port = input||process.env.OPENSHIFT_NODEJS_PORT||8080;
                             rl.question('ssl[null]:', function(input){
                                 config.ssl = input||null;
                                 rl.question("host['']:", function(input){

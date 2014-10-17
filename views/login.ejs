@@ -1,6 +1,37 @@
-<%= err %>
-<form action='/login' method='POST'>
-    <input type='text' name='name'>
-    <input type='password' name='passwd'>
-    <input type='submit' value='login'>
-</form>
+<% include head_head %>
+        <title>login</title>
+        <link href="/static/css/login.css" rel="stylesheet">
+<% include head_foot %>
+    <div class="login">
+      <div class="login-screen">
+        <div class="container">
+          <div class="padding-top hidden-xs"></div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-2">
+            <div class="login-icon">
+              <img src="/static/img/pensils.png" alt="">
+              <h4>XSS Server<small>Hisoka</small></h4>
+            </div>
+          </div>
+            <div class="col-sm-6">
+              <div class="login-form">
+                <div class="form-group">
+                  <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name" />
+                  <label class="login-field-icon fui-user" for="login-name"></label>
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
+                  <label class="login-field-icon fui-lock" for="login-pass"></label>
+                </div>
+                <button class="btn btn-primary btn-lg btn-block">Log in</button>
+              </div>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+        //TODO
+    </script>
+<% include foot %>
