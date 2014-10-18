@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(session({
     name:'session',
-    secret:true,
+    secret:'hey',
     cookie:{
         httpOnly:true,
         path:'/home'
