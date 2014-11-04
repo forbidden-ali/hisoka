@@ -8,15 +8,12 @@ var rl = readline.createInterface({
     output:process.stdout
 });
 
-function adduser(db, name, passwd, salt, callback){
-    return callback();
+function adduser(db, name, passwd, callback){
     mongoose.connect(db);
 
-    var passwd = models.hash(passwd+salt);
     var user = new models.User({
         name:name,
         passwd:passwd,
-        salt:salt
     });
     user.save(function(err){
         if(err){
@@ -36,7 +33,8 @@ function createjson(config, callback){
 
 function main(){
     var config = {},
-        user = {};
+        user = {},
+        config.key = Math.random().toString(36).slice(2);
     console.log('It will help you install Hisoka.');
     console.log('                                              quininer@live.com\n')
 
@@ -52,10 +50,10 @@ function main(){
         rl.question('name:', function(input){
             user.name = input;
             rl.question('passwd:', function(input){
-                user.passwd = input;
+                user.passwd = models.hash(input+config.key+user.name);
                 console.log()
                 console.log('Add user...');
-                adduser(config.db, user.name, user.passwd, Math.random().toString(36).slice(2), function(){
+                adduser(config.db, user.name, user.passwd, function(){
                     console.log("Here's server configuration Hisoka.");
                     rl.question('ip[openshift]:', function(input){
                         config.ip = input||process.env.OPENSHIFT_NODEJS_IP;

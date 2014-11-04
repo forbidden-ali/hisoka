@@ -204,12 +204,14 @@ var love = (function(){
                 u.dom.attr(form, 'target', iframe.name);
             };
             (typeof callback == 'function')&&u.op.bind(form, 'submit', callback);
+            ((!jump)||(typeof jump == 'function'))&&(
+                u.op.bind(iframe, 'load', function(){
+                    u.dom.kill(iframe);
+                })
+            );
             submit.click();
             ((!jump)||(typeof jump == 'function'))&&(
-                u.dom.kill(form),
-                setTimeout(function(){
-                    u.dom.kill(iframe);
-                }, 3*1000)
+                u.dom.kill(form)
             );
         },
 

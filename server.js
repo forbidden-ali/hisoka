@@ -57,7 +57,7 @@ app.route('/login')
             if(!info)return res.json({err:true});
             sql.User.findOne({
                 name:name,
-                passwd:sql.hash(passwd+info.salt)
+                passwd:sql.hash(passwd+config.key+name)
             }, function(err, info){
                 if(!info)return res.json({err:true});
                 req.session.user = info;

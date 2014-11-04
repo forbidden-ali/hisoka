@@ -5,7 +5,6 @@ var Schema = mongoose.Schema;
 var _User = new Schema({
     name:String,
     passwd:String,
-    salt:String,
     watch:[]
 });
 var _Item = new Schema({
