@@ -109,6 +109,7 @@ love.load
 
 - @param - url, callback
 - url*        - JavaScript file URL.  eg: `/hi.js`
+- nrdm        - 不使用随机参数        eg: `true`
 - callback    - onload实现的回调函数  eg: `function(){console.log('hi')}`
 ```
     >love.load.script('/alert.js', function(){console.log(1)});

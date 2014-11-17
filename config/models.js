@@ -11,20 +11,15 @@ var _Item = new Schema({
     name:String,
     group:String,
     payload:String,
-    load:{},
+    page:String,
+    load:[],
     /*
-    *   load:{
-    *       "steal_cookie":{
+    *   load:[
+    *       ["steal_cookie", {
     *           "post":"steal_cookie"
-    *       }
-    *   }
-    */
-    modules:[]
-    /*
-    *   modules:[
-    *       ["autoinfo", {}],
-    *       ["test", {"str":"test"}]
+    *       }]
     *   ]
+    *
     */
 });
 var _Victim = new Schema({
@@ -32,8 +27,8 @@ var _Victim = new Schema({
     name:String,
     who:String,
     payload:String,
-    load:{},
-    modules:{},
+    page:String,
+    load:[],
     status:{},
     /*
     *   status:{
@@ -52,7 +47,13 @@ var _Victim = new Schema({
 var _Page = new Schema({
     name:String,
     uri:String,
-    modules:{}
+    modules:[]
+    /*
+    *   modules:[
+    *       ["autoinfo", {}],
+    *       ["test", {"str":"test"}]
+    *   ]
+    */
 });
 
 exports.hash = function(str){
