@@ -47,12 +47,9 @@ var love = (function(){
         },
         quote:function(num){
             var hex = '';
-            for (i=0;i<num.length;i++){
-                if(num.charCodeAt(i).toString(16).toUpperCase().length < 2){
-                    hex += "%0" + num.charCodeAt(i).toString(16).toUpperCase();
-                }else{
-                    hex += "%" + num.charCodeAt(i).toString(16).toUpperCase();
-                }
+            for(var i in num){
+                var dump = num.charCodeAt(i).toString(16).toUpperCase();
+                hex += (dump.length < 2)?'%0':'%' + dump;
             }
             return hex;
         }

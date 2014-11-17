@@ -12,7 +12,7 @@ router.all('/', function(req, res){
 });
 
 router.all('/x/', function(req, res){
-    //  XXX who id use "Canvas Fingerprinting"
+    // who id can use Fingerprinting.js
     var id = req.param('i');
     var who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){

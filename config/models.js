@@ -30,14 +30,10 @@ var _Victim = new Schema({
     status:{},
     /*
     *   status:{
-    *       "Server":{
-    *           "referer":["http://127.0.0.1/", "http://localhost/"],
-    *           "ip":["127.0.0.1"]
-    *       },
-    *       "Browser":{
-    *           "cookie":["who=yyyyy", "who=what"],
-    *           "the_page":["<script src=//viii.ml/?i=*>"]
-    *       }
+    *       "referer":["http://127.0.0.1/", "http://localhost/"],
+    *       "ip":["127.0.0.1"],
+    *       "cookie":["who=yyyyy", "who=what"],
+    *       "the_page":["<script src=//viii.ml/?i=*>"]
     *   }
     */
     now:String
