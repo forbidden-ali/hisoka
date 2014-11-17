@@ -18,6 +18,34 @@ love.conf
     },
 
 
+love.code
+---------
+关于编码的封装，子类有
+[urlen](#urlenfunction)
+[quote](#quotefunction)
+
+### urlen:[function]
+封装了urlencode操作
+
+- @param - datas, post
+- datas*    - 一个Object        eg: `{"AA":"BB"}`
+
+```
+    >love.code.urlen({"AA":"BB", "CC":"DD"})
+    "AA=BB&CC=DD"
+```
+
+### quote:[function]
+完全的encodeURL编码
+
+- @param - num
+- num*  - 任意字符串    eg: `AAA();`
+
+```
+    >love.code.quote('AAA();')
+    'AA%28%29%3B'
+```
+
 love.req
 --------
 关于请求的封装，子类有
@@ -41,8 +69,8 @@ love.req
     Need POST!
     >love.req.ajax('/post', {"hello":"world."}).responseText;
     hello world.
-    >love.req.ajax('/post', {"hello":"world."}, {"X-Forwarded-For":"127.0.0.1", "Content-Type":"application/x-www-form-urlencoded"}, false, function(xhr){console.log(xhr.currentTarget.responseText)});
-    hello world.
+    >love.req.ajax('/post', {"HELLO":"WORLD."}, {"X-Forwarded-For":"127.0.0.1", "Content-Type":"application/x-www-form-urlencoded"}, false, function(xhr){console.log(xhr.currentTarget.responseText)});
+    HELLO WORLD.
     XMLHttpRequest
 ```
 
@@ -127,6 +155,7 @@ love.load
     >love.load.import({"cutimg":{"uri":"auto"}});
     undefined
 ```
+**按顺序导入模块**
 **当键名不带"/"时，会自动补全成Hisoka的modules地址**
 **同样，原则上仅用来导入模块，没有回调函数**
 
