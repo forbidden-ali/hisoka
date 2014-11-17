@@ -11,7 +11,6 @@ var _Item = new Schema({
     name:String,
     group:String,
     payload:String,
-    page:String,
     load:[],
     /*
     *   load:[
@@ -27,7 +26,6 @@ var _Victim = new Schema({
     name:String,
     who:String,
     payload:String,
-    page:String,
     load:[],
     status:{},
     /*
