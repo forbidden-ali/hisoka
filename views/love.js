@@ -38,12 +38,23 @@ var love = (function(){
     };
 
     u.code = {
-        enurl:function(datas, post){
+        urlen:function(datas, post){
             var uri = '';
             for(var data in datas){
                 uri += (data+'='+encodeURIComponent(datas[data])+(post?';':'&'));
             }
             return uri.slice(0, -1);
+        },
+        quote:function(num){
+            var hex = '';
+            for (i=0;i<num.length;i++){
+                if(num.charCodeAt(i).toString(16).toUpperCase().length < 2){
+                    hex += "%0" + num.charCodeAt(i).toString(16).toUpperCase();
+                }else{
+                    hex += "%" + num.charCodeAt(i).toString(16).toUpperCase();
+                }
+            }
+            return hex;
         }
     },
 
@@ -123,7 +134,7 @@ var love = (function(){
     u.load = {
         script:function(url, nrdm){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            if(typeof nrdm == 'function'||!nrdm){url += '?_=' + u.op.random();};
+            if(!nrdm||typeof nrdm == 'function'){url += '?_=' + u.op.random();};
             var script = u.dom.create('script', {'src':url});
             (typeof callback == 'function')&&u.op.bind(script, 'load', callback);
             u.dom.insert(script, u.get.head(), function(e){
@@ -137,8 +148,8 @@ var love = (function(){
                 u.get.protocol+'//'+u.conf.host+'/static/modules/'+mod[0]+'/'+mod[0]+'.js'
             ):mod[0];
             if(!u.run.args[mod[0]])u.run.args[mod[0]] = {};
-            u.run.args[mod[0]].push(mod[1]);
-            this.script(uri, function(){
+            if(mod[1])u.run.args[mod[0]].push(mod[1]);
+            this.script(uri, true, function(){
                 this.import(loads);
             });
         }
@@ -165,7 +176,7 @@ var love = (function(){
                          ||(this.status == 304))
                 )&&callback.apply(this, arguments);
             });
-            xhr.send((typeof datas == 'object')?u.code.enurl(datas):datas);
+            xhr.send((typeof datas == 'object')?u.code.urlen(datas):datas);
             return xhr;
         },
 
