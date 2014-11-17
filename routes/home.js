@@ -6,6 +6,8 @@ router.post('/logout', function(req, res){
     res.redirect('/login');
 });
 
+// TODO 看之后前端怎么写，再来写接口吧
+
 router.get('/', function(req, res){
     var victim, page;
     sql.Victim.find({}, function(err, info){

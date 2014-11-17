@@ -147,6 +147,7 @@ var love = (function(){
             var uri = (mod[0].indexOf('/') < 0)?(
                 u.get.protocol+'//'+u.conf.host+'/static/modules/'+mod[0]+'/'+mod[0]+'.js'
             ):mod[0];
+            var name = (mod[0].indexOf('/') < 0)?mod[0]:(mod[0].split('#')[1]);
             if(!u.run.args[mod[0]])u.run.args[mod[0]] = {};
             if(mod[1])u.run.args[mod[0]].push(mod[1]);
             this.script(uri, true, function(){
@@ -230,14 +231,13 @@ var love = (function(){
         },
 
         infoback:function(uri, accept, args){
-            var url = '//'+u.conf.host+'/'+uri;
-            if(u.socket.conneted[(u.conf.protocol == 'https:')?'wss:':'ws:'+url]){
-                u.socket.conneted[(u.conf.protocol == 'https:')?'wss:':'ws:'+url].send(JSON.stringify({
+            if(u.socket.conneted[uri]){
+                u.socket.conneted[uri].send(JSON.stringify({
                     'accept':accept,
                     'args':args
                 }));
             }else{
-                this.ajax(u.get.protocol+url, {
+                this.ajax(u.get.protocol+'//'+u.conf.host+'/'+uri;, {
                     'accept':JSON.stringify(accept),
                     'args':JSON.stringify(args)
                 });
@@ -247,15 +247,15 @@ var love = (function(){
 
     u.socket = {
         conneted:{},
-        connet:function(ws){
+        connet:function(name, ws){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            this.conneted[ws] = ((window.WebSocket)?(new window.WebSocket):(new window.MozWebSocket))(ws);
+            this.conneted[name] = ((window.WebSocket)?(new window.WebSocket):(new window.MozWebSocket))(ws);
 
-            (typeof callback == 'function')&&(this.conneted[ws].onopen = callback);
-            this.conneted[ws].onclose = function(){
-                delete this.conneted[ws];
+            (typeof callback == 'function')&&(this.conneted[name].onopen = callback);
+            this.conneted[name].onclose = function(){
+                delete this.conneted[name];
             };
-            return this.conneted[ws];
+            return this.conneted[name];
         }
     };
 

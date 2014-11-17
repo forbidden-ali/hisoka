@@ -1,6 +1,6 @@
 {
     "name":"hisoka",
-    "description":"And a server-side XSS.",
+    "description":"又一个XSS服务端.",
     "version":"0.0.1",
     "private":true,
     "dependencies":{

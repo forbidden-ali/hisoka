@@ -29,6 +29,8 @@ love.code
 
 - @param - datas, post
 - datas*    - 一个Object        eg: `{"AA":"BB"}`
+- @return
+- urlencode后的返回，           String
 
 ```
     >love.code.urlen({"AA":"BB", "CC":"DD"})
@@ -40,6 +42,8 @@ love.code
 
 - @param - num
 - num*  - 任意字符串    eg: `AAA();`
+- @return
+- encodeURL后的返回     String
 
 ```
     >love.code.quote('AAA();')
@@ -63,6 +67,8 @@ love.req
 - headers - 需要添加的请求头                                    eg: `{"Client-IP":"127.0.0.1"}`
 - nsync   - 是否不使用同步xhr                                   eg: `true`
 - callback - 如果最后一个参数是function，将会当作回调函数执行   eg: `function(xhr){console.log(xhr.currentTarget.responseText)}`
+- @return
+- xhr请求对象，                                                 XMLHttpRequest
 
 ```
     >love.req.ajax('/post').responseText;
@@ -84,6 +90,8 @@ love.req
 - url*        - json或jsonp的地址，需要是一个URL字符串   eg: `/hi.json`
 - callname    - 当指定了回调名时，执行jsonp操作，需要同时指定callback，且只能异步操作，没有返回 eg: `callback`
 - callback    - 回调函数的参数即是json                   eg: `function(json){console.log(json)}`
+- @return
+- 如果是json操作，将返回json                            Object
 
 ```
     >love.req.json('/hi.json');
@@ -104,12 +112,12 @@ love.req
 ```
     >love.req.post('/404');
     undefined
-    POST http://quininer.ml/xxx 404 (Not Found)
+    POST http://localhost/404 404 (Not Found)
     >love.req.post('/post', {"hello":"world."}, false, function(){console.log(1)});
     1
     undefined
 ```
-**注意一下，form实现的表单提交，提交时一般在浏览的状态栏会限制action地址之类的，非必要情况建议用ajax代替**
+**注意一下，form实现的表单提交，提交时一般在浏览的状态栏会显示action地址之类的，非必要情况建议用ajax代替**
 
 ### infoback:[function]
 将信息回传给Hisoka的封装
@@ -139,6 +147,7 @@ love.load
 - url*        - JavaScript file URL.  eg: `/hi.js`
 - nrdm        - 不使用随机参数        eg: `true`
 - callback    - onload实现的回调函数  eg: `function(){console.log('hi')}`
+
 ```
     >love.load.script('/alert.js', function(){console.log(1)});
     undefined
@@ -154,8 +163,11 @@ love.load
 ```
     >love.load.import({"cutimg":{"uri":"auto"}});
     undefined
+    >love.load.import({"http://localhost/msf#msf":{"uri":"auto"}})
+    undefined
 ```
 **按顺序导入模块**
+**当指定导入的模块地址是URL时，需要将其名字放在锚点内，如例2**
 **当键名不带"/"时，会自动补全成Hisoka的modules地址**
 **同样，原则上仅用来导入模块，没有回调函数**
 
@@ -178,6 +190,9 @@ love.dom
 - hide      - 是否隐藏式，若启用，则inner的元素不会显示在页面上     eg: `true`
 - e         - 父元素                                                eg: `love.get.id('hi')`
 - callback  - 回调函数，参数为inner创建的元素
+- @return
+- 创建出的dom元素                                                   DOM
+
 ```
     >love.dom.inner('<img src=# onerror=alert(1)>', true, love.get.body, function(){console.log(1)});
     <img src="#" onerror="alert(1)" style="display: none">
@@ -196,6 +211,9 @@ love.dom
 - attr      - 属性，需要是个object `{}`             eg: `{"src":"#"}`
 - parent    - 父元素                                eg: `love.get.id('hi')`
 - callback  - 回调函数，参数为创建的元素和父元素    eg: `function(e, parent){console.log(e, parent)}`
+- @return
+- 所创建出的DOM元素                                 DOM
+
 ```
     >love.dom.add('img', {"src":"/img.png"}, love.get.body, function(e, parent){console.log(parent)});
     <img src="/img.png">
@@ -208,6 +226,9 @@ love.dom
 - @param - tag, attr
 - tag*  - 标签名    eg: `'img'`
 - attr  - 属性      eg: `{"src":"#"}`
+- @return
+- 所创建的DOM元素   DOM
+
 ```
     >love.dom.create('img', {"src":"/img.png"});
     <img src="/img.png">
@@ -221,6 +242,9 @@ love.dom
 - e*        - DOM元素   eg: `love.dom.create('img')`
 - parent    - 父元素    eg: `love.get.body`
 - callback  - 回调函数，参数为创建的元素和父元素
+- @return
+- 所插入的DOM元素       DOM
+
 ```
     >love.dom.insert(love.dom.create('img', {"src":"/img.png"}), function(e, parent){console.log(parent)});
     <img src="/img.png">
@@ -234,6 +258,7 @@ love.dom
 - @param - e, callback
 - e*        - 元素，必须在DOM中     eg: `love.get.tag('a')[0]`
 - callback  - 回调函数，没有参数
+
 ```
     >love.dom.kill(love.get.tab('img')[0], function(){console.log(1)});
     undefined
@@ -248,6 +273,10 @@ love.dom
 - e*    - 元素                                                      eg: `love.get.tag('img')[0]`
 - attr* - 属性名，如果未设置value，那么会返回该属性已设置的属性值   eg: `src'`
 - value - 值                                                        eg: `'#'`
+- @return
+- 若无value参数，将返回属性内容                                     String
+- 若有value参数，将返回DOM元素                                      DOM
+
 ```
     >love.dom.attr(love.get.tag('img')[0], 'src');
     "#"
@@ -278,6 +307,8 @@ love.get
 
 - @param - url, url2
 - url*/url2  - 字符串    eg: `'http://localhost/'`
+- @return
+- 布尔值
 ```
     >love.get.isorigin('http://localhost/test');
     true
@@ -288,6 +319,7 @@ love.get
 ### protocol:[str]
 当前建议使用的HTTP协议
 若要ajax之类时，确定HTTP协议只需要
+
 ```
     love.get.protocol+'//localhost/'
 ```
@@ -297,6 +329,9 @@ love.get
 
 - @param - e
 - e* - *          eg: `'AAAA'`
+- @return
+- 布尔值
+
 ```
     >love.get.isdom(love.get.id('hi'));
     true
@@ -307,6 +342,9 @@ love.get
 
 - @param - url
 - url* - 字符串      eg: `'http://localhost/'`
+- @return
+- 布尔值
+
 ```
     >love.get.testorigin('http://localhost/');
     true
@@ -317,6 +355,9 @@ love.get
 
 - @param - name
 - name* - id名之类的     eg: `'a'`
+- @return
+- DOM元素，或是DOM元素组成的Array.      DOM or Array
+
 ```
     >love.get.id('hi');
     <div id="hi"></div>
@@ -327,6 +368,7 @@ love.get
 
 ### html,head,body:[function]
 返回对应的DOM元素，
+
 ```
     >love.get.html() === love.get.tag('html')[0]
     true
@@ -347,6 +389,9 @@ love.op
 - e*     - DOM元素   eg: `love.dom.create('img')`
 - name*  - 事件名    eg: `'load'`
 - foo*   - 事件函数  eg: `function(e){console.log(e)}`
+- @return
+- 被绑定事件的DOM元素   DOM
+
 ```
     >love.op.bind(love.get.tag('img')[0], 'load', function(e){console.log(1)});
     <img src="#" onerror="alert(1)" style="display: none">
@@ -360,6 +405,10 @@ love.op
 
 - @param - i
 - i* - 获取随机数的类型，一般来说无需关心  eg: `true`
+- @return
+- 若i不为真，返回纯数字随机数               number
+- 若i为真，返回带字符的随机数               String
+
 ```
     > love.op.random(false);
     85114.78146538138
@@ -373,8 +422,10 @@ love.op
 - @param - foo, hook
 - foo* - 原函数，或是其他函数    eg: `alert`
 - hook - 钩子函数               eg: `function(foo_alert, str){console.log(str), foo_alert(str)}`
+- @return
+- 钩子函数                      function
 
-foo函数将会作为hook函数的第一个参数传入，而被hook的函数接收到的参数将会排在foo之后传如hook。
+foo函数将会作为hook函数的第一个参数传入，而被hook的函数接收到的参数将会排在foo之后传入hook。
 ```
     >alert = love.op.hook(alert, function(foo, str){console.log(str), foo(str)});
     function (){
@@ -414,12 +465,18 @@ love.socket
 连接到一个connet，将链接对象保存到`love.socket.conneted`
 
 - @param - ws
-- ws* - ws链接      eg: `'ws://localhost/wstest'`
+- name*     - ws名              eg: `ws`
+- ws*       - ws链接            eg: `'ws://localhost/wstest'`
+- callback  - 回调函数，参数ws  eg: `..`
+- @return
+- ws对象                        WebSocketObject
 ```
-    >love.socket.connet('ws://localhost/wstest');
-    undefined
+    >love.socket.connet('ws', 'ws://localhost/wstest');
+    WebSocketObject
     >love.socket.conneted
-    Object {ws://localhost/wstest: WebSocketObject}
+    Object {ws: WebSocketObject}
+    >love.socket.conneted['ws://localhost/wstest'].send('Hello world.')
+    undefined
 ```
 
 love.run
