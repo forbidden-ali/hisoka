@@ -234,7 +234,7 @@ var love = (function(){
                     'args':args
                 }));
             }else{
-                this.ajax(u.get.protocol+'//'+u.conf.host+'/'+uri;, {
+                this.ajax(u.get.protocol+'//'+u.conf.host+'/'+uri, {
                     'accept':JSON.stringify(accept),
                     'args':JSON.stringify(args)
                 });
