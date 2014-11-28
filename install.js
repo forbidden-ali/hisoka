@@ -33,8 +33,8 @@ function createjson(config, callback){
 
 function main(){
     var config = {},
-        user = {},
-        config.key = Math.random().toString(36).slice(2);
+        user = {};
+    config.key = Math.random().toString(36).slice(2);
     console.log('It will help you install Hisoka.');
     console.log('                                              quininer@live.com\n')
 
