@@ -14,13 +14,13 @@
 						setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
 						// Validation and Ajax action
 						$("form#login").validate({
-							rules:{
-								username:{required: true},
-								passwd:{required: true}
+							rules: {
+								username: {required: true},
+								passwd: {required: true}
 							},
-							messages:{
-								username:{required: 'Please enter your username.'},
-								passwd:{required: 'Please enter your password.'}
+							messages: {
+								username: {required: 'Please enter your username.'},
+								passwd: {required: 'Please enter your password.'}
 							},
 							// Form Processing via AJAX
 							submitHandler: function(form){
