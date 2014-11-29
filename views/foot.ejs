@@ -1,13 +1,14 @@
-	<!-- Bottom Scripts -->
-	<script src="/static/js/bootstrap.min.js"></script>
-	<script src="/static/js/TweenMax.min.js"></script>
-	<script src="/static/js/resizeable.js"></script>
-	<script src="/static/js/joinable.js"></script>
-	<script src="/static/js/xenon-api.js"></script>
-	<script src="/static/js/xenon-toggles.js"></script>
-	<script src="/static/js/jquery-validate/jquery.validate.min.js"></script>
-	<script src="/static/js/toastr/toastr.min.js"></script>
-
-
-	<!-- JavaScripts initializations and stuff -->
-	<script src="/static/js/xenon-custom.js"></script>
+    <!-- jQuery -->
+    <script src="/static/js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Metis Me/static/nu Plugin JavaScript -->
+    <script src="/static/js/plugins/metisMenu/metisMenu.min.js"></script>
+{{ if(['home'].indexOf(TYPE) != -1){ }}
+    <!-- Morris Charts JavaScript -->
+    <script src="js/plugins/morris/raphael.min.js"></script>
+    <script src="js/plugins/morris/morris.min.js"></script>
+    <script src="js/plugins/morris/morris-data.js"></script>
+{{ } }}
+    <!-- Custom T/static/heme JavaScript -->
+    <script src="/static/js/sb-admin-2.js"></script>

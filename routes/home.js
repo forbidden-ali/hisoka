@@ -1,6 +1,24 @@
 var express = require('express'),
     router = express.Router();
 
+router.get('/login', function(req, res){
+    res.render('login', {err:null});
+});
+router.post('/login', function(req, res){
+    var name = req.body.name;
+    var passwd = req.body.passwd;
+    sql.User.findOne({name:name}, function(err, info){
+        if(!info)return res.json({err:true});
+        sql.User.findOne({
+            name:name,
+            passwd:sql.hash(passwd+config.key+name)
+        }, function(err, info){
+            if(!info)return res.json({err:true});
+            req.session.user = info;
+            res.json({err:null});
+        });
+    });
+});
 router.post('/logout', function(req, res){
     req.session.user = null;
     res.redirect('/login');

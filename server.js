@@ -19,6 +19,8 @@ mongoose.connect(config.db);
 
 app.set('view engine', 'ejs');
 app.engine('html', ejs.renderFile);
+ejs.open = '{{';
+ejs.close = '}}';
 
 app.use(logger());
 app.use(cookieParser());
@@ -40,31 +42,11 @@ function err404(req, res, next){
 app.use(favicon(__dirname+'/static/favicon.ico'));
 app.use('/static', express.static(__dirname+'/static'));
 app.use('/home', function(req, res, next){
-    if(!req.session.user)return err404(req, res, next);
+    if(req.path != '/login')if(!req.session.user)return err404(req, res, next);
     res.locals.token = req.csrfToken();
     res.header('X-Frame-Options', 'DENY');
     next();
 });
-
-app.route('/login')
-    .get(function(req, res){
-        res.render('login', {err:null});
-    })
-    .post(function(req, res){
-        var name = req.body.name;
-        var passwd = req.body.passwd;
-        sql.User.findOne({name:name}, function(err, info){
-            if(!info)return res.json({err:true});
-            sql.User.findOne({
-                name:name,
-                passwd:sql.hash(passwd+config.key+name)
-            }, function(err, info){
-                if(!info)return res.json({err:true});
-                req.session.user = info;
-                res.json({err:null});
-            });
-        });
-    });
 
 var page = require('./routes/page'),
     home = require('./routes/home');

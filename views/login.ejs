@@ -1,114 +1,62 @@
- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh">
+{{ TYPE = 'login' }}
 <head>
-    <% include head_head %>
-    <title>Hisoka - Login</title>
+    {{ include head_head }}
+    <title>Hisoka - login</title>
+    {{ include head_foot }}
 </head>
-<body class="page-body login-page login-light">
-	<div class="login-container">
-		<div class="row">
-			<div class="col-sm-6">
-				<script type="text/javascript">
-					jQuery(document).ready(function($){
-						// Reveal Login form
-						setTimeout(function(){ $(".fade-in-effect").addClass('in'); }, 1);
-						// Validation and Ajax action
-						$("form#login").validate({
-							rules: {
-								username: {required: true},
-								passwd: {required: true}
-							},
-							messages: {
-								username: {required: 'Please enter your username.'},
-								passwd: {required: 'Please enter your password.'}
-							},
-							// Form Processing via AJAX
-							submitHandler: function(form){
-								show_loading_bar(70); // Fill progress bar to 70% (just a given value)
-								var opts = {
-									"closeButton": true,
-									"debug": false,
-									"positionClass": "toast-top-full-width",
-									"onclick": null,
-									"showDuration": "300",
-									"hideDuration": "1000",
-									"timeOut": "5000",
-									"extendedTimeOut": "1000",
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								};
-								$.ajax({
-									url: "/login",
-									method: 'POST',
-									dataType: 'json',
-									data: {
-										do_login: true,
-										username: $(form).find('#username').val(),
-										passwd: $(form).find('#passwd').val(),
-									},
-									success: function(resp){
-										show_loading_bar({
-											delay: .5,
-											pct: 100,
-											finish: function(){
-												// Redirect after successful login page (when progress bar reaches 100%)
-												if(!resp.err){
-													window.location.href = '/home';
-												}
-											}
-										});
-
-										// Remove any alert
-										$(".errors-container .alert").slideUp('fast');
-
-										// Show errors
-										if(resp.err){
-											$(".errors-container").html('<div class="alert alert-danger">\
-												<button type="button" class="close" data-dismiss="alert">\
-													<span aria-hidden="true">&times;</span>\
-													<span class="sr-only">Close</span>\
-												</button>\
-												<strong>Invalid login!</strong><br />Please enter valid username and password.<br />\
-											</div>');
-											$(".errors-container .alert").hide().slideDown();
-											$(form).find('#passwd').select();
-										}
-									}
-								});
-							}
-						});
-						// Set Form focus
-						$("form#login .form-group:has(.form-control):first .form-control").focus();
-					});
-				</script>
-
-				<!-- Errors container -->
-				<div class="errors-container">
-				</div>
-
-				<!-- Add class "fade-in-effect" for login form effect -->
-				<form method="post" role="form" id="login" class="login-form fade-in-effect">
-					<div class="login-header"></div>
-					<div class="form-group">
-						<label class="control-label" for="username">Username</label>
-						<input type="text" class="form-control" name="username" id="username" autocomplete="off" />
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="passwd">Password</label>
-						<input type="password" class="form-control" name="passwd" id="passwd" autocomplete="off" />
-					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary  btn-block text-left">
-							<i class="fa-lock"></i>
-							Log In
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-    <% include foot %>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input id="name" class="form-control" placeholder="Name" name="name" type="text" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input id="passwd" class="form-control" placeholder="Password" name="passwd" type="password" value="">
+                                </div>
+                                <div class="checkbox"></div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <a id="login" class="btn btn-lg btn-success btn-block">Login</a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ include foot }}
+    <script>
+        $('#login').click(function(){
+            $.ajax({
+                url:'/home/login',
+                type:'POST',
+                dataType:'json',
+                data:{
+                    name:$('input#name').val(),
+                    passwd:$('input#passwd').val(),
+                    _csrf:'{{= token }}'
+                }
+            })
+            .success(function(data){
+                if(data.err){
+                    $('div .checkbox').append("<div class='alert alert-danger'>用户名或密码错误。</div>");
+                }else{
+                    document.location = '/home';
+                };
+            })
+            .fail(function(){
+                $('div .checkbox').append("<div class='alert alert-danger'>未知错误。</div>");
+            });
+        });
+    </script>
 </body>
 </html>
