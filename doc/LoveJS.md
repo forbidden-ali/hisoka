@@ -74,6 +74,8 @@ love.req
         eg: `{"Client-IP":"127.0.0.1"}`
 - nsync   - 是否不使用同步xhr
         eg: `true`
+- ijson     - 是否使用json格式传递数据
+        eg: `true`
 - callback - 如果最后一个参数是function，将会当作回调函数执行
         eg: `function(xhr){console.log(xhr.currentTarget.responseText)}`
 - @return
@@ -84,8 +86,10 @@ love.req
     >love.req.ajax('/post').responseText;
     Need POST!
     >love.req.ajax('/post', {"hello":"world."}).responseText;
+    Need JSON!
+    >love.req.ajax('/post', {"hello":"world."}, null, null, true).responseText;
     hello world.
-    >love.req.ajax('/post', {"HELLO":"WORLD."}, {"X-Forwarded-For":"127.0.0.1", "Content-Type":"application/x-www-form-urlencoded"}, false, function(xhr){console.log(xhr.currentTarget.responseText)});
+    >love.req.ajax('/post', {"HELLO":"WORLD."}, {"X-Forwarded-For":"127.0.0.1", "Content-Type":"application/x-www-form-urlencoded"}, false, function(xhr){console.log(xhr.currentTarget.responseText)}, null, true);
     HELLO WORLD.
     XMLHttpRequest
 ```
@@ -523,7 +527,7 @@ love.socket
 子类有
 [connet](#connetfunction)
 
-### connet:[funcction]
+### connet:[function]
 连接到一个connet，将链接对象保存到`love.socket.conneted`
 
 - @param - ws

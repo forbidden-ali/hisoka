@@ -99,9 +99,21 @@ exports.re = function(re, ms, di){
                 *       @data   Object, 需要返回的对象
                 *       @tpl    String, 可以指定模板，默认使用与Mod同名的模板 *only HTTP
                 */
-                i.type?re.s.send(JSON.stringify(data)):re.s.rander(di.r+(tpl||di.n), data);
+                return i.type?re.s.send(JSON.stringify(data)):re.s.rander(di.r+(tpl||di.n), data);
             }
         }
     };
     return i;
+};
+exports.op = {
+    unique:function(arr){
+        var ret = [];
+        for(var i in arr){
+            var item = arr[i];
+            if (ret.indexOf(item) === -1){
+                ret.push(item);
+            };
+        };
+        return ret;
+    },
 };

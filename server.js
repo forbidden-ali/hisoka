@@ -35,14 +35,22 @@ app.use(session({
         path:'/home'
     }
 }));
+app.use(session({
+    name:'victim',
+    secret:'page',
+    cookie:{
+        httpOnly:true,
+        path:'/e'
+    }
+}));
 app.use('/home', csrf());
 function err404(req, res, next){
-    return res.status(404).jsonp({err:404});
+    return res.status(404).json({err:404});
 };
 app.use(favicon(__dirname+'/static/favicon.ico'));
 app.use('/static', express.static(__dirname+'/static'));
 app.use('/home', function(req, res, next){
-    if(req.path != '/login')if(!req.session.user)return err404(req, res, next);
+//    if(req.path != '/login')if(!req.session.user)return err404(req, res, next);
     res.locals.token = req.csrfToken();
     res.header('X-Frame-Options', 'DENY');
     next();

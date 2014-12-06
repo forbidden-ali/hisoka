@@ -1,5 +1,6 @@
 var express = require('express'),
-    router = express.Router();
+    router = express.Router(),
+    mod = require('../modules/module.js');
 
 router.get('/login', function(req, res){
     res.render('login', {err:null});
@@ -21,29 +22,57 @@ router.post('/login', function(req, res){
 });
 router.post('/logout', function(req, res){
     req.session.user = null;
-    res.redirect('/login');
+    res.redirect('/home/login');
 });
 
 // TODO 看之后前端怎么写，再来写接口吧
 
 router.get('/', function(req, res){
-    var victim, page;
-    sql.Victim.find({}, function(err, info){
-        victims = info;
-        sql.Page.find({}, function(err, info){
-            pages = info;
-            sql.Item.find({}, function(err, info){
-                items = info;
-                res.render('home', {
-                    items:items,
-                    victims:victims,
-                    pages:pages
-                });
-            });
+    res.render('home', {err:null});
+});
+
+router.get('/info', function(req, res){
+    var mods = ['server', 'victim'],
+        type = req.query.type,
+        data = {};
+    sql.Item.find({}, 'group')
+    .exec(function(err, info){
+        var info_item = info;
+        sql.Victim.find({}, 'group')
+        .exec(function(err, info){
+            var info_victim = info;
+            sql.Page.find({}, 'name')
+            .exec(function(err, info){
+                var info_page = info;
+                if(type == 'home'){
+                    data = {
+                        'item':info_item.length,
+                        'victim':info_victim.length,
+                        'page':info_page.length,
+                        'mod':'-'
+                    };
+                }else if(type == 'side'){
+                    data = {
+                        'item':mod.op.unique(info_item),
+                        'victim':mod.op.unique(info_victim),
+                        'page':mod.op.unique(info_page),
+                        'mod':mods
+                    };
+                };
+                res.json(data);
+            })
         });
     });
 });
 
+router.get('/items/:group', function(req, res){
+    sql.Item.find({group:req.params.group}, function(err, info){
+        if(!info)return err404(req, res);
+        res.render('edit', {
+            items:info
+        });
+    });
+});
 router.get('/item/:name', function(req, res){
     sql.Item.findOne({id:req.params.name}, function(err, info){
         if(!info)return err404(req, res);
@@ -83,6 +112,14 @@ router.post('/item/:name/edit', function(req, res){
     });
 });
 
+router.get('/victims/:group', function(req, res){
+    sql.Victim.findOne({id:req.params.name}, function(err, info){
+        if(!info)return err404(req, res);
+        res.render('edit', {
+            victims:info
+        });
+    });
+});
 router.get('/victim/:name', function(req, res){
     sql.Victim.findOne({id:req.params.name}, function(err, info){
         if(!info)return err404(req, res);
@@ -117,6 +154,9 @@ router.post('/victim/:name/edit', function(req, res){
     };
 });
 
+router.get('/pages/:uri', function(req, res){
+    //
+});
 router.get('/page/:uri/editor', function(req, res){
     sql.Page.findOne({uri:req.params.uri}, function(err, info){
         if(!info)return err404(req, res);
@@ -159,7 +199,10 @@ router.post('/page/:uri/edit', function(req, res){
     };
 });
 
-router.all('/modules/:type', function(req, res){
+router.get('/mods/manage', function(){
+    //
+});
+router.all('/mods/:type/json', function(req, res){
     var type = req.params.type;
     var lists = {};
     var path = (
@@ -179,7 +222,7 @@ router.all('/modules/:type', function(req, res){
     };
     return res.json(lists);
 });
-router.all('/modules/:type/:name', function(req, res){
+router.all('/mods/:type/:name', function(req, res){
     var type = req.params.type;
     var name = req.params.name;
     var details;

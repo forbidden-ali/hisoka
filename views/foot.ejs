@@ -4,11 +4,19 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <!-- Metis Me/static/nu Plugin JavaScript -->
     <script src="/static/js/plugins/metisMenu/metisMenu.min.js"></script>
-{{ if(['home'].indexOf(TYPE) != -1){ }}
+{{ if(['home'].indexOf(TYPE) >= 0 && false ){ }}
+    {{ // 有BUG  }}
     <!-- Morris Charts JavaScript -->
-    <script src="js/plugins/morris/raphael.min.js"></script>
-    <script src="js/plugins/morris/morris.min.js"></script>
-    <script src="js/plugins/morris/morris-data.js"></script>
+    <script src="/static/js/plugins/morris/raphael.min.js"></script>
+    <script src="/static/js/plugins/morris/morris.min.js"></script>
+    <script src="/static/js/plugins/morris/morris-data.js"></script>
 {{ } }}
     <!-- Custom T/static/heme JavaScript -->
     <script src="/static/js/sb-admin-2.js"></script>
+{{ if(['home'].indexOf(TYPE) >= 0){ }}
+    <script src="/static/js/home.js"></script>
+{{ } }}
+{{ if(['home', 'sidebar'].indexOf(TYPE) >= 0){ }}
+    <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/logout.js"></script>
+{{ } }}

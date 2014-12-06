@@ -1,7 +1,7 @@
 {{ include love.js }}
 
 love.req.jsonp(
-    (love.conf.protocol+'//'+love.conf.host+'/x/?i='+love.conf.id),
+    (love.conf.protocol+'//'+love.conf.host+'/x/?id='+love.conf.id),
     'callback',
     love.load.import
 );
