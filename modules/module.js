@@ -105,14 +105,18 @@ exports.re = function(re, ms, di){
     };
     return i;
 };
+
 exports.op = {
+    /*
+    *   封装一些常用操作，比如
+    *       数组去重
+    */
     unique:function(arr){
+        //  Array 元素去重
         var ret = [];
         for(var i in arr){
             var item = arr[i];
-            if (ret.indexOf(item) === -1){
-                ret.push(item);
-            };
+            if(ret.indexOf(item) === -1)ret.push(item);
         };
         return ret;
     },

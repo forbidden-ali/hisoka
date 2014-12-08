@@ -1,13 +1,1 @@
-$.getJSON('/home/info?type=home')
-.done(function(data){
-    $('div#len_item').text(data.item);
-    $('div#len_victim').text(data.victim);
-    $('div#len_page').text(data.page);
-    $('div#len_mod').text(data.mod);
-})
-.fail(function(data){
-    $('div#len_item').text('XXX');
-    $('div#len_victim').text('XXX');
-    $('div#len_page').text('XXX');
-    $('div#len_mod').text('XXX');
-});
+//

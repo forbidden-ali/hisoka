@@ -6,8 +6,8 @@ router.get('/login', function(req, res){
     res.render('login', {err:null});
 });
 router.post('/login', function(req, res){
-    var name = req.body.name;
-    var passwd = req.body.passwd;
+    var name = (typeof req.body.name)?req.body.name:'';
+    var passwd = (typeof req.body.name)?req.body.passwd:'';
     sql.User.findOne({name:name}, function(err, info){
         if(!info)return res.json({err:true});
         sql.User.findOne({
@@ -26,15 +26,15 @@ router.post('/logout', function(req, res){
 });
 
 // TODO 看之后前端怎么写，再来写接口吧
+// NOTE 注意！！
+//      不要直接使用body和query以及param，务必先验证typeof！
 
 router.get('/', function(req, res){
     res.render('home', {err:null});
 });
 
-router.get('/info', function(req, res){
-    var mods = ['server', 'victim'],
-        type = req.query.type,
-        data = {};
+router.get('/side.info', function(req, res){
+    var mods = ['server', 'victim'];
     sql.Item.find({}, 'group')
     .exec(function(err, info){
         var info_item = info;
@@ -44,22 +44,12 @@ router.get('/info', function(req, res){
             sql.Page.find({}, 'name')
             .exec(function(err, info){
                 var info_page = info;
-                if(type == 'home'){
-                    data = {
-                        'item':info_item.length,
-                        'victim':info_victim.length,
-                        'page':info_page.length,
-                        'mod':'-'
-                    };
-                }else if(type == 'side'){
-                    data = {
-                        'item':mod.op.unique(info_item),
-                        'victim':mod.op.unique(info_victim),
-                        'page':mod.op.unique(info_page),
-                        'mod':mods
-                    };
-                };
-                res.json(data);
+                res.json({
+                    'item':mod.op.unique(info_item),
+                    'victim':mod.op.unique(info_victim),
+                    'page':mod.op.unique(info_page),
+                    'mod':mods
+                });
             })
         });
     });
@@ -130,7 +120,7 @@ router.get('/victim/:name', function(req, res){
 });
 router.post('/victim/:name/edit', function(req, res){
     var id = req.params.id;
-    if(req.param('type')=='delete'){
+    if(req.param('type') == 'delete'){
         sql.Victim.remove({_id:id}, function(err){
             res.json({err:err});
         });

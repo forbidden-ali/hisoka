@@ -1,4 +1,4 @@
-$.getJSON('/home/info?type=side')
+$.getJSON('/home/side.info')
 .done(function(data){
     $.each(data.item, function(_, name){
         $('ul#side_item').append($('<li>').html($('<a>').text(name).attr('href', '/home/items/'+name)));

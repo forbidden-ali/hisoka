@@ -3,18 +3,19 @@ var express = require('express'),
     auws = {};
 
 router.all('/', function(req, res){
+    var xid = (typeof req.query.x == 'string')?req.query.x:'';
     res.header('Content-Type', 'application/javascript');
     return res.render('index', {
         protocol:config.ssl?'https:':'',
         host:config.host||req.header('host'),
-        id:req.query.x||'Default'
+        id:xid||'Default'
     });
 });
 
 router.all('/x/', function(req, res){
     // who id can use Fingerprinting.js
-    var isdef = (req.parm('id') == 'Default'),
-        id = req.param('id'),
+    var xid =  (typeof req.param('id') == 'string')?req.param('id'):'',
+        isdef = (xid == 'Default'),
         who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
         if(info)return res.jsonp(info.load);
@@ -46,20 +47,20 @@ function online(who, on){
 };
 function handle(req, res, modules, auws, victim, who, msg){
     var path = fs.realpathSync('.');
-    req.session.share = {};
+    req.session.share = req.session.share||{};
     for(var i in modules){
-        if(typeof share[modules[i][0]] != 'object'){
-            share[modules[i][0]] = [];
+        if(typeof req.session.share[modules[i][0]] != 'object'){
+            req.session.share[modules[i][0]] = [];
         };
         try{
             if(!fs.lstatSync(path+'/'+modules[i][0]).isDirectory())throw 'path error.';
             var m = require(path+'/modules/'+modules[i][0]+'/'+modules[i][0]);
         }catch(err){
             req.session.share[modules[i][0]].unshift({'err':err});
-            continue
+            continue;
         };
         req.session.share[modules[i][0]].unshift(
-            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:share}, {o:auws, g:msg})
+            m({q:req, s:res}, {v:victim, w:who}, {p:modules[i][1], s:req.session.share}, {o:auws, g:msg})
         );
     };
 };

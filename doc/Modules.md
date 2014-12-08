@@ -59,9 +59,7 @@ Hisoka 提供了一个 example, `./static/modules/example`
 2. **Vmod可以请求某些模块处理该信息!**
 
     `love.req.infoback`除去回传的信息，还有一个参数必填。
-
     `accept`要求是个Array，保存着请求处理该信息的服务端模块的名字。
-
     例如`love.req.infoback('page', ['autoinfo'], {"hello":"world."})`
     会请求`autoinfo`模块将`{"hello":"world."}`保存至数据库。
 
