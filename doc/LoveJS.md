@@ -27,27 +27,31 @@ love.code
 ### urlen:[function]
 封装了urlencode操作
 
-:-------|:------------------|:---------------
-@param  |                   |
-datas*  | Object            | eg: `{"AA":"BB"}`
-@return | urlencode后的返回 | String
+- @param - datas, post
+- datas*    - 一个Object
+        eg: `{"AA":"BB"}`
+- @return
+- urlencode后的返回，
+        String
 
 ```
     >love.code.urlen({"AA":"BB", "CC":"DD"})
-    "%41%41%41%28%29%3B"
+    "AA=BB&CC=DD"
 ```
 
 ### quote:[function]
 完全的encodeURL编码
 
-:-------|:------------------|:-------
-@param  |                   |
-num*    | 任意字符串        | eg: `AAA();`
-@return | encodeURL后的返回 | String
+- @param - num
+- num*  - 任意字符串
+        eg: `AAA();`
+- @return
+- encodeURL后的返回
+        String
 
 ```
     >love.code.quote('AAA();')
-    'AA%28%29%3B'
+    "%41%41%41%28%29%3B"
 ```
 
 love.req
