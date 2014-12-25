@@ -544,7 +544,7 @@ love.socket
 子类有
 + [connet](#connetfunction)
 
-### connet:[funcction]
+### connet:[function]
 连接到一个connet，将链接对象保存到`love.socket.conneted`
 
 |Params | Description   | Type      | Example
