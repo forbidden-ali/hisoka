@@ -20,7 +20,7 @@ love.conf
 
 love.code
 ---------
-关于编码的封装，子类有
+关于编码的封装，方法有
 + [urlen](#urlenfunction)
 + [quote](#quotefunction)
 
@@ -58,7 +58,7 @@ love.code
 
 love.req
 --------
-关于请求的封装，子类有
+关于请求的封装，方法有
 + [ajax](#ajaxfunction)，
 + [json](#jsonfunction)，
 + [post](#postfunction)，
@@ -161,7 +161,7 @@ love.req
 
 love.load
 ---------
-关于模块加载的封装，子类有
+关于模块加载的封装，方法有
 + [script](#scriptfunction)，
 + [import](#importfunction)
 
@@ -205,7 +205,7 @@ love.load
 
 love.dom
 --------
-关于DOM操作的封装，子类有
+关于DOM操作的封装，方法有
 + [inner](#innerfunction)，
 + [add](#addfunction)，
 + [create](#createfunction)，
@@ -349,7 +349,7 @@ love.get
 --------
 上面也有用到一些`love.get`的内容，
 是对获取信息的一些封装，
-子类有
+方法和属性有
 + [isorigin](#isoriginfunction)，
 + [protocol](#protocolstr)，
 + [isdom](#isdomfunction)，
@@ -452,7 +452,7 @@ love.get
 love.op
 -------
 关于JavaScript的一些封装，
-子类有
+方法有
 + [bind](#bindfunction)，
 + [random](#randomfunction)，
 + [hook](#hookfunction)
@@ -542,7 +542,7 @@ foo函数将会作为hook函数的第一个参数传入，而被hook的函数接
 love.socket
 -----------
 关于WebSocket的封装，
-子类有
+方法有
 + [connet](#connetfunction)
 
 ### connet:[function]
