@@ -36,7 +36,7 @@ love.code
 
 ```
     >love.code.urlen({"AA":"BB", "CC":"DD"})
-    "AA=BB&CC=DD"
+    "%41%41%41%28%29%3B"
 ```
 
 ### quote:[function]
