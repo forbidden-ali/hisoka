@@ -106,12 +106,12 @@ love.req
 |callname   | 当指定了回调名执行jsonp操作，需要同时指定callback，且只能异步操作，没有返回   | String    | `callback`
 
 |Callback Params    | Type
-|-------------------|-------
-|json               | Object
-
-|Return Description | Type
 |-------------------|--------
 |json               | Object
+
+|Return Description                 | Type
+|-----------------------------------|--------
+|json，若指定了callname，则没有返回 | Object
 
 ```
     >love.req.json('/hi.json');
@@ -130,6 +130,7 @@ love.req
 |jump   | 跳转页面      | Bool      | `true`
 
 |Callback Param | Type
+|---------------|------
 |Null           | Null
 
 ```
@@ -553,9 +554,11 @@ love.socket
 |ws*    | WebSocks链接  | String    | `'ws://localhost/wstest'`
 
 |Callback Param | Type      | Description
+|---------------|-----------|-------------
 |ws             | Object    | WebSocks对象
 
 |Return Description | Type
+|-------------------|--------
 |WebSocks对象       | Object
 
 ```
