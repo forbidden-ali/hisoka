@@ -21,13 +21,13 @@ love.conf
 love.code
 ---------
 关于编码的封装，子类有
-[urlen](#urlenfunction)
-[quote](#quotefunction)
++ [urlen](#urlenfunction)
++ [quote](#quotefunction)
 
 ### urlen:[function]
 封装了urlencode操作
 
-|Param  | Description   | Type      | Example
+|Params | Description   | Type      | Example
 |-------|---------------|-----------|--------------
 |datas  | ..            | Object    | `{"AA":"BB"}`
 
@@ -43,7 +43,7 @@ love.code
 ### quote:[function]
 完全的encodeURL编码
 
-|Param  | Description       | Type     | Example
+|Params | Description       | Type     | Example
 |-------|-------------------|----------|--------
 |num*   | 需要编码的字符    | String   | `AAA();`
 
@@ -59,21 +59,21 @@ love.code
 love.req
 --------
 关于请求的封装，子类有
-[ajax](#ajaxfunction)，
-[json](#jsonfunction)，
-[post](#postfunction)，
-[infoback](#infobackfunction)
++ [ajax](#ajaxfunction)，
++ [json](#jsonfunction)，
++ [post](#postfunction)，
++ [infoback](#infobackfunction)
 
 ### ajax:[function]
 封装了xhr操作
 
-|Param      | Description           | Type              | Example
+|Params     | Description           | Type              | Example
 |-----------|-----------------------|-------------------|---------------------------
-|url        | 请求目标的URL         | String            | `/index.html`
+|url*       | 请求目标的URL         | String            | `/index.html`
 |datas      | body内容              | String or Object  | `{"hello":"world."}`
 |headers    | 需要添加的请求头      | Object            | `{"Client-IP":"127.0.0.1"}`
-|nsync      | 不使用同步xhr         | bool              | `true`
-|ijson      | POST内容使用JSON格式  | bool              | `true`
+|nsync      | 不使用同步xhr         | Bool              | `true`
+|ijson      | POST内容使用JSON格式  | Bool              | `true`
 
 |Callback Param                 | Type      | Example
 |-------------------------------|-----------|---------------------------------
@@ -100,16 +100,18 @@ love.req
 ### json:[function]
 简化了json和jsonp的操作
 
-- @param - url, callname, callback
-- url*        - json或jsonp的地址，需要是一个URL字符串
-        eg: `/hi.json`
-- callname    - 当指定了回调名时，执行jsonp操作，需要同时指定callback，且只能异步操作，没有返回
-        eg: `callback`
-- callback    - 回调函数的参数即是json
-        eg: `function(json){console.log(json)}`
-- @return
-- 如果是json操作，将返回json
-        Object
+|Params     | Description                                                                   | Type      | Example
+|-----------|-------------------------------------------------------------------------------|-----------|------------
+|url*       | json或jsonp的地址                                                             | String    | `/hi.json`
+|callname   | 当指定了回调名执行jsonp操作，需要同时指定callback，且只能异步操作，没有返回   | String    | `callback`
+
+|Callback Params    | Type
+|-------------------|-------
+|json               | Object
+
+|Return Description | Type
+|-------------------|--------
+|json               | Object
 
 ```
     >love.req.json('/hi.json');
@@ -121,14 +123,14 @@ love.req
 ### post:[function]
 使用form实现的表单提交
 
-- @param - url, datas, jump, callback
-- url*    - action地址
-        eg: `/post.php`
-- datas   - 一个object字典
-        eg: `{"hello":"world."}`
-- jump    - 是否跳转，当不需要使用iframe实现不刷新时可以打开
-        eg: `true`
-- callback - 回调函数
+|Params | Description   | Type      | Example
+|-------|---------------|-----------|---------------------
+|url*   | action地址    | String    | `/post.do`
+|datas  | POST内容      | Object    | `{"Hello":"world."}`
+|jump   | 跳转页面      | Bool      | `true`
+
+|Callback Param | Type
+|Null           | Null
 
 ```
     >love.req.post('/404');
@@ -143,13 +145,11 @@ love.req
 ### infoback:[function]
 将信息回传给Hisoka的封装
 
-- @param - uri, accept, args
-- uri*    - 指定接收的Page所在的URI.
-        eg: `auto`
-- accept* - 指定希望处理该信息的Page模块，需要是个Array
-        eg: `['autoinfo']`
-- args*   - 需要回传的参数们，是个object
-        eg: `"hello":"world."}`
+|Params | Description                   | Type      | Example
+|-------|-------------------------------|-----------|---------------------
+|uri*   | 指定接收的Page所在的uri       | String    | `auto`
+|accept | 指定希望处理该信息的Page模块  | Array     | `['autoinfo']`
+|args*  | 需要回传的参数                | Object    | `{"hello":"world."}`
 
 ```
     >love.req.infoback('attack', ['autoinfo'], {"Cookie":document.cookie});
@@ -161,19 +161,20 @@ love.req
 love.load
 ---------
 关于模块加载的封装，子类有
-[script](#scriptfunction)，
-[import](#importfunction)
++ [script](#scriptfunction)，
++ [import](#importfunction)
 
 ### script:[function]
 单独导入一个JavaScript文件
 
-- @param - url, callback
-- url*        - JavaScript file URL.
-        eg: `/hi.js`
-- nrdm        - 不使用随机参数
-        eg: `true`
-- callback    - onload实现的回调函数
-        eg: `function(){console.log('hi')}`
+|Params | Description       | Type      | Example
+|-------|-------------------|-----------|---------
+|url*   | JS文件URL         | String    | `/hi.js`
+|nrdm   | 不使用随机参数    | Bool      | `true`
+
+|Callback Param | Type
+|---------------|-------
+|Null           | Null
 
 ```
     >love.load.script('/alert.js', function(){console.log(1)});
@@ -185,9 +186,9 @@ love.load
 ### import:[function]
 导入多个modules
 
-- @param - loads
-- loads*  - 是个object字典，键名为URL，键值为modules的参数，也是个object字典
-        eg: `{"example":{"hello":"world."}}`
+|Params | Description               | Type      | Example
+|-------|---------------------------|-----------|----------------------------------
+|loads* | 模块名和模块参数的键值对  | Object    | `{"example":{"hello":"world."}}`
 
 ```
     >love.load.import({"cutimg":{"uri":"auto"}});
@@ -204,27 +205,29 @@ love.load
 love.dom
 --------
 关于DOM操作的封装，子类有
-[inner](#innerfunction)，
-[add](#addfunction)，
-[create](#createfunction)，
-[insert](#insertfunction)，
-[kill](#killfunction)，
-[attr](#attrfunction)
++ [inner](#innerfunction)，
++ [add](#addfunction)，
++ [create](#createfunction)，
++ [insert](#insertfunction)，
++ [kill](#killfunction)，
++ [attr](#attrfunction)
 
 ### inner:[function]
 用innerHTML方法插入HTML代码。
 
-- @param - dom, hide, e, callback
-- dom*      - 需要inner的HTML内容
-        eg: `'<img src=#>'`
-- hide      - 是否隐藏式，若启用，则inner的元素不会显示在页面上
-        eg: `true`
-- e         - 父元素
-        eg: `love.get.id('hi')`
-- callback  - 回调函数，参数为inner创建的元素
-- @return
-- 创建出的dom元素
-        DOM
+|Params | Description           | Type      | Example
+|-------|-----------------------|-----------|--------------------
+|dom*   | 需要inner的HTML内容   | String    | `'<img src=#>'`
+|hide   | 隐藏                  | Bool      | `true`
+|e      | 父元素                | DOM       | `love.get.id('hi')`
+
+|Callback Params | Type | Description
+|----------------|------|-------------------
+|dom             | DOM  | inner创建的DOM元素
+
+|Return Description | Type
+|-------------------|------
+|inner创建的DOM元素 | DOM
 
 ```
     >love.dom.inner('<img src=# onerror=alert(1)>', true, love.get.body, function(){console.log(1)});
@@ -239,18 +242,20 @@ love.dom
 使用DOM方法插入元素
 是对love.dom.create和love.dom.insert的封装
 
-- @param - tag, attr, parent, callback
-- tag*      - 标签名
-        eg: `'img'`
-- attr      - 属性，需要是个object `{}`
-        eg: `{"src":"#"}`
-- parent    - 父元素
-        eg: `love.get.id('hi')`
-- callback  - 回调函数，参数为创建的元素和父元素
-        eg: `function(e, parent){console.log(e, parent)}`
-- @return
-- 所创建出的DOM元素
-        DOM
+|Params | Description   | Type      | Example
+|-------|---------------|-----------|--------------------
+|tag*   | 标签名        | String    | `'img'`
+|attr   | 属性键值对    | Object    | `{"src":"#"}`
+|parent | 父DOM         | DOM       | `love.get.id('hi')`
+
+|Callback Param | Type  | Description
+|---------------|-------|----------------
+|e              | DOM   | 所创建的DOM元素
+|parent         | DOM   | 父DOM
+
+|Return Description | Type
+|-------------------|------
+|所创建的DOM元素    | DOM
 
 ```
     >love.dom.add('img', {"src":"/img.png"}, love.get.body, function(e, parent){console.log(parent)});
@@ -261,14 +266,14 @@ love.dom
 ### create:[function]
 创建元素
 
-- @param - tag, attr
-- tag*  - 标签名
-        eg: `'img'`
-- attr  - 属性
-        eg: `{"src":"#"}`
-- @return
-- 所创建的DOM元素
-        DOM
+|Params | Description   | Type      | Example
+|-------|---------------|-----------|--------------
+|tag*   | 标签名        | String    | `'img'`
+|attr   | 属性键值对    | Object    | `{"src":"#"}`
+
+|Return Description | Type
+|-------------------|------
+|返回DOM元素        | DOM
 
 ```
     >love.dom.create('img', {"src":"/img.png"});
@@ -279,15 +284,19 @@ love.dom
 ### insert:[function]
 插入元素
 
-- @param - e, parent, callback
-- e*        - DOM元素
-        eg: `love.dom.create('img')`
-- parent    - 父元素
-        eg: `love.get.body`
-- callback  - 回调函数，参数为创建的元素和父元素
-- @return
-- 所插入的DOM元素
-        DOM
+|Params | Description   | Type  | Example
+|-------|---------------|-------|--------------------------
+|e*     | 待插入的元素  | DOM   | `love.dom.create('img')`
+|parent | 父DOM         | DOM   | `love.get.body`
+
+|Callback Param | Type  | Description
+|---------------|-------|----------------
+|e              | DOM   | 所插入的DOM元素
+|parent         | DOM   | 父DOM
+
+|Return Description | Type
+|-------------------|------
+|所插入的DOM元素    | DOM
 
 ```
     >love.dom.insert(love.dom.create('img', {"src":"/img.png"}), function(e, parent){console.log(parent)});
@@ -299,11 +308,13 @@ love.dom
 ### kill:[function]
 从DOM里删除元素
 
-- @param - e, callback
-- e*        - 元素，必须在DOM中
-        eg: `love.get.tag('a')[0]`
-- callback  - 回调函数，没有参数
+|Params | Description   | Type  | Example
+|-------|---------------|-------|-------------------------
+|e*     | 待删除的元素  | DOM   | `love.get.tag('img')[0]`
 
+|Callback Param | Type
+|---------------|------
+|Null           | Null
 ```
     >love.dom.kill(love.get.tab('img')[0], function(){console.log(1)});
     undefined
@@ -314,17 +325,16 @@ love.dom
 ### attr:[function]
 获取或设置某元素的属性
 
-- @param - e, attr, value
-- e*    - 元素
-        eg: `love.get.tag('img')[0]`
-- attr* - 属性名，如果未设置value，那么会返回该属性已设置的属性值
-        eg: `src'`
-- value - 值                                                        eg: `'#'`
-- @return
-- 若无value参数，将返回属性内容
-        String
-- 若有value参数，将返回DOM元素
-        DOM
+|Params | Description               | Type      | Example
+|-------|---------------------------|-----------|-------------------------
+|e*     | 元素                      | DOM       | `love.get.tag('img')[0]`
+|attr*  | 属性名                    | String    | `'src'`
+|value  | 值，若未设置则返回属性值  | String    | `'#'`
+
+|Return Description             | Type
+|-------------------------------|--------
+|若无value参数，将返回属性内容  | String
+|若有value参数，将返回DOM元素   | DOM
 
 ```
     >love.dom.attr(love.get.tag('img')[0], 'src');
@@ -339,26 +349,29 @@ love.get
 上面也有用到一些`love.get`的内容，
 是对获取信息的一些封装，
 子类有
-[isorigin](#isoriginfunction)，
-[protocol](#protocolstr)，
-[isdom](#isdomfunction)，
-[id](#idnametagclassfunction)，
-[name](#idnametagclassfunction)，
-[tag](#idnametagclassfunction)，
-[class](#idnametagclassfunction)，
-[html](#htmlheadbodyfunction)，
-[head](#htmlheadbodyfunction)，
-[body](#htmlheadbodyfunction)，
-[testorigin](#testoriginfunciton)
++ [isorigin](#isoriginfunction)，
++ [protocol](#protocolstr)，
++ [isdom](#isdomfunction)，
++ [id](#idnametagclassfunction)，
++ [name](#idnametagclassfunction)，
++ [tag](#idnametagclassfunction)，
++ [class](#idnametagclassfunction)，
++ [html](#htmlheadbodyfunction)，
++ [head](#htmlheadbodyfunction)，
++ [body](#htmlheadbodyfunction)，
++ [testorigin](#testoriginfunciton)
 
 ### isorigin:[function]
 判断一个URL是否和当前域同源 or 判断两个URL是否同源
 
-- @param - url, url2
-- url*/url2  - 字符串
-        eg: `'http://localhost/'`
-- @return
-- 布尔值
+|Params | Description               | Type      | Example
+|-------|---------------------------|-----------|-----------------------
+|url*   | URL                       | String    | `'http://localhost/'`
+|url2   | URL，若无则与当前域对白   | String    | `'http://localhost/'`
+
+|Return Description             | Type
+|-------------------------------|--------
+|若同源则返回true，否则false    | Bool
 
 ```
     >love.get.isorigin('http://localhost/test');
@@ -378,11 +391,13 @@ love.get
 ### isdom:[function]
 判断参数是否是DOM元素
 
-- @param - e
-- e* - 不确定是否是DOM的对象
-        eg: `'AAAA'`
-- @return
-- 布尔值
+|Params | Description   | Type  | Example
+|-------|---------------|-------|---------
+|e*     | 待判断的对象  | Null  | `'AAA'`
+
+|Return Description     | Type
+|-----------------------|------
+|若是DOM元素则返回true  | Bool
 
 ```
     >love.get.isdom(love.get.id('hi'));
@@ -393,11 +408,13 @@ love.get
 ### testorigin:[function]
 使用ajax测试某个URL和当前域是否同源
 
-- @param - url
-- url* - 字符串
-        eg: `'http://localhost/'`
-- @return
-- 布尔值
+|Params | Description   | Type      | Example
+|-------|---------------|-----------|-----------------------
+|url*   | URL           | String    | `'http://localhost/'`
+
+|Return Description     | Type
+|-----------------------|------
+|若测试同源则返回true   | Bool
 
 ```
     >love.get.testorigin('http://localhost/');
@@ -407,12 +424,13 @@ love.get
 ### id,name,tag,class:[function]
 对获取DOM元素的封装
 
-- @param - name
-- name* - id名之类的
-        eg: `'a'`
-- @return
-- DOM元素，或是DOM元素组成的Array.
-        DOM or Array
+|Params | Description           | Type      | Example
+|-------|-----------------------|-----------|---------
+|name*  | id, name, class, tag  | String    | `'id'`
+
+|Return Description     | Type
+|-----------------------|--------------
+|DOM或是DOM组成的Array  | DOM or Array
 
 ```
     >love.get.id('hi');
@@ -434,23 +452,22 @@ love.op
 -------
 关于JavaScript的一些封装，
 子类有
-[bind](#bindfunction)，
-[random](#randomfunction)，
-[hook](#hookfunction)
++ [bind](#bindfunction)，
++ [random](#randomfunction)，
++ [hook](#hookfunction)
 
 ### bind:[function]
 关于绑定事件的封装
 
-- @param - e, name, foo
-- e*     - DOM元素
-        eg: `love.dom.create('img')`
-- name*  - 事件名
-        eg: `'load'`
-- foo*   - 事件函数
-        eg: `function(e){console.log(e)}`
-- @return
-- 被绑定事件的DOM元素
-        DOM
+|Params | Description   | Type      | Example
+|-------|---------------|-----------|-----------
+|e*     | DOM元素       | DOM       | `love.dom.create('img')`
+|name*  | 事件名        | String    | `'load'`
+|foo*   | 事件函数      | Function  | `function(e){console.log(e)}`
+
+|Return Description     | Type
+|-----------------------|------
+|被绑定事件的DOM元素    | DOM
 
 ```
     >love.op.bind(love.get.tag('img')[0], 'load', function(e){console.log(1)});
@@ -463,14 +480,14 @@ love.op
 ### random:[function]
 关于获取随机数的封装
 
-- @param - i
-- i* - 获取随机数的类型，一般来说无需关心
-        eg: `true`
-- @return
-- 若i不为真，返回纯数字随机数
-        number
-- 若i为真，返回带字符的随机数
-        String
+|Params | Description       | Type  | Example
+|-------|-------------------|-------|---------
+|i      | 获取随机数的类型  | Bool  | `true`
+
+|Return Description         | Type
+|---------------------------|--------
+|若无i，返回纯数字随机数    | Number
+|若有i，返回字符串随机数    | String
 
 ```
     > love.op.random(false);
@@ -482,14 +499,14 @@ love.op
 ### hook:[function]
 关于函数钩子的实现
 
-- @param - foo, hook
-- foo* - 原函数，或是其他函数
-        eg: `alert`
-- hook - 钩子函数
-        eg: `function(foo_alert, str){console.log(str), foo_alert(str)}`
-- @return
-- 钩子函数
-        function
+|Params | Description           | Type      | Example
+|-------|-----------------------|-----------|-------------------------------------------------------------
+|foo*   | 原函数，或是其他函数  | Function  | `alert`
+|hook   | 钩子函数              | Function  | `function(foo_alert, str){console.log(str), foo_alert(str)}`
+
+|Return Description             | Type
+|-------------------------------|----------
+|返回用作替代原函数的钩子函数   | Function
 
 foo函数将会作为hook函数的第一个参数传入，而被hook的函数接收到的参数将会排在foo之后传入hook。
 ```
@@ -525,20 +542,21 @@ love.socket
 -----------
 关于WebSocket的封装，
 子类有
-[connet](#connetfunction)
++ [connet](#connetfunction)
 
 ### connet:[funcction]
 连接到一个connet，将链接对象保存到`love.socket.conneted`
 
-- @param - ws
-- name*     - ws名
-        eg: `ws`
-- ws*       - ws链接
-        eg: `'ws://localhost/wstest'`
-- callback  - 回调函数，参数ws  eg: `..`
-- @return
-- ws对象
-        WebSocketObject
+|Params | Description   | Type      | Example
+|-------|---------------|-----------|---------
+|name*  | WebSocks名    | String    | `'ws'`
+|ws*    | WebSocks链接  | String    | `'ws://localhost/wstest'`
+
+|Callback Param | Type      | Description
+|ws             | Object    | WebSocks对象
+
+|Return Description | Type
+|WebSocks对象       | Object
 
 ```
     >love.socket.connet('ws', 'ws://localhost/wstest');
@@ -553,9 +571,9 @@ love.run
 --------
 一些运行时的配置，
 大概有
-[jsonp](#jsonpobject)，
-[args](#argsobject)，
-[foo](#fooobject)
++ [jsonp](#jsonpobject)，
++ [args](#argsobject)，
++ [foo](#fooobject)
 
 ### jsonp:[object]
 临时保存jsonp回调函数的地方。
