@@ -14,7 +14,7 @@ exports.sql = function(conf, name){
     *   attr:
     *       @owner  Boolean
     */
-    var i = {
+    return {
         owner:((conf.w === null)?true:false),
         add:function(data){
             /*
@@ -53,7 +53,6 @@ exports.sql = function(conf, name){
             });
         }
     };
-    return i;
 };
 exports.re = function(re, ms, di){
     /*
@@ -66,7 +65,7 @@ exports.re = function(re, ms, di){
     *       @type   Boolean, 是否是HTTP类型的请求
     *
     */
-    var i = {
+    return {
         type:(((ms.g === null)&&(ms.o === null))?true:false),
         q:{
             /*
@@ -103,21 +102,22 @@ exports.re = function(re, ms, di){
             }
         }
     };
-    return i;
 };
 
-exports.op = {
-    /*
-    *   封装一些常用操作，比如
-    *       数组去重
-    */
-    unique:function(arr){
-        //  Array 元素去重
-        var ret = [];
-        for(var i in arr){
-            var item = arr[i];
-            if(ret.indexOf(item) === -1)ret.push(item);
-        };
-        return ret;
-    },
-};
+exports.op = function(){
+    return {
+        /*
+        *   封装一些常用操作，比如
+        *       数组去重
+        */
+        unique:function(arr){
+            //  Array 元素去重
+            var ret = [];
+            for(var i in arr){
+                var item = arr[i];
+                if(ret.indexOf(item) === -1)ret.push(item);
+            };
+            return ret;
+        },
+    };
+}

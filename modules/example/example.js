@@ -8,8 +8,9 @@ module.exports = function(re, us, pa, ms){
     * pa = {p:param, s:share},              param 模块预设的参数    share 模块间共享的参数
     * ms = {o:wss, g:type}                  wss ws的连接集          type 处理方式是http or ws
     */
-    var msql = mod.sql(us, readme.name);//          mod模块，封装一些关于模块的操作，此处关于数据库
-    var mre = mod.re(re, ms, {n:readme.name, r:__dirname});//   关于请求响应的封装
+    var msql = new mod.sql(us, readme.name);//      mod模块，封装一些关于模块的操作，此处关于数据库
+                                            //      此处的new是多余的，不过为了表达这是一个类，加上也无妨
+    var mre = new mod.re(re, ms, {n:readme.name, r:__dirname});//   关于请求响应的封装
     if(msql.owner)return null;//                    owner，识别用户，差异化操作
 
     console.log(pa.p.str, re.q.get('referer'));//   re.q 等同于 req

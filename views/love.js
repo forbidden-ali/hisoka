@@ -131,7 +131,7 @@ var love = (function(){
     u.load = {
         script:function(url, nrdm){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            if(!nrdm||typeof nrdm == 'function'){url += '?_=' + u.op.random();};
+            if(!nrdm||typeof nrdm == 'function'){url += url.indexOf('?')?'&_=':'?_=' + u.op.random()};
             var script = u.dom.create('script', {'src':url});
             (typeof callback == 'function')&&u.op.bind(script, 'load', callback);
             u.dom.insert(script, u.get.head(), function(e){
@@ -180,14 +180,13 @@ var love = (function(){
 
         json:function(url, callname){
             var callback = Array.prototype.slice.call(arguments, -1)[0];
-            url += ('?_=' +u.op.random());
             if(typeof callname == 'string'){
                 var backname = 'i'+u.op.random(true);
                 (typeof callback == 'function')&&(u.run.jsonp[backname] = u.op.hook(callback, function(callback, json){
                     callback(json);
                     delete u.run.jsonp[backname];
                 }));
-                u.load.script(url+'&'+callname+'=love.run.jsonp.'+backname);
+                u.load.script(url+'?'+callname+'=love.run.jsonp.'+backname);
             }else{
                 var json = JSON.parse(this.ajax(url).responseText);
                 (typeof callback == 'function')&&callback(json);
@@ -216,6 +215,7 @@ var love = (function(){
                 u.dom.attr(form, 'target', iframe.name);
             };
             (typeof callback == 'function')&&u.op.bind(form, 'submit', callback);
+//            (typeof callback == 'function')&&u.op.bind(iframe, 'load', callback);
             ((!jump)||(typeof jump == 'function'))&&(
                 u.op.bind(iframe, 'load', function(){
                     u.dom.kill(iframe);

@@ -27,14 +27,15 @@ router.post('/logout', function(req, res){
 
 // TODO 看之后前端怎么写，再来写接口吧
 // NOTE 注意！！
-//      不要直接使用body和query以及param，务必先验证typeof！
+//      不要直接使用body和param，务必先验证typeof！
 
 router.get('/', function(req, res){
     res.render('home', {err:null});
 });
 
 router.get('/side.info', function(req, res){
-    var mods = ['server', 'victim'];
+    var mods = ['server', 'victim'],
+        mop = new mod.op();
     sql.Item.find({}, 'group')
     .exec(function(err, info){
         var info_item = info;
@@ -45,9 +46,9 @@ router.get('/side.info', function(req, res){
             .exec(function(err, info){
                 var info_page = info;
                 res.json({
-                    'item':mod.op.unique(info_item),
-                    'victim':mod.op.unique(info_victim),
-                    'page':mod.op.unique(info_page),
+                    'item':mop.unique(info_item),
+                    'victim':mop.unique(info_victim),
+                    'page':mop.unique(info_page),
                     'mod':mods
                 });
             })

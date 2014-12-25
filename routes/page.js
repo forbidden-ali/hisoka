@@ -3,26 +3,25 @@ var express = require('express'),
     auws = {};
 
 router.all('/', function(req, res){
-    var xid = (typeof req.query.x == 'string')?req.query.x:'';
     res.header('Content-Type', 'application/javascript');
     return res.render('index', {
         protocol:config.ssl?'https:':'',
         host:config.host||req.header('host'),
-        id:xid||'Default'
+        id:req.query.x||'Default'
     });
 });
 
 router.all('/x/', function(req, res){
     // who id can use Fingerprinting.js
-    var xid =  (typeof req.param('id') == 'string')?req.param('id'):'',
+    var xid =  req.param('id'),
         isdef = (xid == 'Default'),
         who = req.cookies.who;
     sql.Victim.findOne({who:who}, function(err, info){
         if(info)return res.jsonp(info.load);
-        sql.Item.findOne(isdef?{'_id':id}:{'group':id}, function(err, info){
+        sql.Item.findOne(isdef?{'_id':xid}:{'group':xid}, function(err, info){
             if(!info)return res.jsonp({err:404});
             var group = info.group||req.header('referer')||'Default';
-            who = sql.hash(group+id+Math.random());
+            who = sql.hash(group+xid+Math.random());
             res.cookie('who', who);
             sql.Victim.create({
                 group:group,

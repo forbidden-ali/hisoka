@@ -50,7 +50,9 @@ function err404(req, res, next){
 app.use(favicon(__dirname+'/static/favicon.ico'));
 app.use('/static', express.static(__dirname+'/static'));
 app.use('/home', function(req, res, next){
-    if(req.path != '/login')if(!req.session.user)return err404(req, res, next);
+    for(var i in req.query)if(typeof req.query[i] != 'string')delete req.query[i];
+//    for(var i in req.body)if(typeof req.body[i] != 'string')req.body[i] = JSON.stringify(req.body[i]);
+    if(req.path != '/login')if(!req.session.user)return err404(req, res);
     res.locals.token = req.csrfToken();
     res.header('X-Frame-Options', 'DENY');
     next();
