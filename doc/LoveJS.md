@@ -27,12 +27,10 @@ love.code
 ### urlen:[function]
 封装了urlencode操作
 
-- @param - datas, post
-- datas*    - 一个Object
-        eg: `{"AA":"BB"}`
-- @return
-- urlencode后的返回，
-        String
+:-------|:------------------|:---------------
+@param  |                   |
+datas*  | Object            | eg: `{"AA":"BB"}`
+@return | urlencode后的返回 | String
 
 ```
     >love.code.urlen({"AA":"BB", "CC":"DD"})
@@ -42,12 +40,10 @@ love.code
 ### quote:[function]
 完全的encodeURL编码
 
-- @param - num
-- num*  - 任意字符串
-        eg: `AAA();`
-- @return
-- encodeURL后的返回
-        String
+:-------|:------------------|:-------
+@param  |                   |
+num*    | 任意字符串        | eg: `AAA();`
+@return | encodeURL后的返回 | String
 
 ```
     >love.code.quote('AAA();')
