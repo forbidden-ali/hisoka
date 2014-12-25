@@ -27,12 +27,13 @@ love.code
 ### urlen:[function]
 封装了urlencode操作
 
-- @param - datas, post
-- datas*    - 一个Object
-        eg: `{"AA":"BB"}`
-- @return
-- urlencode后的返回，
-        String
+|Param  | Description   | Type      | Example
+|-------|---------------|-----------|--------------
+|datas  | ..            | Object    | `{"AA":"BB"}`
+
+|Return Description | Type
+|-------------------|-------
+|urlencode后的返回  | String
 
 ```
     >love.code.urlen({"AA":"BB", "CC":"DD"})
@@ -42,12 +43,13 @@ love.code
 ### quote:[function]
 完全的encodeURL编码
 
-- @param - num
-- num*  - 任意字符串
-        eg: `AAA();`
-- @return
-- encodeURL后的返回
-        String
+|Param  | Description       | Type     | Example
+|-------|-------------------|----------|--------
+|num*   | 需要编码的字符    | String   | `AAA();`
+
+|Return Description     | Type
+|-----------------------|------
+|encodeURL后的返回      | String
 
 ```
     >love.code.quote('AAA();')
@@ -65,20 +67,21 @@ love.req
 ### ajax:[function]
 封装了xhr操作
 
-- @param - url, datas, headers, nsync, callback
-- url*    - 目标的URL，需要是一个合法的URL字符串
-        eg: `/index.html`
-- datas   - body内容，可以是字符串或是object字典
-        eg: `{"hello":"world."}`
-- headers - 需要添加的请求头
-        eg: `{"Client-IP":"127.0.0.1"}`
-- nsync   - 是否不使用同步xhr
-        eg: `true`
-- callback - 如果最后一个参数是function，将会当作回调函数执行
-        eg: `function(xhr){console.log(xhr.currentTarget.responseText)}`
-- @return
-- xhr请求对象，
-        XMLHttpRequest
+|Param      | Description           | Type              | Example
+|-----------|-----------------------|-------------------|---------------------------
+|url        | 请求目标的URL         | String            | `/index.html`
+|datas      | body内容              | String or Object  | `{"hello":"world."}`
+|headers    | 需要添加的请求头      | Object            | `{"Client-IP":"127.0.0.1"}`
+|nsync      | 不使用同步xhr         | bool              | `true`
+|ijson      | POST内容使用JSON格式  | bool              | `true`
+
+|Callback Param                 | Type      | Example
+|-------------------------------|-----------|---------------------------------
+|XMLHttpRequestProgressEvent    | Object    | `xhr.currentTarget.responseText`
+
+|Return Description | Type
+|-------------------|--------
+|XMLHttpRequest     | Object
 
 ```
     >love.req.ajax('/post').responseText;
@@ -90,6 +93,7 @@ love.req
     XMLHttpRequest
 ```
 
+* 有Callback列表的方法，若最后一个参数是函数，则会将该参数当作回调函数使用
 * love.req.ajax回调函数的参数是XMLHttpRequestProgressEvent，而非XMLHttpRequest，需要注意。
 * 另一点需要注意的是，如果有headers，则不会默认带上Content-Type Headers
 
